@@ -36,7 +36,10 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
+Src/memory_access.c \
 Src/main.c \
+Src/term_io.c\
+Src/dbgu.c\
 Src/usbh_diskio.c \
 Src/fatfs.c \
 Src/freertos.c \
@@ -304,7 +307,10 @@ $(BUILD_DIR):
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
-  
+
+program:
+	openocd -f "board/stm32f7discovery.cfg" -c "program $(BUILD_DIR)/$(TARGET).elf verify reset exit"
+
 #######################################
 # dependencies
 #######################################

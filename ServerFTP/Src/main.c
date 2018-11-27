@@ -55,7 +55,10 @@
 #include "usb_host.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "dbgu.h"
+#include "ansi.h"
+#include "term_io.h"
+#include "memory_access.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -68,7 +71,13 @@ osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+USBH_StatusTypeDef usbh_stat;
 
+extern ApplicationTypeDef Appli_state;
+
+extern USBH_HandleTypeDef hUsbHostFS;
+
+extern const Diskio_drvTypeDef USBH_Driver;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -95,7 +104,7 @@ void StartDefaultTask(void const * argument);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -104,7 +113,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  debug_init(&huart3);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -119,7 +128,9 @@ int main(void)
   MX_USART3_UART_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
-
+  
+    xprintf("ZACZYNAM DZIAŁAĆ\n");
+  
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -159,7 +170,7 @@ int main(void)
   {
 
   /* USER CODE END WHILE */
-
+  
   /* USER CODE BEGIN 3 */
 
   }
@@ -377,10 +388,13 @@ void StartDefaultTask(void const * argument)
   MX_LWIP_Init();
 
   /* USER CODE BEGIN 5 */
+  FATFS_LinkDriver(&USBH_Driver, "");
   /* Infinite loop */
   for(;;)
-  {
-    osDelay(1);
+  { 
+    USB_Process(Appli_state);
+    xprintf("asd\n");
+    osDelay(1000);
   }
   /* USER CODE END 5 */ 
 }

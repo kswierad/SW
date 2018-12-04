@@ -1,0 +1,3497 @@
+ARM GAS  /tmp/cctyFkZL.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"httpserver-netconn.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.http_server_serve,"ax",%progbits
+  18              		.align	1
+  19              		.global	http_server_serve
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv5-sp-d16
+  25              	http_server_serve:
+  26              	.LFB157:
+  27              		.file 1 "Src/httpserver-netconn.c"
+   1:Src/httpserver-netconn.c **** /**
+   2:Src/httpserver-netconn.c ****   ******************************************************************************
+   3:Src/httpserver-netconn.c ****   * @file    LwIP/LwIP_HTTP_Server_Netconn_RTOS/Src/httpser-netconn.c 
+   4:Src/httpserver-netconn.c ****   * @author  MCD Application Team
+   5:Src/httpserver-netconn.c ****   * @version V1.0.0
+   6:Src/httpserver-netconn.c ****   * @date    18-November-2015
+   7:Src/httpserver-netconn.c ****   * @brief   Basic http server implementation using LwIP netconn API  
+   8:Src/httpserver-netconn.c ****   ******************************************************************************
+   9:Src/httpserver-netconn.c ****   * @attention
+  10:Src/httpserver-netconn.c ****   *
+  11:Src/httpserver-netconn.c ****   * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
+  12:Src/httpserver-netconn.c ****   *
+  13:Src/httpserver-netconn.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  14:Src/httpserver-netconn.c ****   * You may not use this file except in compliance with the License.
+  15:Src/httpserver-netconn.c ****   * You may obtain a copy of the License at:
+  16:Src/httpserver-netconn.c ****   *
+  17:Src/httpserver-netconn.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  18:Src/httpserver-netconn.c ****   *
+  19:Src/httpserver-netconn.c ****   * Unless required by applicable law or agreed to in writing, software 
+  20:Src/httpserver-netconn.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  21:Src/httpserver-netconn.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  22:Src/httpserver-netconn.c ****   * See the License for the specific language governing permissions and
+  23:Src/httpserver-netconn.c ****   * limitations under the License.
+  24:Src/httpserver-netconn.c ****   *
+  25:Src/httpserver-netconn.c ****   ******************************************************************************
+  26:Src/httpserver-netconn.c ****   */
+  27:Src/httpserver-netconn.c **** 
+  28:Src/httpserver-netconn.c **** /* Includes ------------------------------------------------------------------*/
+  29:Src/httpserver-netconn.c **** #include "lwip/opt.h"
+  30:Src/httpserver-netconn.c **** #include "lwip/arch.h"
+  31:Src/httpserver-netconn.c **** #include "lwip/api.h"
+ARM GAS  /tmp/cctyFkZL.s 			page 2
+
+
+  32:Src/httpserver-netconn.c **** #include "string.h"
+  33:Src/httpserver-netconn.c **** #include "httpserver-netconn.h"
+  34:Src/httpserver-netconn.c **** #include "cmsis_os.h"
+  35:Src/httpserver-netconn.c **** #include "../webpages/index.h"
+  36:Src/httpserver-netconn.c **** 
+  37:Src/httpserver-netconn.c **** 
+  38:Src/httpserver-netconn.c **** /* Private typedef -----------------------------------------------------------*/
+  39:Src/httpserver-netconn.c **** /* Private define ------------------------------------------------------------*/
+  40:Src/httpserver-netconn.c **** #define WEBSERVER_THREAD_PRIO    ( tskIDLE_PRIORITY + 4 )
+  41:Src/httpserver-netconn.c **** 
+  42:Src/httpserver-netconn.c **** /* Private macro -------------------------------------------------------------*/
+  43:Src/httpserver-netconn.c **** /* Private variables ---------------------------------------------------------*/
+  44:Src/httpserver-netconn.c **** u32_t nPageHits = 0;
+  45:Src/httpserver-netconn.c **** 
+  46:Src/httpserver-netconn.c **** /* Private function prototypes -----------------------------------------------*/
+  47:Src/httpserver-netconn.c **** /* Private functions ---------------------------------------------------------*/
+  48:Src/httpserver-netconn.c **** 
+  49:Src/httpserver-netconn.c **** /**
+  50:Src/httpserver-netconn.c ****   * @brief serve tcp connection  
+  51:Src/httpserver-netconn.c ****   * @param conn: pointer on connection structure 
+  52:Src/httpserver-netconn.c ****   * @retval None
+  53:Src/httpserver-netconn.c ****   */
+  54:Src/httpserver-netconn.c **** void http_server_serve(struct netconn *conn) 
+  55:Src/httpserver-netconn.c **** {
+  28              		.loc 1 55 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 16
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 30B5     		push	{r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 12
+  36              		.cfi_offset 4, -12
+  37              		.cfi_offset 5, -8
+  38              		.cfi_offset 14, -4
+  39 0002 87B0     		sub	sp, sp, #28
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 40
+  42 0004 0446     		mov	r4, r0
+  56:Src/httpserver-netconn.c ****   struct netbuf *inbuf;
+  57:Src/httpserver-netconn.c ****   err_t recv_err;
+  58:Src/httpserver-netconn.c ****   char* buf;
+  59:Src/httpserver-netconn.c ****   u16_t buflen;
+  60:Src/httpserver-netconn.c **** 
+  61:Src/httpserver-netconn.c ****   /* Read the data from the port, blocking if nothing yet there. 
+  62:Src/httpserver-netconn.c ****    We assume the request (the part we care about) is in one netbuf */
+  63:Src/httpserver-netconn.c ****   recv_err = netconn_recv(conn, &inbuf);
+  43              		.loc 1 63 0
+  44 0006 05A9     		add	r1, sp, #20
+  45 0008 FFF7FEFF 		bl	netconn_recv
+  46              	.LVL1:
+  64:Src/httpserver-netconn.c ****   
+  65:Src/httpserver-netconn.c ****   if (recv_err == ERR_OK)
+  47              		.loc 1 65 0
+  48 000c 10B9     		cbnz	r0, .L2
+  66:Src/httpserver-netconn.c ****   {
+  67:Src/httpserver-netconn.c ****     if (netconn_err(conn) == ERR_OK) 
+ARM GAS  /tmp/cctyFkZL.s 			page 3
+
+
+  49              		.loc 1 67 0
+  50 000e 94F90830 		ldrsb	r3, [r4, #8]
+  51 0012 3BB1     		cbz	r3, .L9
+  52              	.LVL2:
+  53              	.L2:
+  68:Src/httpserver-netconn.c ****     {
+  69:Src/httpserver-netconn.c ****       netbuf_data(inbuf, (void**)&buf, &buflen);
+  70:Src/httpserver-netconn.c ****     
+  71:Src/httpserver-netconn.c ****       /* Is this an HTTP GET command? (only check the first 5 chars, since
+  72:Src/httpserver-netconn.c ****       there are other formats for GET, and we're keeping it very simple )*/
+  73:Src/httpserver-netconn.c ****       if ((buflen >=5) && (strncmp(buf, "GET /", 5) == 0))
+  74:Src/httpserver-netconn.c ****       {
+  75:Src/httpserver-netconn.c ****     	  if (strncmp((char const *)buf,"GET /index.html",15)==0) {
+  76:Src/httpserver-netconn.c ****     		  netconn_write(conn, (const unsigned char*)index_html, index_html_len, NETCONN_NOCOPY);
+  77:Src/httpserver-netconn.c ****     	  }
+  78:Src/httpserver-netconn.c ****     	  if (strncmp((char const *)buf,"GET /led1", 9) == 0) {
+  79:Src/httpserver-netconn.c ****     		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+  80:Src/httpserver-netconn.c ****     	  }
+  81:Src/httpserver-netconn.c ****     	  if (strncmp((char const *)buf,"GET /led2", 9) == 0) {
+  82:Src/httpserver-netconn.c ****     		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
+  83:Src/httpserver-netconn.c ****     	  }
+  84:Src/httpserver-netconn.c ****     	  if (strncmp((char const *)buf,"GET /led3", 9) == 0) {
+  85:Src/httpserver-netconn.c ****     		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
+  86:Src/httpserver-netconn.c ****     	  }
+  87:Src/httpserver-netconn.c ****     	  if (strncmp((char const *)buf,"GET /btn1", 9) == 0) {
+  88:Src/httpserver-netconn.c ****     		  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET)
+  89:Src/httpserver-netconn.c ****     			  netconn_write(conn, (const unsigned char*)"ON", 2, NETCONN_NOCOPY);
+  90:Src/httpserver-netconn.c ****     		  else
+  91:Src/httpserver-netconn.c ****     			  netconn_write(conn, (const unsigned char*)"OFF", 3, NETCONN_NOCOPY);
+  92:Src/httpserver-netconn.c ****     	  }
+  93:Src/httpserver-netconn.c ****       }
+  94:Src/httpserver-netconn.c ****     }
+  95:Src/httpserver-netconn.c ****   }
+  96:Src/httpserver-netconn.c ****   /* Close the connection (server closes in HTTP) */
+  97:Src/httpserver-netconn.c ****   netconn_close(conn);
+  54              		.loc 1 97 0
+  55 0014 2046     		mov	r0, r4
+  56 0016 FFF7FEFF 		bl	netconn_close
+  57              	.LVL3:
+  98:Src/httpserver-netconn.c ****   
+  99:Src/httpserver-netconn.c ****   /* Delete the buffer (netconn_recv gives us ownership,
+ 100:Src/httpserver-netconn.c ****    so we have to make sure to deallocate the buffer) */
+ 101:Src/httpserver-netconn.c ****   netbuf_delete(inbuf);
+  58              		.loc 1 101 0
+  59 001a 0598     		ldr	r0, [sp, #20]
+  60 001c FFF7FEFF 		bl	netbuf_delete
+  61              	.LVL4:
+ 102:Src/httpserver-netconn.c **** }
+  62              		.loc 1 102 0
+  63 0020 07B0     		add	sp, sp, #28
+  64              	.LCFI2:
+  65              		.cfi_remember_state
+  66              		.cfi_def_cfa_offset 12
+  67              		@ sp needed
+  68 0022 30BD     		pop	{r4, r5, pc}
+  69              	.LVL5:
+  70              	.L9:
+ARM GAS  /tmp/cctyFkZL.s 			page 4
+
+
+  71              	.LCFI3:
+  72              		.cfi_restore_state
+  69:Src/httpserver-netconn.c ****     
+  73              		.loc 1 69 0
+  74 0024 0DF10E02 		add	r2, sp, #14
+  75 0028 04A9     		add	r1, sp, #16
+  76 002a 0598     		ldr	r0, [sp, #20]
+  77              	.LVL6:
+  78 002c FFF7FEFF 		bl	netbuf_data
+  79              	.LVL7:
+  73:Src/httpserver-netconn.c ****       {
+  80              		.loc 1 73 0
+  81 0030 BDF80E30 		ldrh	r3, [sp, #14]
+  82 0034 042B     		cmp	r3, #4
+  83 0036 EDD9     		bls	.L2
+  73:Src/httpserver-netconn.c ****       {
+  84              		.loc 1 73 0 is_stmt 0 discriminator 1
+  85 0038 049D     		ldr	r5, [sp, #16]
+  86 003a 0522     		movs	r2, #5
+  87 003c 3049     		ldr	r1, .L15
+  88 003e 2846     		mov	r0, r5
+  89 0040 FFF7FEFF 		bl	strncmp
+  90              	.LVL8:
+  91 0044 0028     		cmp	r0, #0
+  92 0046 E5D1     		bne	.L2
+  75:Src/httpserver-netconn.c ****     		  netconn_write(conn, (const unsigned char*)index_html, index_html_len, NETCONN_NOCOPY);
+  93              		.loc 1 75 0 is_stmt 1
+  94 0048 0F22     		movs	r2, #15
+  95 004a 2E49     		ldr	r1, .L15+4
+  96 004c 2846     		mov	r0, r5
+  97 004e FFF7FEFF 		bl	strncmp
+  98              	.LVL9:
+  99 0052 50B3     		cbz	r0, .L10
+ 100              	.L3:
+  78:Src/httpserver-netconn.c ****     		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+ 101              		.loc 1 78 0
+ 102 0054 0922     		movs	r2, #9
+ 103 0056 2C49     		ldr	r1, .L15+8
+ 104 0058 0498     		ldr	r0, [sp, #16]
+ 105 005a FFF7FEFF 		bl	strncmp
+ 106              	.LVL10:
+ 107 005e 68B3     		cbz	r0, .L11
+ 108              	.L4:
+  81:Src/httpserver-netconn.c ****     		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
+ 109              		.loc 1 81 0
+ 110 0060 0922     		movs	r2, #9
+ 111 0062 2A49     		ldr	r1, .L15+12
+ 112 0064 0498     		ldr	r0, [sp, #16]
+ 113 0066 FFF7FEFF 		bl	strncmp
+ 114              	.LVL11:
+ 115 006a 78B3     		cbz	r0, .L12
+ 116              	.L5:
+  84:Src/httpserver-netconn.c ****     		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
+ 117              		.loc 1 84 0
+ 118 006c 0922     		movs	r2, #9
+ 119 006e 2849     		ldr	r1, .L15+16
+ 120 0070 0498     		ldr	r0, [sp, #16]
+ARM GAS  /tmp/cctyFkZL.s 			page 5
+
+
+ 121 0072 FFF7FEFF 		bl	strncmp
+ 122              	.LVL12:
+ 123 0076 88B3     		cbz	r0, .L13
+ 124              	.L6:
+  87:Src/httpserver-netconn.c ****     		  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET)
+ 125              		.loc 1 87 0
+ 126 0078 0922     		movs	r2, #9
+ 127 007a 2649     		ldr	r1, .L15+20
+ 128 007c 0498     		ldr	r0, [sp, #16]
+ 129 007e FFF7FEFF 		bl	strncmp
+ 130              	.LVL13:
+ 131 0082 0028     		cmp	r0, #0
+ 132 0084 C6D1     		bne	.L2
+  88:Src/httpserver-netconn.c ****     			  netconn_write(conn, (const unsigned char*)"ON", 2, NETCONN_NOCOPY);
+ 133              		.loc 1 88 0
+ 134 0086 4FF40051 		mov	r1, #8192
+ 135 008a 00F18040 		add	r0, r0, #1073741824
+ 136 008e 00F50230 		add	r0, r0, #133120
+ 137 0092 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 138              	.LVL14:
+ 139 0096 0128     		cmp	r0, #1
+ 140 0098 29D0     		beq	.L14
+  91:Src/httpserver-netconn.c ****     	  }
+ 141              		.loc 1 91 0
+ 142 009a 0023     		movs	r3, #0
+ 143 009c 0093     		str	r3, [sp]
+ 144 009e 0322     		movs	r2, #3
+ 145 00a0 1D49     		ldr	r1, .L15+24
+ 146 00a2 2046     		mov	r0, r4
+ 147 00a4 FFF7FEFF 		bl	netconn_write_partly
+ 148              	.LVL15:
+ 149 00a8 B4E7     		b	.L2
+ 150              	.L10:
+  76:Src/httpserver-netconn.c ****     	  }
+ 151              		.loc 1 76 0
+ 152 00aa 1C4B     		ldr	r3, .L15+28
+ 153 00ac 1A68     		ldr	r2, [r3]
+ 154 00ae 0023     		movs	r3, #0
+ 155 00b0 0093     		str	r3, [sp]
+ 156 00b2 1B49     		ldr	r1, .L15+32
+ 157 00b4 2046     		mov	r0, r4
+ 158 00b6 FFF7FEFF 		bl	netconn_write_partly
+ 159              	.LVL16:
+ 160 00ba CBE7     		b	.L3
+ 161              	.L11:
+  79:Src/httpserver-netconn.c ****     	  }
+ 162              		.loc 1 79 0
+ 163 00bc 0121     		movs	r1, #1
+ 164 00be 00F18040 		add	r0, r0, #1073741824
+ 165 00c2 00F50130 		add	r0, r0, #132096
+ 166 00c6 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 167              	.LVL17:
+ 168 00ca C9E7     		b	.L4
+ 169              	.L12:
+  82:Src/httpserver-netconn.c ****     	  }
+ 170              		.loc 1 82 0
+ 171 00cc 8021     		movs	r1, #128
+ARM GAS  /tmp/cctyFkZL.s 			page 6
+
+
+ 172 00ce 00F18040 		add	r0, r0, #1073741824
+ 173 00d2 00F50130 		add	r0, r0, #132096
+ 174 00d6 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 175              	.LVL18:
+ 176 00da C7E7     		b	.L5
+ 177              	.L13:
+  85:Src/httpserver-netconn.c ****     	  }
+ 178              		.loc 1 85 0
+ 179 00dc 4FF48041 		mov	r1, #16384
+ 180 00e0 00F18040 		add	r0, r0, #1073741824
+ 181 00e4 00F50130 		add	r0, r0, #132096
+ 182 00e8 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 183              	.LVL19:
+ 184 00ec C4E7     		b	.L6
+ 185              	.L14:
+  89:Src/httpserver-netconn.c ****     		  else
+ 186              		.loc 1 89 0
+ 187 00ee 0023     		movs	r3, #0
+ 188 00f0 0093     		str	r3, [sp]
+ 189 00f2 0222     		movs	r2, #2
+ 190 00f4 0B49     		ldr	r1, .L15+36
+ 191 00f6 2046     		mov	r0, r4
+ 192 00f8 FFF7FEFF 		bl	netconn_write_partly
+ 193              	.LVL20:
+ 194 00fc 8AE7     		b	.L2
+ 195              	.L16:
+ 196 00fe 00BF     		.align	2
+ 197              	.L15:
+ 198 0100 00000000 		.word	.LC0
+ 199 0104 08000000 		.word	.LC1
+ 200 0108 18000000 		.word	.LC2
+ 201 010c 24000000 		.word	.LC3
+ 202 0110 30000000 		.word	.LC4
+ 203 0114 3C000000 		.word	.LC5
+ 204 0118 4C000000 		.word	.LC7
+ 205 011c 00000000 		.word	.LANCHOR0
+ 206 0120 00000000 		.word	.LANCHOR1
+ 207 0124 48000000 		.word	.LC6
+ 208              		.cfi_endproc
+ 209              	.LFE157:
+ 211              		.section	.text.http_server_netconn_thread,"ax",%progbits
+ 212              		.align	1
+ 213              		.syntax unified
+ 214              		.thumb
+ 215              		.thumb_func
+ 216              		.fpu fpv5-sp-d16
+ 218              	http_server_netconn_thread:
+ 219              	.LFB158:
+ 103:Src/httpserver-netconn.c **** 
+ 104:Src/httpserver-netconn.c **** 
+ 105:Src/httpserver-netconn.c **** /**
+ 106:Src/httpserver-netconn.c ****   * @brief  http server thread 
+ 107:Src/httpserver-netconn.c ****   * @retval None
+ 108:Src/httpserver-netconn.c ****   */
+ 109:Src/httpserver-netconn.c **** static void http_server_netconn_thread()
+ 110:Src/httpserver-netconn.c **** { 
+ 220              		.loc 1 110 0
+ARM GAS  /tmp/cctyFkZL.s 			page 7
+
+
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 8
+ 223              		@ frame_needed = 0, uses_anonymous_args = 0
+ 224 0000 10B5     		push	{r4, lr}
+ 225              	.LCFI4:
+ 226              		.cfi_def_cfa_offset 8
+ 227              		.cfi_offset 4, -8
+ 228              		.cfi_offset 14, -4
+ 229 0002 82B0     		sub	sp, sp, #8
+ 230              	.LCFI5:
+ 231              		.cfi_def_cfa_offset 16
+ 111:Src/httpserver-netconn.c ****   struct netconn *conn, *newconn;
+ 112:Src/httpserver-netconn.c ****   err_t err, accept_err;
+ 113:Src/httpserver-netconn.c ****   
+ 114:Src/httpserver-netconn.c ****   /* Create a new TCP connection handle */
+ 115:Src/httpserver-netconn.c ****   conn = netconn_new(NETCONN_TCP);
+ 232              		.loc 1 115 0
+ 233 0004 0022     		movs	r2, #0
+ 234 0006 1146     		mov	r1, r2
+ 235 0008 1020     		movs	r0, #16
+ 236 000a FFF7FEFF 		bl	netconn_new_with_proto_and_callback
+ 237              	.LVL21:
+ 116:Src/httpserver-netconn.c ****   
+ 117:Src/httpserver-netconn.c ****   if (conn!= NULL)
+ 238              		.loc 1 117 0
+ 239 000e B0B1     		cbz	r0, .L17
+ 240 0010 0446     		mov	r4, r0
+ 118:Src/httpserver-netconn.c ****   {
+ 119:Src/httpserver-netconn.c ****     /* Bind to port 80 (HTTP) with default IP address */
+ 120:Src/httpserver-netconn.c ****     err = netconn_bind(conn, NULL, 80);
+ 241              		.loc 1 120 0
+ 242 0012 5022     		movs	r2, #80
+ 243 0014 0021     		movs	r1, #0
+ 244 0016 FFF7FEFF 		bl	netconn_bind
+ 245              	.LVL22:
+ 121:Src/httpserver-netconn.c ****     
+ 122:Src/httpserver-netconn.c ****     if (err == ERR_OK)
+ 246              		.loc 1 122 0
+ 247 001a 80B9     		cbnz	r0, .L17
+ 123:Src/httpserver-netconn.c ****     {
+ 124:Src/httpserver-netconn.c ****       /* Put the connection into LISTEN state */
+ 125:Src/httpserver-netconn.c ****       netconn_listen(conn);
+ 248              		.loc 1 125 0
+ 249 001c FF21     		movs	r1, #255
+ 250 001e 2046     		mov	r0, r4
+ 251              	.LVL23:
+ 252 0020 FFF7FEFF 		bl	netconn_listen_with_backlog
+ 253              	.LVL24:
+ 254              	.L19:
+ 126:Src/httpserver-netconn.c ****   
+ 127:Src/httpserver-netconn.c ****       while(1) 
+ 128:Src/httpserver-netconn.c ****       {
+ 129:Src/httpserver-netconn.c ****         /* accept any icoming connection */
+ 130:Src/httpserver-netconn.c ****         accept_err = netconn_accept(conn, &newconn);
+ 255              		.loc 1 130 0
+ 256 0024 01A9     		add	r1, sp, #4
+ 257 0026 2046     		mov	r0, r4
+ARM GAS  /tmp/cctyFkZL.s 			page 8
+
+
+ 258 0028 FFF7FEFF 		bl	netconn_accept
+ 259              	.LVL25:
+ 131:Src/httpserver-netconn.c ****         if(accept_err == ERR_OK)
+ 260              		.loc 1 131 0
+ 261 002c 0028     		cmp	r0, #0
+ 262 002e F9D1     		bne	.L19
+ 132:Src/httpserver-netconn.c ****         {
+ 133:Src/httpserver-netconn.c ****           /* serve connection */
+ 134:Src/httpserver-netconn.c ****           http_server_serve(newconn);
+ 263              		.loc 1 134 0
+ 264 0030 0198     		ldr	r0, [sp, #4]
+ 265              	.LVL26:
+ 266 0032 FFF7FEFF 		bl	http_server_serve
+ 267              	.LVL27:
+ 135:Src/httpserver-netconn.c **** 
+ 136:Src/httpserver-netconn.c ****           /* delete connection */
+ 137:Src/httpserver-netconn.c ****           netconn_delete(newconn);
+ 268              		.loc 1 137 0
+ 269 0036 0198     		ldr	r0, [sp, #4]
+ 270 0038 FFF7FEFF 		bl	netconn_delete
+ 271              	.LVL28:
+ 272 003c F2E7     		b	.L19
+ 273              	.LVL29:
+ 274              	.L17:
+ 138:Src/httpserver-netconn.c ****         }
+ 139:Src/httpserver-netconn.c ****       }
+ 140:Src/httpserver-netconn.c ****     }
+ 141:Src/httpserver-netconn.c ****   }
+ 142:Src/httpserver-netconn.c **** }
+ 275              		.loc 1 142 0
+ 276 003e 02B0     		add	sp, sp, #8
+ 277              	.LCFI6:
+ 278              		.cfi_def_cfa_offset 8
+ 279              		@ sp needed
+ 280 0040 10BD     		pop	{r4, pc}
+ 281              		.cfi_endproc
+ 282              	.LFE158:
+ 284              		.section	.text.http_server_netconn_init,"ax",%progbits
+ 285              		.align	1
+ 286              		.global	http_server_netconn_init
+ 287              		.syntax unified
+ 288              		.thumb
+ 289              		.thumb_func
+ 290              		.fpu fpv5-sp-d16
+ 292              	http_server_netconn_init:
+ 293              	.LFB159:
+ 143:Src/httpserver-netconn.c **** 
+ 144:Src/httpserver-netconn.c **** /**
+ 145:Src/httpserver-netconn.c ****   * @brief  Initialize the HTTP server (start its thread) 
+ 146:Src/httpserver-netconn.c ****   * @param  none
+ 147:Src/httpserver-netconn.c ****   * @retval None
+ 148:Src/httpserver-netconn.c ****   */
+ 149:Src/httpserver-netconn.c **** void http_server_netconn_init()
+ 150:Src/httpserver-netconn.c **** {
+ 294              		.loc 1 150 0
+ 295              		.cfi_startproc
+ 296              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cctyFkZL.s 			page 9
+
+
+ 297              		@ frame_needed = 0, uses_anonymous_args = 0
+ 298 0000 00B5     		push	{lr}
+ 299              	.LCFI7:
+ 300              		.cfi_def_cfa_offset 4
+ 301              		.cfi_offset 14, -4
+ 302 0002 83B0     		sub	sp, sp, #12
+ 303              	.LCFI8:
+ 304              		.cfi_def_cfa_offset 16
+ 151:Src/httpserver-netconn.c ****   sys_thread_new("HTTP", http_server_netconn_thread, NULL, DEFAULT_THREAD_STACKSIZE, WEBSERVER_THRE
+ 305              		.loc 1 151 0
+ 306 0004 0423     		movs	r3, #4
+ 307 0006 0093     		str	r3, [sp]
+ 308 0008 4FF48063 		mov	r3, #1024
+ 309 000c 0022     		movs	r2, #0
+ 310 000e 0349     		ldr	r1, .L24
+ 311 0010 0348     		ldr	r0, .L24+4
+ 312 0012 FFF7FEFF 		bl	sys_thread_new
+ 313              	.LVL30:
+ 152:Src/httpserver-netconn.c **** }
+ 314              		.loc 1 152 0
+ 315 0016 03B0     		add	sp, sp, #12
+ 316              	.LCFI9:
+ 317              		.cfi_def_cfa_offset 4
+ 318              		@ sp needed
+ 319 0018 5DF804FB 		ldr	pc, [sp], #4
+ 320              	.L25:
+ 321              		.align	2
+ 322              	.L24:
+ 323 001c 00000000 		.word	http_server_netconn_thread
+ 324 0020 00000000 		.word	.LC8
+ 325              		.cfi_endproc
+ 326              	.LFE159:
+ 328              		.global	nPageHits
+ 329              		.global	index_html_len
+ 330              		.global	index_html
+ 331              		.section	.bss.nPageHits,"aw",%nobits
+ 332              		.align	2
+ 335              	nPageHits:
+ 336 0000 00000000 		.space	4
+ 337              		.section	.data.index_html,"aw",%progbits
+ 338              		.align	2
+ 339              		.set	.LANCHOR1,. + 0
+ 342              	index_html:
+ 343 0000 3C       		.byte	60
+ 344 0001 68       		.byte	104
+ 345 0002 74       		.byte	116
+ 346 0003 6D       		.byte	109
+ 347 0004 6C       		.byte	108
+ 348 0005 3E       		.byte	62
+ 349 0006 0A       		.byte	10
+ 350 0007 3C       		.byte	60
+ 351 0008 68       		.byte	104
+ 352 0009 65       		.byte	101
+ 353 000a 61       		.byte	97
+ 354 000b 64       		.byte	100
+ 355 000c 3E       		.byte	62
+ 356 000d 0A       		.byte	10
+ARM GAS  /tmp/cctyFkZL.s 			page 10
+
+
+ 357 000e 0A       		.byte	10
+ 358 000f 3C       		.byte	60
+ 359 0010 21       		.byte	33
+ 360 0011 2D       		.byte	45
+ 361 0012 2D       		.byte	45
+ 362 0013 20       		.byte	32
+ 363 0014 4A       		.byte	74
+ 364 0015 51       		.byte	81
+ 365 0016 75       		.byte	117
+ 366 0017 65       		.byte	101
+ 367 0018 72       		.byte	114
+ 368 0019 79       		.byte	121
+ 369 001a 20       		.byte	32
+ 370 001b 49       		.byte	73
+ 371 001c 6D       		.byte	109
+ 372 001d 70       		.byte	112
+ 373 001e 6F       		.byte	111
+ 374 001f 72       		.byte	114
+ 375 0020 74       		.byte	116
+ 376 0021 20       		.byte	32
+ 377 0022 2D       		.byte	45
+ 378 0023 2D       		.byte	45
+ 379 0024 3E       		.byte	62
+ 380 0025 0A       		.byte	10
+ 381 0026 3C       		.byte	60
+ 382 0027 73       		.byte	115
+ 383 0028 63       		.byte	99
+ 384 0029 72       		.byte	114
+ 385 002a 69       		.byte	105
+ 386 002b 70       		.byte	112
+ 387 002c 74       		.byte	116
+ 388 002d 20       		.byte	32
+ 389 002e 73       		.byte	115
+ 390 002f 72       		.byte	114
+ 391 0030 63       		.byte	99
+ 392 0031 3D       		.byte	61
+ 393 0032 22       		.byte	34
+ 394 0033 68       		.byte	104
+ 395 0034 74       		.byte	116
+ 396 0035 74       		.byte	116
+ 397 0036 70       		.byte	112
+ 398 0037 73       		.byte	115
+ 399 0038 3A       		.byte	58
+ 400 0039 2F       		.byte	47
+ 401 003a 2F       		.byte	47
+ 402 003b 61       		.byte	97
+ 403 003c 6A       		.byte	106
+ 404 003d 61       		.byte	97
+ 405 003e 78       		.byte	120
+ 406 003f 2E       		.byte	46
+ 407 0040 67       		.byte	103
+ 408 0041 6F       		.byte	111
+ 409 0042 6F       		.byte	111
+ 410 0043 67       		.byte	103
+ 411 0044 6C       		.byte	108
+ 412 0045 65       		.byte	101
+ 413 0046 61       		.byte	97
+ARM GAS  /tmp/cctyFkZL.s 			page 11
+
+
+ 414 0047 70       		.byte	112
+ 415 0048 69       		.byte	105
+ 416 0049 73       		.byte	115
+ 417 004a 2E       		.byte	46
+ 418 004b 63       		.byte	99
+ 419 004c 6F       		.byte	111
+ 420 004d 6D       		.byte	109
+ 421 004e 2F       		.byte	47
+ 422 004f 61       		.byte	97
+ 423 0050 6A       		.byte	106
+ 424 0051 61       		.byte	97
+ 425 0052 78       		.byte	120
+ 426 0053 2F       		.byte	47
+ 427 0054 6C       		.byte	108
+ 428 0055 69       		.byte	105
+ 429 0056 62       		.byte	98
+ 430 0057 73       		.byte	115
+ 431 0058 2F       		.byte	47
+ 432 0059 6A       		.byte	106
+ 433 005a 71       		.byte	113
+ 434 005b 75       		.byte	117
+ 435 005c 65       		.byte	101
+ 436 005d 72       		.byte	114
+ 437 005e 79       		.byte	121
+ 438 005f 2F       		.byte	47
+ 439 0060 31       		.byte	49
+ 440 0061 2E       		.byte	46
+ 441 0062 31       		.byte	49
+ 442 0063 32       		.byte	50
+ 443 0064 2E       		.byte	46
+ 444 0065 30       		.byte	48
+ 445 0066 2F       		.byte	47
+ 446 0067 6A       		.byte	106
+ 447 0068 71       		.byte	113
+ 448 0069 75       		.byte	117
+ 449 006a 65       		.byte	101
+ 450 006b 72       		.byte	114
+ 451 006c 79       		.byte	121
+ 452 006d 2E       		.byte	46
+ 453 006e 6D       		.byte	109
+ 454 006f 69       		.byte	105
+ 455 0070 6E       		.byte	110
+ 456 0071 2E       		.byte	46
+ 457 0072 6A       		.byte	106
+ 458 0073 73       		.byte	115
+ 459 0074 22       		.byte	34
+ 460 0075 3E       		.byte	62
+ 461 0076 3C       		.byte	60
+ 462 0077 2F       		.byte	47
+ 463 0078 73       		.byte	115
+ 464 0079 63       		.byte	99
+ 465 007a 72       		.byte	114
+ 466 007b 69       		.byte	105
+ 467 007c 70       		.byte	112
+ 468 007d 74       		.byte	116
+ 469 007e 3E       		.byte	62
+ 470 007f 0A       		.byte	10
+ARM GAS  /tmp/cctyFkZL.s 			page 12
+
+
+ 471 0080 0A       		.byte	10
+ 472 0081 3C       		.byte	60
+ 473 0082 21       		.byte	33
+ 474 0083 2D       		.byte	45
+ 475 0084 2D       		.byte	45
+ 476 0085 20       		.byte	32
+ 477 0086 4C       		.byte	76
+ 478 0087 61       		.byte	97
+ 479 0088 74       		.byte	116
+ 480 0089 65       		.byte	101
+ 481 008a 73       		.byte	115
+ 482 008b 74       		.byte	116
+ 483 008c 20       		.byte	32
+ 484 008d 63       		.byte	99
+ 485 008e 6F       		.byte	111
+ 486 008f 6D       		.byte	109
+ 487 0090 70       		.byte	112
+ 488 0091 69       		.byte	105
+ 489 0092 6C       		.byte	108
+ 490 0093 65       		.byte	101
+ 491 0094 64       		.byte	100
+ 492 0095 20       		.byte	32
+ 493 0096 61       		.byte	97
+ 494 0097 6E       		.byte	110
+ 495 0098 64       		.byte	100
+ 496 0099 20       		.byte	32
+ 497 009a 6D       		.byte	109
+ 498 009b 69       		.byte	105
+ 499 009c 6E       		.byte	110
+ 500 009d 69       		.byte	105
+ 501 009e 66       		.byte	102
+ 502 009f 69       		.byte	105
+ 503 00a0 65       		.byte	101
+ 504 00a1 64       		.byte	100
+ 505 00a2 20       		.byte	32
+ 506 00a3 43       		.byte	67
+ 507 00a4 53       		.byte	83
+ 508 00a5 53       		.byte	83
+ 509 00a6 20       		.byte	32
+ 510 00a7 2D       		.byte	45
+ 511 00a8 2D       		.byte	45
+ 512 00a9 3E       		.byte	62
+ 513 00aa 0A       		.byte	10
+ 514 00ab 3C       		.byte	60
+ 515 00ac 6C       		.byte	108
+ 516 00ad 69       		.byte	105
+ 517 00ae 6E       		.byte	110
+ 518 00af 6B       		.byte	107
+ 519 00b0 20       		.byte	32
+ 520 00b1 72       		.byte	114
+ 521 00b2 65       		.byte	101
+ 522 00b3 6C       		.byte	108
+ 523 00b4 3D       		.byte	61
+ 524 00b5 22       		.byte	34
+ 525 00b6 73       		.byte	115
+ 526 00b7 74       		.byte	116
+ 527 00b8 79       		.byte	121
+ARM GAS  /tmp/cctyFkZL.s 			page 13
+
+
+ 528 00b9 6C       		.byte	108
+ 529 00ba 65       		.byte	101
+ 530 00bb 73       		.byte	115
+ 531 00bc 68       		.byte	104
+ 532 00bd 65       		.byte	101
+ 533 00be 65       		.byte	101
+ 534 00bf 74       		.byte	116
+ 535 00c0 22       		.byte	34
+ 536 00c1 20       		.byte	32
+ 537 00c2 68       		.byte	104
+ 538 00c3 72       		.byte	114
+ 539 00c4 65       		.byte	101
+ 540 00c5 66       		.byte	102
+ 541 00c6 3D       		.byte	61
+ 542 00c7 22       		.byte	34
+ 543 00c8 68       		.byte	104
+ 544 00c9 74       		.byte	116
+ 545 00ca 74       		.byte	116
+ 546 00cb 70       		.byte	112
+ 547 00cc 73       		.byte	115
+ 548 00cd 3A       		.byte	58
+ 549 00ce 2F       		.byte	47
+ 550 00cf 2F       		.byte	47
+ 551 00d0 6D       		.byte	109
+ 552 00d1 61       		.byte	97
+ 553 00d2 78       		.byte	120
+ 554 00d3 63       		.byte	99
+ 555 00d4 64       		.byte	100
+ 556 00d5 6E       		.byte	110
+ 557 00d6 2E       		.byte	46
+ 558 00d7 62       		.byte	98
+ 559 00d8 6F       		.byte	111
+ 560 00d9 6F       		.byte	111
+ 561 00da 74       		.byte	116
+ 562 00db 73       		.byte	115
+ 563 00dc 74       		.byte	116
+ 564 00dd 72       		.byte	114
+ 565 00de 61       		.byte	97
+ 566 00df 70       		.byte	112
+ 567 00e0 63       		.byte	99
+ 568 00e1 64       		.byte	100
+ 569 00e2 6E       		.byte	110
+ 570 00e3 2E       		.byte	46
+ 571 00e4 63       		.byte	99
+ 572 00e5 6F       		.byte	111
+ 573 00e6 6D       		.byte	109
+ 574 00e7 2F       		.byte	47
+ 575 00e8 62       		.byte	98
+ 576 00e9 6F       		.byte	111
+ 577 00ea 6F       		.byte	111
+ 578 00eb 74       		.byte	116
+ 579 00ec 73       		.byte	115
+ 580 00ed 74       		.byte	116
+ 581 00ee 72       		.byte	114
+ 582 00ef 61       		.byte	97
+ 583 00f0 70       		.byte	112
+ 584 00f1 2F       		.byte	47
+ARM GAS  /tmp/cctyFkZL.s 			page 14
+
+
+ 585 00f2 33       		.byte	51
+ 586 00f3 2E       		.byte	46
+ 587 00f4 33       		.byte	51
+ 588 00f5 2E       		.byte	46
+ 589 00f6 36       		.byte	54
+ 590 00f7 2F       		.byte	47
+ 591 00f8 63       		.byte	99
+ 592 00f9 73       		.byte	115
+ 593 00fa 73       		.byte	115
+ 594 00fb 2F       		.byte	47
+ 595 00fc 62       		.byte	98
+ 596 00fd 6F       		.byte	111
+ 597 00fe 6F       		.byte	111
+ 598 00ff 74       		.byte	116
+ 599 0100 73       		.byte	115
+ 600 0101 74       		.byte	116
+ 601 0102 72       		.byte	114
+ 602 0103 61       		.byte	97
+ 603 0104 70       		.byte	112
+ 604 0105 2E       		.byte	46
+ 605 0106 6D       		.byte	109
+ 606 0107 69       		.byte	105
+ 607 0108 6E       		.byte	110
+ 608 0109 2E       		.byte	46
+ 609 010a 63       		.byte	99
+ 610 010b 73       		.byte	115
+ 611 010c 73       		.byte	115
+ 612 010d 22       		.byte	34
+ 613 010e 20       		.byte	32
+ 614 010f 69       		.byte	105
+ 615 0110 6E       		.byte	110
+ 616 0111 74       		.byte	116
+ 617 0112 65       		.byte	101
+ 618 0113 67       		.byte	103
+ 619 0114 72       		.byte	114
+ 620 0115 69       		.byte	105
+ 621 0116 74       		.byte	116
+ 622 0117 79       		.byte	121
+ 623 0118 3D       		.byte	61
+ 624 0119 22       		.byte	34
+ 625 011a 73       		.byte	115
+ 626 011b 68       		.byte	104
+ 627 011c 61       		.byte	97
+ 628 011d 33       		.byte	51
+ 629 011e 38       		.byte	56
+ 630 011f 34       		.byte	52
+ 631 0120 2D       		.byte	45
+ 632 0121 31       		.byte	49
+ 633 0122 71       		.byte	113
+ 634 0123 38       		.byte	56
+ 635 0124 6D       		.byte	109
+ 636 0125 54       		.byte	84
+ 637 0126 4A       		.byte	74
+ 638 0127 4F       		.byte	79
+ 639 0128 41       		.byte	65
+ 640 0129 53       		.byte	83
+ 641 012a 78       		.byte	120
+ARM GAS  /tmp/cctyFkZL.s 			page 15
+
+
+ 642 012b 38       		.byte	56
+ 643 012c 6A       		.byte	106
+ 644 012d 31       		.byte	49
+ 645 012e 41       		.byte	65
+ 646 012f 75       		.byte	117
+ 647 0130 2B       		.byte	43
+ 648 0131 61       		.byte	97
+ 649 0132 35       		.byte	53
+ 650 0133 57       		.byte	87
+ 651 0134 44       		.byte	68
+ 652 0135 56       		.byte	86
+ 653 0136 6E       		.byte	110
+ 654 0137 50       		.byte	80
+ 655 0138 69       		.byte	105
+ 656 0139 32       		.byte	50
+ 657 013a 6C       		.byte	108
+ 658 013b 6B       		.byte	107
+ 659 013c 46       		.byte	70
+ 660 013d 66       		.byte	102
+ 661 013e 77       		.byte	119
+ 662 013f 77       		.byte	119
+ 663 0140 45       		.byte	69
+ 664 0141 41       		.byte	65
+ 665 0142 61       		.byte	97
+ 666 0143 38       		.byte	56
+ 667 0144 68       		.byte	104
+ 668 0145 44       		.byte	68
+ 669 0146 44       		.byte	68
+ 670 0147 64       		.byte	100
+ 671 0148 6A       		.byte	106
+ 672 0149 5A       		.byte	90
+ 673 014a 6C       		.byte	108
+ 674 014b 70       		.byte	112
+ 675 014c 4C       		.byte	76
+ 676 014d 65       		.byte	101
+ 677 014e 67       		.byte	103
+ 678 014f 78       		.byte	120
+ 679 0150 68       		.byte	104
+ 680 0151 6A       		.byte	106
+ 681 0152 56       		.byte	86
+ 682 0153 4D       		.byte	77
+ 683 0154 45       		.byte	69
+ 684 0155 31       		.byte	49
+ 685 0156 66       		.byte	102
+ 686 0157 67       		.byte	103
+ 687 0158 6A       		.byte	106
+ 688 0159 57       		.byte	87
+ 689 015a 50       		.byte	80
+ 690 015b 47       		.byte	71
+ 691 015c 6D       		.byte	109
+ 692 015d 6B       		.byte	107
+ 693 015e 7A       		.byte	122
+ 694 015f 73       		.byte	115
+ 695 0160 37       		.byte	55
+ 696 0161 22       		.byte	34
+ 697 0162 20       		.byte	32
+ 698 0163 63       		.byte	99
+ARM GAS  /tmp/cctyFkZL.s 			page 16
+
+
+ 699 0164 72       		.byte	114
+ 700 0165 6F       		.byte	111
+ 701 0166 73       		.byte	115
+ 702 0167 73       		.byte	115
+ 703 0168 6F       		.byte	111
+ 704 0169 72       		.byte	114
+ 705 016a 69       		.byte	105
+ 706 016b 67       		.byte	103
+ 707 016c 69       		.byte	105
+ 708 016d 6E       		.byte	110
+ 709 016e 3D       		.byte	61
+ 710 016f 22       		.byte	34
+ 711 0170 61       		.byte	97
+ 712 0171 6E       		.byte	110
+ 713 0172 6F       		.byte	111
+ 714 0173 6E       		.byte	110
+ 715 0174 79       		.byte	121
+ 716 0175 6D       		.byte	109
+ 717 0176 6F       		.byte	111
+ 718 0177 75       		.byte	117
+ 719 0178 73       		.byte	115
+ 720 0179 22       		.byte	34
+ 721 017a 3E       		.byte	62
+ 722 017b 0A       		.byte	10
+ 723 017c 0A       		.byte	10
+ 724 017d 3C       		.byte	60
+ 725 017e 21       		.byte	33
+ 726 017f 2D       		.byte	45
+ 727 0180 2D       		.byte	45
+ 728 0181 20       		.byte	32
+ 729 0182 4F       		.byte	79
+ 730 0183 70       		.byte	112
+ 731 0184 74       		.byte	116
+ 732 0185 69       		.byte	105
+ 733 0186 6F       		.byte	111
+ 734 0187 6E       		.byte	110
+ 735 0188 61       		.byte	97
+ 736 0189 6C       		.byte	108
+ 737 018a 20       		.byte	32
+ 738 018b 74       		.byte	116
+ 739 018c 68       		.byte	104
+ 740 018d 65       		.byte	101
+ 741 018e 6D       		.byte	109
+ 742 018f 65       		.byte	101
+ 743 0190 20       		.byte	32
+ 744 0191 2D       		.byte	45
+ 745 0192 2D       		.byte	45
+ 746 0193 3E       		.byte	62
+ 747 0194 0A       		.byte	10
+ 748 0195 3C       		.byte	60
+ 749 0196 6C       		.byte	108
+ 750 0197 69       		.byte	105
+ 751 0198 6E       		.byte	110
+ 752 0199 6B       		.byte	107
+ 753 019a 20       		.byte	32
+ 754 019b 72       		.byte	114
+ 755 019c 65       		.byte	101
+ARM GAS  /tmp/cctyFkZL.s 			page 17
+
+
+ 756 019d 6C       		.byte	108
+ 757 019e 3D       		.byte	61
+ 758 019f 22       		.byte	34
+ 759 01a0 73       		.byte	115
+ 760 01a1 74       		.byte	116
+ 761 01a2 79       		.byte	121
+ 762 01a3 6C       		.byte	108
+ 763 01a4 65       		.byte	101
+ 764 01a5 73       		.byte	115
+ 765 01a6 68       		.byte	104
+ 766 01a7 65       		.byte	101
+ 767 01a8 65       		.byte	101
+ 768 01a9 74       		.byte	116
+ 769 01aa 22       		.byte	34
+ 770 01ab 20       		.byte	32
+ 771 01ac 68       		.byte	104
+ 772 01ad 72       		.byte	114
+ 773 01ae 65       		.byte	101
+ 774 01af 66       		.byte	102
+ 775 01b0 3D       		.byte	61
+ 776 01b1 22       		.byte	34
+ 777 01b2 68       		.byte	104
+ 778 01b3 74       		.byte	116
+ 779 01b4 74       		.byte	116
+ 780 01b5 70       		.byte	112
+ 781 01b6 73       		.byte	115
+ 782 01b7 3A       		.byte	58
+ 783 01b8 2F       		.byte	47
+ 784 01b9 2F       		.byte	47
+ 785 01ba 6D       		.byte	109
+ 786 01bb 61       		.byte	97
+ 787 01bc 78       		.byte	120
+ 788 01bd 63       		.byte	99
+ 789 01be 64       		.byte	100
+ 790 01bf 6E       		.byte	110
+ 791 01c0 2E       		.byte	46
+ 792 01c1 62       		.byte	98
+ 793 01c2 6F       		.byte	111
+ 794 01c3 6F       		.byte	111
+ 795 01c4 74       		.byte	116
+ 796 01c5 73       		.byte	115
+ 797 01c6 74       		.byte	116
+ 798 01c7 72       		.byte	114
+ 799 01c8 61       		.byte	97
+ 800 01c9 70       		.byte	112
+ 801 01ca 63       		.byte	99
+ 802 01cb 64       		.byte	100
+ 803 01cc 6E       		.byte	110
+ 804 01cd 2E       		.byte	46
+ 805 01ce 63       		.byte	99
+ 806 01cf 6F       		.byte	111
+ 807 01d0 6D       		.byte	109
+ 808 01d1 2F       		.byte	47
+ 809 01d2 62       		.byte	98
+ 810 01d3 6F       		.byte	111
+ 811 01d4 6F       		.byte	111
+ 812 01d5 74       		.byte	116
+ARM GAS  /tmp/cctyFkZL.s 			page 18
+
+
+ 813 01d6 73       		.byte	115
+ 814 01d7 74       		.byte	116
+ 815 01d8 72       		.byte	114
+ 816 01d9 61       		.byte	97
+ 817 01da 70       		.byte	112
+ 818 01db 2F       		.byte	47
+ 819 01dc 33       		.byte	51
+ 820 01dd 2E       		.byte	46
+ 821 01de 33       		.byte	51
+ 822 01df 2E       		.byte	46
+ 823 01e0 36       		.byte	54
+ 824 01e1 2F       		.byte	47
+ 825 01e2 63       		.byte	99
+ 826 01e3 73       		.byte	115
+ 827 01e4 73       		.byte	115
+ 828 01e5 2F       		.byte	47
+ 829 01e6 62       		.byte	98
+ 830 01e7 6F       		.byte	111
+ 831 01e8 6F       		.byte	111
+ 832 01e9 74       		.byte	116
+ 833 01ea 73       		.byte	115
+ 834 01eb 74       		.byte	116
+ 835 01ec 72       		.byte	114
+ 836 01ed 61       		.byte	97
+ 837 01ee 70       		.byte	112
+ 838 01ef 2D       		.byte	45
+ 839 01f0 74       		.byte	116
+ 840 01f1 68       		.byte	104
+ 841 01f2 65       		.byte	101
+ 842 01f3 6D       		.byte	109
+ 843 01f4 65       		.byte	101
+ 844 01f5 2E       		.byte	46
+ 845 01f6 6D       		.byte	109
+ 846 01f7 69       		.byte	105
+ 847 01f8 6E       		.byte	110
+ 848 01f9 2E       		.byte	46
+ 849 01fa 63       		.byte	99
+ 850 01fb 73       		.byte	115
+ 851 01fc 73       		.byte	115
+ 852 01fd 22       		.byte	34
+ 853 01fe 20       		.byte	32
+ 854 01ff 69       		.byte	105
+ 855 0200 6E       		.byte	110
+ 856 0201 74       		.byte	116
+ 857 0202 65       		.byte	101
+ 858 0203 67       		.byte	103
+ 859 0204 72       		.byte	114
+ 860 0205 69       		.byte	105
+ 861 0206 74       		.byte	116
+ 862 0207 79       		.byte	121
+ 863 0208 3D       		.byte	61
+ 864 0209 22       		.byte	34
+ 865 020a 73       		.byte	115
+ 866 020b 68       		.byte	104
+ 867 020c 61       		.byte	97
+ 868 020d 33       		.byte	51
+ 869 020e 38       		.byte	56
+ARM GAS  /tmp/cctyFkZL.s 			page 19
+
+
+ 870 020f 34       		.byte	52
+ 871 0210 2D       		.byte	45
+ 872 0211 66       		.byte	102
+ 873 0212 4C       		.byte	76
+ 874 0213 57       		.byte	87
+ 875 0214 32       		.byte	50
+ 876 0215 4E       		.byte	78
+ 877 0216 30       		.byte	48
+ 878 0217 31       		.byte	49
+ 879 0218 6C       		.byte	108
+ 880 0219 4D       		.byte	77
+ 881 021a 71       		.byte	113
+ 882 021b 6A       		.byte	106
+ 883 021c 61       		.byte	97
+ 884 021d 6B       		.byte	107
+ 885 021e 42       		.byte	66
+ 886 021f 6B       		.byte	107
+ 887 0220 78       		.byte	120
+ 888 0221 33       		.byte	51
+ 889 0222 6C       		.byte	108
+ 890 0223 2F       		.byte	47
+ 891 0224 4D       		.byte	77
+ 892 0225 39       		.byte	57
+ 893 0226 45       		.byte	69
+ 894 0227 61       		.byte	97
+ 895 0228 68       		.byte	104
+ 896 0229 75       		.byte	117
+ 897 022a 77       		.byte	119
+ 898 022b 70       		.byte	112
+ 899 022c 53       		.byte	83
+ 900 022d 66       		.byte	102
+ 901 022e 65       		.byte	101
+ 902 022f 4E       		.byte	78
+ 903 0230 76       		.byte	118
+ 904 0231 56       		.byte	86
+ 905 0232 36       		.byte	54
+ 906 0233 33       		.byte	51
+ 907 0234 4A       		.byte	74
+ 908 0235 35       		.byte	53
+ 909 0236 65       		.byte	101
+ 910 0237 7A       		.byte	122
+ 911 0238 6E       		.byte	110
+ 912 0239 33       		.byte	51
+ 913 023a 75       		.byte	117
+ 914 023b 5A       		.byte	90
+ 915 023c 7A       		.byte	122
+ 916 023d 61       		.byte	97
+ 917 023e 70       		.byte	112
+ 918 023f 54       		.byte	84
+ 919 0240 30       		.byte	48
+ 920 0241 75       		.byte	117
+ 921 0242 37       		.byte	55
+ 922 0243 45       		.byte	69
+ 923 0244 59       		.byte	89
+ 924 0245 73       		.byte	115
+ 925 0246 58       		.byte	88
+ 926 0247 4D       		.byte	77
+ARM GAS  /tmp/cctyFkZL.s 			page 20
+
+
+ 927 0248 6A       		.byte	106
+ 928 0249 51       		.byte	81
+ 929 024a 56       		.byte	86
+ 930 024b 2B       		.byte	43
+ 931 024c 30       		.byte	48
+ 932 024d 45       		.byte	69
+ 933 024e 6E       		.byte	110
+ 934 024f 35       		.byte	53
+ 935 0250 72       		.byte	114
+ 936 0251 22       		.byte	34
+ 937 0252 20       		.byte	32
+ 938 0253 63       		.byte	99
+ 939 0254 72       		.byte	114
+ 940 0255 6F       		.byte	111
+ 941 0256 73       		.byte	115
+ 942 0257 73       		.byte	115
+ 943 0258 6F       		.byte	111
+ 944 0259 72       		.byte	114
+ 945 025a 69       		.byte	105
+ 946 025b 67       		.byte	103
+ 947 025c 69       		.byte	105
+ 948 025d 6E       		.byte	110
+ 949 025e 3D       		.byte	61
+ 950 025f 22       		.byte	34
+ 951 0260 61       		.byte	97
+ 952 0261 6E       		.byte	110
+ 953 0262 6F       		.byte	111
+ 954 0263 6E       		.byte	110
+ 955 0264 79       		.byte	121
+ 956 0265 6D       		.byte	109
+ 957 0266 6F       		.byte	111
+ 958 0267 75       		.byte	117
+ 959 0268 73       		.byte	115
+ 960 0269 22       		.byte	34
+ 961 026a 3E       		.byte	62
+ 962 026b 0A       		.byte	10
+ 963 026c 0A       		.byte	10
+ 964 026d 3C       		.byte	60
+ 965 026e 21       		.byte	33
+ 966 026f 2D       		.byte	45
+ 967 0270 2D       		.byte	45
+ 968 0271 20       		.byte	32
+ 969 0272 4C       		.byte	76
+ 970 0273 61       		.byte	97
+ 971 0274 74       		.byte	116
+ 972 0275 65       		.byte	101
+ 973 0276 73       		.byte	115
+ 974 0277 74       		.byte	116
+ 975 0278 20       		.byte	32
+ 976 0279 63       		.byte	99
+ 977 027a 6F       		.byte	111
+ 978 027b 6D       		.byte	109
+ 979 027c 70       		.byte	112
+ 980 027d 69       		.byte	105
+ 981 027e 6C       		.byte	108
+ 982 027f 65       		.byte	101
+ 983 0280 64       		.byte	100
+ARM GAS  /tmp/cctyFkZL.s 			page 21
+
+
+ 984 0281 20       		.byte	32
+ 985 0282 61       		.byte	97
+ 986 0283 6E       		.byte	110
+ 987 0284 64       		.byte	100
+ 988 0285 20       		.byte	32
+ 989 0286 6D       		.byte	109
+ 990 0287 69       		.byte	105
+ 991 0288 6E       		.byte	110
+ 992 0289 69       		.byte	105
+ 993 028a 66       		.byte	102
+ 994 028b 69       		.byte	105
+ 995 028c 65       		.byte	101
+ 996 028d 64       		.byte	100
+ 997 028e 20       		.byte	32
+ 998 028f 4A       		.byte	74
+ 999 0290 61       		.byte	97
+ 1000 0291 76       		.byte	118
+ 1001 0292 61       		.byte	97
+ 1002 0293 53       		.byte	83
+ 1003 0294 63       		.byte	99
+ 1004 0295 72       		.byte	114
+ 1005 0296 69       		.byte	105
+ 1006 0297 70       		.byte	112
+ 1007 0298 74       		.byte	116
+ 1008 0299 20       		.byte	32
+ 1009 029a 2D       		.byte	45
+ 1010 029b 2D       		.byte	45
+ 1011 029c 3E       		.byte	62
+ 1012 029d 0A       		.byte	10
+ 1013 029e 3C       		.byte	60
+ 1014 029f 73       		.byte	115
+ 1015 02a0 63       		.byte	99
+ 1016 02a1 72       		.byte	114
+ 1017 02a2 69       		.byte	105
+ 1018 02a3 70       		.byte	112
+ 1019 02a4 74       		.byte	116
+ 1020 02a5 20       		.byte	32
+ 1021 02a6 73       		.byte	115
+ 1022 02a7 72       		.byte	114
+ 1023 02a8 63       		.byte	99
+ 1024 02a9 3D       		.byte	61
+ 1025 02aa 22       		.byte	34
+ 1026 02ab 68       		.byte	104
+ 1027 02ac 74       		.byte	116
+ 1028 02ad 74       		.byte	116
+ 1029 02ae 70       		.byte	112
+ 1030 02af 73       		.byte	115
+ 1031 02b0 3A       		.byte	58
+ 1032 02b1 2F       		.byte	47
+ 1033 02b2 2F       		.byte	47
+ 1034 02b3 6D       		.byte	109
+ 1035 02b4 61       		.byte	97
+ 1036 02b5 78       		.byte	120
+ 1037 02b6 63       		.byte	99
+ 1038 02b7 64       		.byte	100
+ 1039 02b8 6E       		.byte	110
+ 1040 02b9 2E       		.byte	46
+ARM GAS  /tmp/cctyFkZL.s 			page 22
+
+
+ 1041 02ba 62       		.byte	98
+ 1042 02bb 6F       		.byte	111
+ 1043 02bc 6F       		.byte	111
+ 1044 02bd 74       		.byte	116
+ 1045 02be 73       		.byte	115
+ 1046 02bf 74       		.byte	116
+ 1047 02c0 72       		.byte	114
+ 1048 02c1 61       		.byte	97
+ 1049 02c2 70       		.byte	112
+ 1050 02c3 63       		.byte	99
+ 1051 02c4 64       		.byte	100
+ 1052 02c5 6E       		.byte	110
+ 1053 02c6 2E       		.byte	46
+ 1054 02c7 63       		.byte	99
+ 1055 02c8 6F       		.byte	111
+ 1056 02c9 6D       		.byte	109
+ 1057 02ca 2F       		.byte	47
+ 1058 02cb 62       		.byte	98
+ 1059 02cc 6F       		.byte	111
+ 1060 02cd 6F       		.byte	111
+ 1061 02ce 74       		.byte	116
+ 1062 02cf 73       		.byte	115
+ 1063 02d0 74       		.byte	116
+ 1064 02d1 72       		.byte	114
+ 1065 02d2 61       		.byte	97
+ 1066 02d3 70       		.byte	112
+ 1067 02d4 2F       		.byte	47
+ 1068 02d5 33       		.byte	51
+ 1069 02d6 2E       		.byte	46
+ 1070 02d7 33       		.byte	51
+ 1071 02d8 2E       		.byte	46
+ 1072 02d9 36       		.byte	54
+ 1073 02da 2F       		.byte	47
+ 1074 02db 6A       		.byte	106
+ 1075 02dc 73       		.byte	115
+ 1076 02dd 2F       		.byte	47
+ 1077 02de 62       		.byte	98
+ 1078 02df 6F       		.byte	111
+ 1079 02e0 6F       		.byte	111
+ 1080 02e1 74       		.byte	116
+ 1081 02e2 73       		.byte	115
+ 1082 02e3 74       		.byte	116
+ 1083 02e4 72       		.byte	114
+ 1084 02e5 61       		.byte	97
+ 1085 02e6 70       		.byte	112
+ 1086 02e7 2E       		.byte	46
+ 1087 02e8 6D       		.byte	109
+ 1088 02e9 69       		.byte	105
+ 1089 02ea 6E       		.byte	110
+ 1090 02eb 2E       		.byte	46
+ 1091 02ec 6A       		.byte	106
+ 1092 02ed 73       		.byte	115
+ 1093 02ee 22       		.byte	34
+ 1094 02ef 20       		.byte	32
+ 1095 02f0 69       		.byte	105
+ 1096 02f1 6E       		.byte	110
+ 1097 02f2 74       		.byte	116
+ARM GAS  /tmp/cctyFkZL.s 			page 23
+
+
+ 1098 02f3 65       		.byte	101
+ 1099 02f4 67       		.byte	103
+ 1100 02f5 72       		.byte	114
+ 1101 02f6 69       		.byte	105
+ 1102 02f7 74       		.byte	116
+ 1103 02f8 79       		.byte	121
+ 1104 02f9 3D       		.byte	61
+ 1105 02fa 22       		.byte	34
+ 1106 02fb 73       		.byte	115
+ 1107 02fc 68       		.byte	104
+ 1108 02fd 61       		.byte	97
+ 1109 02fe 33       		.byte	51
+ 1110 02ff 38       		.byte	56
+ 1111 0300 34       		.byte	52
+ 1112 0301 2D       		.byte	45
+ 1113 0302 30       		.byte	48
+ 1114 0303 6D       		.byte	109
+ 1115 0304 53       		.byte	83
+ 1116 0305 62       		.byte	98
+ 1117 0306 4A       		.byte	74
+ 1118 0307 44       		.byte	68
+ 1119 0308 45       		.byte	69
+ 1120 0309 48       		.byte	72
+ 1121 030a 69       		.byte	105
+ 1122 030b 61       		.byte	97
+ 1123 030c 6C       		.byte	108
+ 1124 030d 66       		.byte	102
+ 1125 030e 6D       		.byte	109
+ 1126 030f 75       		.byte	117
+ 1127 0310 42       		.byte	66
+ 1128 0311 42       		.byte	66
+ 1129 0312 51       		.byte	81
+ 1130 0313 50       		.byte	80
+ 1131 0314 36       		.byte	54
+ 1132 0315 41       		.byte	65
+ 1133 0316 34       		.byte	52
+ 1134 0317 51       		.byte	81
+ 1135 0318 72       		.byte	114
+ 1136 0319 70       		.byte	112
+ 1137 031a 72       		.byte	114
+ 1138 031b 71       		.byte	113
+ 1139 031c 35       		.byte	53
+ 1140 031d 4F       		.byte	79
+ 1141 031e 56       		.byte	86
+ 1142 031f 66       		.byte	102
+ 1143 0320 57       		.byte	87
+ 1144 0321 33       		.byte	51
+ 1145 0322 37       		.byte	55
+ 1146 0323 50       		.byte	80
+ 1147 0324 52       		.byte	82
+ 1148 0325 52       		.byte	82
+ 1149 0326 33       		.byte	51
+ 1150 0327 6A       		.byte	106
+ 1151 0328 35       		.byte	53
+ 1152 0329 45       		.byte	69
+ 1153 032a 4C       		.byte	76
+ 1154 032b 71       		.byte	113
+ARM GAS  /tmp/cctyFkZL.s 			page 24
+
+
+ 1155 032c 78       		.byte	120
+ 1156 032d 73       		.byte	115
+ 1157 032e 73       		.byte	115
+ 1158 032f 31       		.byte	49
+ 1159 0330 79       		.byte	121
+ 1160 0331 56       		.byte	86
+ 1161 0332 71       		.byte	113
+ 1162 0333 4F       		.byte	79
+ 1163 0334 74       		.byte	116
+ 1164 0335 6E       		.byte	110
+ 1165 0336 65       		.byte	101
+ 1166 0337 70       		.byte	112
+ 1167 0338 6E       		.byte	110
+ 1168 0339 48       		.byte	72
+ 1169 033a 56       		.byte	86
+ 1170 033b 50       		.byte	80
+ 1171 033c 39       		.byte	57
+ 1172 033d 61       		.byte	97
+ 1173 033e 4A       		.byte	74
+ 1174 033f 37       		.byte	55
+ 1175 0340 78       		.byte	120
+ 1176 0341 53       		.byte	83
+ 1177 0342 22       		.byte	34
+ 1178 0343 20       		.byte	32
+ 1179 0344 63       		.byte	99
+ 1180 0345 72       		.byte	114
+ 1181 0346 6F       		.byte	111
+ 1182 0347 73       		.byte	115
+ 1183 0348 73       		.byte	115
+ 1184 0349 6F       		.byte	111
+ 1185 034a 72       		.byte	114
+ 1186 034b 69       		.byte	105
+ 1187 034c 67       		.byte	103
+ 1188 034d 69       		.byte	105
+ 1189 034e 6E       		.byte	110
+ 1190 034f 3D       		.byte	61
+ 1191 0350 22       		.byte	34
+ 1192 0351 61       		.byte	97
+ 1193 0352 6E       		.byte	110
+ 1194 0353 6F       		.byte	111
+ 1195 0354 6E       		.byte	110
+ 1196 0355 79       		.byte	121
+ 1197 0356 6D       		.byte	109
+ 1198 0357 6F       		.byte	111
+ 1199 0358 75       		.byte	117
+ 1200 0359 73       		.byte	115
+ 1201 035a 22       		.byte	34
+ 1202 035b 3E       		.byte	62
+ 1203 035c 3C       		.byte	60
+ 1204 035d 2F       		.byte	47
+ 1205 035e 73       		.byte	115
+ 1206 035f 63       		.byte	99
+ 1207 0360 72       		.byte	114
+ 1208 0361 69       		.byte	105
+ 1209 0362 70       		.byte	112
+ 1210 0363 74       		.byte	116
+ 1211 0364 3E       		.byte	62
+ARM GAS  /tmp/cctyFkZL.s 			page 25
+
+
+ 1212 0365 0A       		.byte	10
+ 1213 0366 3C       		.byte	60
+ 1214 0367 73       		.byte	115
+ 1215 0368 63       		.byte	99
+ 1216 0369 72       		.byte	114
+ 1217 036a 69       		.byte	105
+ 1218 036b 70       		.byte	112
+ 1219 036c 74       		.byte	116
+ 1220 036d 20       		.byte	32
+ 1221 036e 74       		.byte	116
+ 1222 036f 79       		.byte	121
+ 1223 0370 70       		.byte	112
+ 1224 0371 65       		.byte	101
+ 1225 0372 3D       		.byte	61
+ 1226 0373 22       		.byte	34
+ 1227 0374 74       		.byte	116
+ 1228 0375 65       		.byte	101
+ 1229 0376 78       		.byte	120
+ 1230 0377 74       		.byte	116
+ 1231 0378 2F       		.byte	47
+ 1232 0379 6A       		.byte	106
+ 1233 037a 61       		.byte	97
+ 1234 037b 76       		.byte	118
+ 1235 037c 61       		.byte	97
+ 1236 037d 73       		.byte	115
+ 1237 037e 63       		.byte	99
+ 1238 037f 72       		.byte	114
+ 1239 0380 69       		.byte	105
+ 1240 0381 70       		.byte	112
+ 1241 0382 74       		.byte	116
+ 1242 0383 22       		.byte	34
+ 1243 0384 3E       		.byte	62
+ 1244 0385 0A       		.byte	10
+ 1245 0386 20       		.byte	32
+ 1246 0387 20       		.byte	32
+ 1247 0388 24       		.byte	36
+ 1248 0389 28       		.byte	40
+ 1249 038a 64       		.byte	100
+ 1250 038b 6F       		.byte	111
+ 1251 038c 63       		.byte	99
+ 1252 038d 75       		.byte	117
+ 1253 038e 6D       		.byte	109
+ 1254 038f 65       		.byte	101
+ 1255 0390 6E       		.byte	110
+ 1256 0391 74       		.byte	116
+ 1257 0392 29       		.byte	41
+ 1258 0393 2E       		.byte	46
+ 1259 0394 72       		.byte	114
+ 1260 0395 65       		.byte	101
+ 1261 0396 61       		.byte	97
+ 1262 0397 64       		.byte	100
+ 1263 0398 79       		.byte	121
+ 1264 0399 28       		.byte	40
+ 1265 039a 66       		.byte	102
+ 1266 039b 75       		.byte	117
+ 1267 039c 6E       		.byte	110
+ 1268 039d 63       		.byte	99
+ARM GAS  /tmp/cctyFkZL.s 			page 26
+
+
+ 1269 039e 74       		.byte	116
+ 1270 039f 69       		.byte	105
+ 1271 03a0 6F       		.byte	111
+ 1272 03a1 6E       		.byte	110
+ 1273 03a2 28       		.byte	40
+ 1274 03a3 29       		.byte	41
+ 1275 03a4 20       		.byte	32
+ 1276 03a5 7B       		.byte	123
+ 1277 03a6 0A       		.byte	10
+ 1278 03a7 20       		.byte	32
+ 1279 03a8 20       		.byte	32
+ 1280 03a9 09       		.byte	9
+ 1281 03aa 24       		.byte	36
+ 1282 03ab 28       		.byte	40
+ 1283 03ac 22       		.byte	34
+ 1284 03ad 2E       		.byte	46
+ 1285 03ae 6C       		.byte	108
+ 1286 03af 65       		.byte	101
+ 1287 03b0 64       		.byte	100
+ 1288 03b1 22       		.byte	34
+ 1289 03b2 29       		.byte	41
+ 1290 03b3 2E       		.byte	46
+ 1291 03b4 63       		.byte	99
+ 1292 03b5 6C       		.byte	108
+ 1293 03b6 69       		.byte	105
+ 1294 03b7 63       		.byte	99
+ 1295 03b8 6B       		.byte	107
+ 1296 03b9 28       		.byte	40
+ 1297 03ba 66       		.byte	102
+ 1298 03bb 75       		.byte	117
+ 1299 03bc 6E       		.byte	110
+ 1300 03bd 63       		.byte	99
+ 1301 03be 74       		.byte	116
+ 1302 03bf 69       		.byte	105
+ 1303 03c0 6F       		.byte	111
+ 1304 03c1 6E       		.byte	110
+ 1305 03c2 28       		.byte	40
+ 1306 03c3 65       		.byte	101
+ 1307 03c4 29       		.byte	41
+ 1308 03c5 20       		.byte	32
+ 1309 03c6 7B       		.byte	123
+ 1310 03c7 0A       		.byte	10
+ 1311 03c8 20       		.byte	32
+ 1312 03c9 20       		.byte	32
+ 1313 03ca 09       		.byte	9
+ 1314 03cb 20       		.byte	32
+ 1315 03cc 20       		.byte	32
+ 1316 03cd 20       		.byte	32
+ 1317 03ce 20       		.byte	32
+ 1318 03cf 24       		.byte	36
+ 1319 03d0 2E       		.byte	46
+ 1320 03d1 67       		.byte	103
+ 1321 03d2 65       		.byte	101
+ 1322 03d3 74       		.byte	116
+ 1323 03d4 28       		.byte	40
+ 1324 03d5 24       		.byte	36
+ 1325 03d6 28       		.byte	40
+ARM GAS  /tmp/cctyFkZL.s 			page 27
+
+
+ 1326 03d7 74       		.byte	116
+ 1327 03d8 68       		.byte	104
+ 1328 03d9 69       		.byte	105
+ 1329 03da 73       		.byte	115
+ 1330 03db 29       		.byte	41
+ 1331 03dc 2E       		.byte	46
+ 1332 03dd 61       		.byte	97
+ 1333 03de 74       		.byte	116
+ 1334 03df 74       		.byte	116
+ 1335 03e0 72       		.byte	114
+ 1336 03e1 28       		.byte	40
+ 1337 03e2 22       		.byte	34
+ 1338 03e3 69       		.byte	105
+ 1339 03e4 64       		.byte	100
+ 1340 03e5 22       		.byte	34
+ 1341 03e6 29       		.byte	41
+ 1342 03e7 29       		.byte	41
+ 1343 03e8 3B       		.byte	59
+ 1344 03e9 0A       		.byte	10
+ 1345 03ea 20       		.byte	32
+ 1346 03eb 20       		.byte	32
+ 1347 03ec 09       		.byte	9
+ 1348 03ed 7D       		.byte	125
+ 1349 03ee 29       		.byte	41
+ 1350 03ef 3B       		.byte	59
+ 1351 03f0 0A       		.byte	10
+ 1352 03f1 09       		.byte	9
+ 1353 03f2 66       		.byte	102
+ 1354 03f3 75       		.byte	117
+ 1355 03f4 6E       		.byte	110
+ 1356 03f5 63       		.byte	99
+ 1357 03f6 74       		.byte	116
+ 1358 03f7 69       		.byte	105
+ 1359 03f8 6F       		.byte	111
+ 1360 03f9 6E       		.byte	110
+ 1361 03fa 20       		.byte	32
+ 1362 03fb 72       		.byte	114
+ 1363 03fc 65       		.byte	101
+ 1364 03fd 66       		.byte	102
+ 1365 03fe 72       		.byte	114
+ 1366 03ff 65       		.byte	101
+ 1367 0400 73       		.byte	115
+ 1368 0401 68       		.byte	104
+ 1369 0402 56       		.byte	86
+ 1370 0403 61       		.byte	97
+ 1371 0404 6C       		.byte	108
+ 1372 0405 75       		.byte	117
+ 1373 0406 65       		.byte	101
+ 1374 0407 73       		.byte	115
+ 1375 0408 28       		.byte	40
+ 1376 0409 29       		.byte	41
+ 1377 040a 20       		.byte	32
+ 1378 040b 7B       		.byte	123
+ 1379 040c 0A       		.byte	10
+ 1380 040d 20       		.byte	32
+ 1381 040e 20       		.byte	32
+ 1382 040f 20       		.byte	32
+ARM GAS  /tmp/cctyFkZL.s 			page 28
+
+
+ 1383 0410 20       		.byte	32
+ 1384 0411 20       		.byte	32
+ 1385 0412 20       		.byte	32
+ 1386 0413 20       		.byte	32
+ 1387 0414 24       		.byte	36
+ 1388 0415 2E       		.byte	46
+ 1389 0416 67       		.byte	103
+ 1390 0417 65       		.byte	101
+ 1391 0418 74       		.byte	116
+ 1392 0419 28       		.byte	40
+ 1393 041a 22       		.byte	34
+ 1394 041b 62       		.byte	98
+ 1395 041c 74       		.byte	116
+ 1396 041d 6E       		.byte	110
+ 1397 041e 31       		.byte	49
+ 1398 041f 22       		.byte	34
+ 1399 0420 2C       		.byte	44
+ 1400 0421 20       		.byte	32
+ 1401 0422 66       		.byte	102
+ 1402 0423 75       		.byte	117
+ 1403 0424 6E       		.byte	110
+ 1404 0425 63       		.byte	99
+ 1405 0426 74       		.byte	116
+ 1406 0427 69       		.byte	105
+ 1407 0428 6F       		.byte	111
+ 1408 0429 6E       		.byte	110
+ 1409 042a 28       		.byte	40
+ 1410 042b 72       		.byte	114
+ 1411 042c 65       		.byte	101
+ 1412 042d 73       		.byte	115
+ 1413 042e 29       		.byte	41
+ 1414 042f 20       		.byte	32
+ 1415 0430 7B       		.byte	123
+ 1416 0431 0A       		.byte	10
+ 1417 0432 20       		.byte	32
+ 1418 0433 20       		.byte	32
+ 1419 0434 20       		.byte	32
+ 1420 0435 20       		.byte	32
+ 1421 0436 20       		.byte	32
+ 1422 0437 20       		.byte	32
+ 1423 0438 20       		.byte	32
+ 1424 0439 20       		.byte	32
+ 1425 043a 20       		.byte	32
+ 1426 043b 20       		.byte	32
+ 1427 043c 20       		.byte	32
+ 1428 043d 69       		.byte	105
+ 1429 043e 66       		.byte	102
+ 1430 043f 28       		.byte	40
+ 1431 0440 72       		.byte	114
+ 1432 0441 65       		.byte	101
+ 1433 0442 73       		.byte	115
+ 1434 0443 20       		.byte	32
+ 1435 0444 3D       		.byte	61
+ 1436 0445 3D       		.byte	61
+ 1437 0446 20       		.byte	32
+ 1438 0447 22       		.byte	34
+ 1439 0448 4F       		.byte	79
+ARM GAS  /tmp/cctyFkZL.s 			page 29
+
+
+ 1440 0449 46       		.byte	70
+ 1441 044a 46       		.byte	70
+ 1442 044b 22       		.byte	34
+ 1443 044c 29       		.byte	41
+ 1444 044d 0A       		.byte	10
+ 1445 044e 20       		.byte	32
+ 1446 044f 20       		.byte	32
+ 1447 0450 20       		.byte	32
+ 1448 0451 20       		.byte	32
+ 1449 0452 20       		.byte	32
+ 1450 0453 20       		.byte	32
+ 1451 0454 20       		.byte	32
+ 1452 0455 20       		.byte	32
+ 1453 0456 20       		.byte	32
+ 1454 0457 20       		.byte	32
+ 1455 0458 20       		.byte	32
+ 1456 0459 09       		.byte	9
+ 1457 045a 20       		.byte	32
+ 1458 045b 24       		.byte	36
+ 1459 045c 28       		.byte	40
+ 1460 045d 22       		.byte	34
+ 1461 045e 23       		.byte	35
+ 1462 045f 75       		.byte	117
+ 1463 0460 73       		.byte	115
+ 1464 0461 72       		.byte	114
+ 1465 0462 2D       		.byte	45
+ 1466 0463 62       		.byte	98
+ 1467 0464 74       		.byte	116
+ 1468 0465 6E       		.byte	110
+ 1469 0466 22       		.byte	34
+ 1470 0467 29       		.byte	41
+ 1471 0468 2E       		.byte	46
+ 1472 0469 72       		.byte	114
+ 1473 046a 65       		.byte	101
+ 1474 046b 6D       		.byte	109
+ 1475 046c 6F       		.byte	111
+ 1476 046d 76       		.byte	118
+ 1477 046e 65       		.byte	101
+ 1478 046f 43       		.byte	67
+ 1479 0470 6C       		.byte	108
+ 1480 0471 61       		.byte	97
+ 1481 0472 73       		.byte	115
+ 1482 0473 73       		.byte	115
+ 1483 0474 28       		.byte	40
+ 1484 0475 22       		.byte	34
+ 1485 0476 61       		.byte	97
+ 1486 0477 6C       		.byte	108
+ 1487 0478 65       		.byte	101
+ 1488 0479 72       		.byte	114
+ 1489 047a 74       		.byte	116
+ 1490 047b 2D       		.byte	45
+ 1491 047c 73       		.byte	115
+ 1492 047d 75       		.byte	117
+ 1493 047e 63       		.byte	99
+ 1494 047f 63       		.byte	99
+ 1495 0480 65       		.byte	101
+ 1496 0481 73       		.byte	115
+ARM GAS  /tmp/cctyFkZL.s 			page 30
+
+
+ 1497 0482 73       		.byte	115
+ 1498 0483 22       		.byte	34
+ 1499 0484 29       		.byte	41
+ 1500 0485 2E       		.byte	46
+ 1501 0486 61       		.byte	97
+ 1502 0487 64       		.byte	100
+ 1503 0488 64       		.byte	100
+ 1504 0489 43       		.byte	67
+ 1505 048a 6C       		.byte	108
+ 1506 048b 61       		.byte	97
+ 1507 048c 73       		.byte	115
+ 1508 048d 73       		.byte	115
+ 1509 048e 28       		.byte	40
+ 1510 048f 22       		.byte	34
+ 1511 0490 61       		.byte	97
+ 1512 0491 6C       		.byte	108
+ 1513 0492 65       		.byte	101
+ 1514 0493 72       		.byte	114
+ 1515 0494 74       		.byte	116
+ 1516 0495 2D       		.byte	45
+ 1517 0496 69       		.byte	105
+ 1518 0497 6E       		.byte	110
+ 1519 0498 66       		.byte	102
+ 1520 0499 6F       		.byte	111
+ 1521 049a 22       		.byte	34
+ 1522 049b 29       		.byte	41
+ 1523 049c 3B       		.byte	59
+ 1524 049d 0A       		.byte	10
+ 1525 049e 20       		.byte	32
+ 1526 049f 20       		.byte	32
+ 1527 04a0 20       		.byte	32
+ 1528 04a1 20       		.byte	32
+ 1529 04a2 20       		.byte	32
+ 1530 04a3 20       		.byte	32
+ 1531 04a4 20       		.byte	32
+ 1532 04a5 20       		.byte	32
+ 1533 04a6 20       		.byte	32
+ 1534 04a7 20       		.byte	32
+ 1535 04a8 20       		.byte	32
+ 1536 04a9 65       		.byte	101
+ 1537 04aa 6C       		.byte	108
+ 1538 04ab 73       		.byte	115
+ 1539 04ac 65       		.byte	101
+ 1540 04ad 0A       		.byte	10
+ 1541 04ae 20       		.byte	32
+ 1542 04af 20       		.byte	32
+ 1543 04b0 20       		.byte	32
+ 1544 04b1 20       		.byte	32
+ 1545 04b2 20       		.byte	32
+ 1546 04b3 20       		.byte	32
+ 1547 04b4 20       		.byte	32
+ 1548 04b5 20       		.byte	32
+ 1549 04b6 20       		.byte	32
+ 1550 04b7 20       		.byte	32
+ 1551 04b8 20       		.byte	32
+ 1552 04b9 20       		.byte	32
+ 1553 04ba 20       		.byte	32
+ARM GAS  /tmp/cctyFkZL.s 			page 31
+
+
+ 1554 04bb 24       		.byte	36
+ 1555 04bc 28       		.byte	40
+ 1556 04bd 22       		.byte	34
+ 1557 04be 23       		.byte	35
+ 1558 04bf 75       		.byte	117
+ 1559 04c0 73       		.byte	115
+ 1560 04c1 72       		.byte	114
+ 1561 04c2 2D       		.byte	45
+ 1562 04c3 62       		.byte	98
+ 1563 04c4 74       		.byte	116
+ 1564 04c5 6E       		.byte	110
+ 1565 04c6 22       		.byte	34
+ 1566 04c7 29       		.byte	41
+ 1567 04c8 2E       		.byte	46
+ 1568 04c9 72       		.byte	114
+ 1569 04ca 65       		.byte	101
+ 1570 04cb 6D       		.byte	109
+ 1571 04cc 6F       		.byte	111
+ 1572 04cd 76       		.byte	118
+ 1573 04ce 65       		.byte	101
+ 1574 04cf 43       		.byte	67
+ 1575 04d0 6C       		.byte	108
+ 1576 04d1 61       		.byte	97
+ 1577 04d2 73       		.byte	115
+ 1578 04d3 73       		.byte	115
+ 1579 04d4 28       		.byte	40
+ 1580 04d5 22       		.byte	34
+ 1581 04d6 61       		.byte	97
+ 1582 04d7 6C       		.byte	108
+ 1583 04d8 65       		.byte	101
+ 1584 04d9 72       		.byte	114
+ 1585 04da 74       		.byte	116
+ 1586 04db 2D       		.byte	45
+ 1587 04dc 69       		.byte	105
+ 1588 04dd 6E       		.byte	110
+ 1589 04de 66       		.byte	102
+ 1590 04df 6F       		.byte	111
+ 1591 04e0 22       		.byte	34
+ 1592 04e1 29       		.byte	41
+ 1593 04e2 2E       		.byte	46
+ 1594 04e3 61       		.byte	97
+ 1595 04e4 64       		.byte	100
+ 1596 04e5 64       		.byte	100
+ 1597 04e6 43       		.byte	67
+ 1598 04e7 6C       		.byte	108
+ 1599 04e8 61       		.byte	97
+ 1600 04e9 73       		.byte	115
+ 1601 04ea 73       		.byte	115
+ 1602 04eb 28       		.byte	40
+ 1603 04ec 22       		.byte	34
+ 1604 04ed 61       		.byte	97
+ 1605 04ee 6C       		.byte	108
+ 1606 04ef 65       		.byte	101
+ 1607 04f0 72       		.byte	114
+ 1608 04f1 74       		.byte	116
+ 1609 04f2 2D       		.byte	45
+ 1610 04f3 73       		.byte	115
+ARM GAS  /tmp/cctyFkZL.s 			page 32
+
+
+ 1611 04f4 75       		.byte	117
+ 1612 04f5 63       		.byte	99
+ 1613 04f6 63       		.byte	99
+ 1614 04f7 65       		.byte	101
+ 1615 04f8 73       		.byte	115
+ 1616 04f9 73       		.byte	115
+ 1617 04fa 22       		.byte	34
+ 1618 04fb 29       		.byte	41
+ 1619 04fc 3B       		.byte	59
+ 1620 04fd 0A       		.byte	10
+ 1621 04fe 20       		.byte	32
+ 1622 04ff 20       		.byte	32
+ 1623 0500 20       		.byte	32
+ 1624 0501 20       		.byte	32
+ 1625 0502 20       		.byte	32
+ 1626 0503 20       		.byte	32
+ 1627 0504 20       		.byte	32
+ 1628 0505 20       		.byte	32
+ 1629 0506 20       		.byte	32
+ 1630 0507 20       		.byte	32
+ 1631 0508 20       		.byte	32
+ 1632 0509 20       		.byte	32
+ 1633 050a 20       		.byte	32
+ 1634 050b 0A       		.byte	10
+ 1635 050c 20       		.byte	32
+ 1636 050d 20       		.byte	32
+ 1637 050e 20       		.byte	32
+ 1638 050f 20       		.byte	32
+ 1639 0510 20       		.byte	32
+ 1640 0511 20       		.byte	32
+ 1641 0512 20       		.byte	32
+ 1642 0513 20       		.byte	32
+ 1643 0514 20       		.byte	32
+ 1644 0515 20       		.byte	32
+ 1645 0516 20       		.byte	32
+ 1646 0517 24       		.byte	36
+ 1647 0518 28       		.byte	40
+ 1648 0519 22       		.byte	34
+ 1649 051a 23       		.byte	35
+ 1650 051b 75       		.byte	117
+ 1651 051c 73       		.byte	115
+ 1652 051d 72       		.byte	114
+ 1653 051e 2D       		.byte	45
+ 1654 051f 62       		.byte	98
+ 1655 0520 74       		.byte	116
+ 1656 0521 6E       		.byte	110
+ 1657 0522 22       		.byte	34
+ 1658 0523 29       		.byte	41
+ 1659 0524 2E       		.byte	46
+ 1660 0525 66       		.byte	102
+ 1661 0526 69       		.byte	105
+ 1662 0527 6E       		.byte	110
+ 1663 0528 64       		.byte	100
+ 1664 0529 28       		.byte	40
+ 1665 052a 22       		.byte	34
+ 1666 052b 62       		.byte	98
+ 1667 052c 22       		.byte	34
+ARM GAS  /tmp/cctyFkZL.s 			page 33
+
+
+ 1668 052d 29       		.byte	41
+ 1669 052e 2E       		.byte	46
+ 1670 052f 68       		.byte	104
+ 1671 0530 74       		.byte	116
+ 1672 0531 6D       		.byte	109
+ 1673 0532 6C       		.byte	108
+ 1674 0533 28       		.byte	40
+ 1675 0534 72       		.byte	114
+ 1676 0535 65       		.byte	101
+ 1677 0536 73       		.byte	115
+ 1678 0537 29       		.byte	41
+ 1679 0538 3B       		.byte	59
+ 1680 0539 20       		.byte	32
+ 1681 053a 20       		.byte	32
+ 1682 053b 20       		.byte	32
+ 1683 053c 20       		.byte	32
+ 1684 053d 20       		.byte	32
+ 1685 053e 20       		.byte	32
+ 1686 053f 20       		.byte	32
+ 1687 0540 20       		.byte	32
+ 1688 0541 20       		.byte	32
+ 1689 0542 20       		.byte	32
+ 1690 0543 20       		.byte	32
+ 1691 0544 0A       		.byte	10
+ 1692 0545 20       		.byte	32
+ 1693 0546 20       		.byte	32
+ 1694 0547 20       		.byte	32
+ 1695 0548 20       		.byte	32
+ 1696 0549 20       		.byte	32
+ 1697 054a 20       		.byte	32
+ 1698 054b 20       		.byte	32
+ 1699 054c 20       		.byte	32
+ 1700 054d 7D       		.byte	125
+ 1701 054e 29       		.byte	41
+ 1702 054f 3B       		.byte	59
+ 1703 0550 20       		.byte	32
+ 1704 0551 0A       		.byte	10
+ 1705 0552 20       		.byte	32
+ 1706 0553 20       		.byte	32
+ 1707 0554 20       		.byte	32
+ 1708 0555 20       		.byte	32
+ 1709 0556 20       		.byte	32
+ 1710 0557 20       		.byte	32
+ 1711 0558 20       		.byte	32
+ 1712 0559 20       		.byte	32
+ 1713 055a 24       		.byte	36
+ 1714 055b 2E       		.byte	46
+ 1715 055c 67       		.byte	103
+ 1716 055d 65       		.byte	101
+ 1717 055e 74       		.byte	116
+ 1718 055f 28       		.byte	40
+ 1719 0560 22       		.byte	34
+ 1720 0561 61       		.byte	97
+ 1721 0562 64       		.byte	100
+ 1722 0563 63       		.byte	99
+ 1723 0564 22       		.byte	34
+ 1724 0565 2C       		.byte	44
+ARM GAS  /tmp/cctyFkZL.s 			page 34
+
+
+ 1725 0566 20       		.byte	32
+ 1726 0567 66       		.byte	102
+ 1727 0568 75       		.byte	117
+ 1728 0569 6E       		.byte	110
+ 1729 056a 63       		.byte	99
+ 1730 056b 74       		.byte	116
+ 1731 056c 69       		.byte	105
+ 1732 056d 6F       		.byte	111
+ 1733 056e 6E       		.byte	110
+ 1734 056f 28       		.byte	40
+ 1735 0570 72       		.byte	114
+ 1736 0571 65       		.byte	101
+ 1737 0572 73       		.byte	115
+ 1738 0573 29       		.byte	41
+ 1739 0574 20       		.byte	32
+ 1740 0575 7B       		.byte	123
+ 1741 0576 0A       		.byte	10
+ 1742 0577 20       		.byte	32
+ 1743 0578 20       		.byte	32
+ 1744 0579 20       		.byte	32
+ 1745 057a 20       		.byte	32
+ 1746 057b 20       		.byte	32
+ 1747 057c 20       		.byte	32
+ 1748 057d 20       		.byte	32
+ 1749 057e 20       		.byte	32
+ 1750 057f 20       		.byte	32
+ 1751 0580 20       		.byte	32
+ 1752 0581 20       		.byte	32
+ 1753 0582 24       		.byte	36
+ 1754 0583 28       		.byte	40
+ 1755 0584 22       		.byte	34
+ 1756 0585 23       		.byte	35
+ 1757 0586 6D       		.byte	109
+ 1758 0587 63       		.byte	99
+ 1759 0588 75       		.byte	117
+ 1760 0589 2D       		.byte	45
+ 1761 058a 74       		.byte	116
+ 1762 058b 65       		.byte	101
+ 1763 058c 6D       		.byte	109
+ 1764 058d 70       		.byte	112
+ 1765 058e 22       		.byte	34
+ 1766 058f 29       		.byte	41
+ 1767 0590 2E       		.byte	46
+ 1768 0591 66       		.byte	102
+ 1769 0592 69       		.byte	105
+ 1770 0593 6E       		.byte	110
+ 1771 0594 64       		.byte	100
+ 1772 0595 28       		.byte	40
+ 1773 0596 22       		.byte	34
+ 1774 0597 62       		.byte	98
+ 1775 0598 22       		.byte	34
+ 1776 0599 29       		.byte	41
+ 1777 059a 2E       		.byte	46
+ 1778 059b 68       		.byte	104
+ 1779 059c 74       		.byte	116
+ 1780 059d 6D       		.byte	109
+ 1781 059e 6C       		.byte	108
+ARM GAS  /tmp/cctyFkZL.s 			page 35
+
+
+ 1782 059f 28       		.byte	40
+ 1783 05a0 72       		.byte	114
+ 1784 05a1 65       		.byte	101
+ 1785 05a2 73       		.byte	115
+ 1786 05a3 29       		.byte	41
+ 1787 05a4 3B       		.byte	59
+ 1788 05a5 20       		.byte	32
+ 1789 05a6 20       		.byte	32
+ 1790 05a7 20       		.byte	32
+ 1791 05a8 20       		.byte	32
+ 1792 05a9 20       		.byte	32
+ 1793 05aa 20       		.byte	32
+ 1794 05ab 20       		.byte	32
+ 1795 05ac 20       		.byte	32
+ 1796 05ad 20       		.byte	32
+ 1797 05ae 20       		.byte	32
+ 1798 05af 20       		.byte	32
+ 1799 05b0 0A       		.byte	10
+ 1800 05b1 20       		.byte	32
+ 1801 05b2 20       		.byte	32
+ 1802 05b3 20       		.byte	32
+ 1803 05b4 20       		.byte	32
+ 1804 05b5 20       		.byte	32
+ 1805 05b6 20       		.byte	32
+ 1806 05b7 20       		.byte	32
+ 1807 05b8 20       		.byte	32
+ 1808 05b9 7D       		.byte	125
+ 1809 05ba 29       		.byte	41
+ 1810 05bb 3B       		.byte	59
+ 1811 05bc 20       		.byte	32
+ 1812 05bd 0A       		.byte	10
+ 1813 05be 09       		.byte	9
+ 1814 05bf 20       		.byte	32
+ 1815 05c0 20       		.byte	32
+ 1816 05c1 20       		.byte	32
+ 1817 05c2 73       		.byte	115
+ 1818 05c3 65       		.byte	101
+ 1819 05c4 74       		.byte	116
+ 1820 05c5 54       		.byte	84
+ 1821 05c6 69       		.byte	105
+ 1822 05c7 6D       		.byte	109
+ 1823 05c8 65       		.byte	101
+ 1824 05c9 6F       		.byte	111
+ 1825 05ca 75       		.byte	117
+ 1826 05cb 74       		.byte	116
+ 1827 05cc 28       		.byte	40
+ 1828 05cd 72       		.byte	114
+ 1829 05ce 65       		.byte	101
+ 1830 05cf 66       		.byte	102
+ 1831 05d0 72       		.byte	114
+ 1832 05d1 65       		.byte	101
+ 1833 05d2 73       		.byte	115
+ 1834 05d3 68       		.byte	104
+ 1835 05d4 56       		.byte	86
+ 1836 05d5 61       		.byte	97
+ 1837 05d6 6C       		.byte	108
+ 1838 05d7 75       		.byte	117
+ARM GAS  /tmp/cctyFkZL.s 			page 36
+
+
+ 1839 05d8 65       		.byte	101
+ 1840 05d9 73       		.byte	115
+ 1841 05da 2C       		.byte	44
+ 1842 05db 20       		.byte	32
+ 1843 05dc 32       		.byte	50
+ 1844 05dd 35       		.byte	53
+ 1845 05de 30       		.byte	48
+ 1846 05df 29       		.byte	41
+ 1847 05e0 3B       		.byte	59
+ 1848 05e1 20       		.byte	32
+ 1849 05e2 0A       		.byte	10
+ 1850 05e3 09       		.byte	9
+ 1851 05e4 7D       		.byte	125
+ 1852 05e5 0A       		.byte	10
+ 1853 05e6 09       		.byte	9
+ 1854 05e7 73       		.byte	115
+ 1855 05e8 65       		.byte	101
+ 1856 05e9 74       		.byte	116
+ 1857 05ea 54       		.byte	84
+ 1858 05eb 69       		.byte	105
+ 1859 05ec 6D       		.byte	109
+ 1860 05ed 65       		.byte	101
+ 1861 05ee 6F       		.byte	111
+ 1862 05ef 75       		.byte	117
+ 1863 05f0 74       		.byte	116
+ 1864 05f1 28       		.byte	40
+ 1865 05f2 72       		.byte	114
+ 1866 05f3 65       		.byte	101
+ 1867 05f4 66       		.byte	102
+ 1868 05f5 72       		.byte	114
+ 1869 05f6 65       		.byte	101
+ 1870 05f7 73       		.byte	115
+ 1871 05f8 68       		.byte	104
+ 1872 05f9 56       		.byte	86
+ 1873 05fa 61       		.byte	97
+ 1874 05fb 6C       		.byte	108
+ 1875 05fc 75       		.byte	117
+ 1876 05fd 65       		.byte	101
+ 1877 05fe 73       		.byte	115
+ 1878 05ff 2C       		.byte	44
+ 1879 0600 20       		.byte	32
+ 1880 0601 32       		.byte	50
+ 1881 0602 35       		.byte	53
+ 1882 0603 30       		.byte	48
+ 1883 0604 29       		.byte	41
+ 1884 0605 3B       		.byte	59
+ 1885 0606 0A       		.byte	10
+ 1886 0607 20       		.byte	32
+ 1887 0608 20       		.byte	32
+ 1888 0609 7D       		.byte	125
+ 1889 060a 29       		.byte	41
+ 1890 060b 3B       		.byte	59
+ 1891 060c 0A       		.byte	10
+ 1892 060d 20       		.byte	32
+ 1893 060e 20       		.byte	32
+ 1894 060f 0A       		.byte	10
+ 1895 0610 20       		.byte	32
+ARM GAS  /tmp/cctyFkZL.s 			page 37
+
+
+ 1896 0611 20       		.byte	32
+ 1897 0612 0A       		.byte	10
+ 1898 0613 3C       		.byte	60
+ 1899 0614 2F       		.byte	47
+ 1900 0615 73       		.byte	115
+ 1901 0616 63       		.byte	99
+ 1902 0617 72       		.byte	114
+ 1903 0618 69       		.byte	105
+ 1904 0619 70       		.byte	112
+ 1905 061a 74       		.byte	116
+ 1906 061b 3E       		.byte	62
+ 1907 061c 0A       		.byte	10
+ 1908 061d 3C       		.byte	60
+ 1909 061e 6D       		.byte	109
+ 1910 061f 65       		.byte	101
+ 1911 0620 74       		.byte	116
+ 1912 0621 61       		.byte	97
+ 1913 0622 20       		.byte	32
+ 1914 0623 6E       		.byte	110
+ 1915 0624 61       		.byte	97
+ 1916 0625 6D       		.byte	109
+ 1917 0626 65       		.byte	101
+ 1918 0627 3D       		.byte	61
+ 1919 0628 22       		.byte	34
+ 1920 0629 76       		.byte	118
+ 1921 062a 69       		.byte	105
+ 1922 062b 65       		.byte	101
+ 1923 062c 77       		.byte	119
+ 1924 062d 70       		.byte	112
+ 1925 062e 6F       		.byte	111
+ 1926 062f 72       		.byte	114
+ 1927 0630 74       		.byte	116
+ 1928 0631 22       		.byte	34
+ 1929 0632 20       		.byte	32
+ 1930 0633 63       		.byte	99
+ 1931 0634 6F       		.byte	111
+ 1932 0635 6E       		.byte	110
+ 1933 0636 74       		.byte	116
+ 1934 0637 65       		.byte	101
+ 1935 0638 6E       		.byte	110
+ 1936 0639 74       		.byte	116
+ 1937 063a 3D       		.byte	61
+ 1938 063b 22       		.byte	34
+ 1939 063c 77       		.byte	119
+ 1940 063d 69       		.byte	105
+ 1941 063e 64       		.byte	100
+ 1942 063f 74       		.byte	116
+ 1943 0640 68       		.byte	104
+ 1944 0641 3D       		.byte	61
+ 1945 0642 64       		.byte	100
+ 1946 0643 65       		.byte	101
+ 1947 0644 76       		.byte	118
+ 1948 0645 69       		.byte	105
+ 1949 0646 63       		.byte	99
+ 1950 0647 65       		.byte	101
+ 1951 0648 2D       		.byte	45
+ 1952 0649 77       		.byte	119
+ARM GAS  /tmp/cctyFkZL.s 			page 38
+
+
+ 1953 064a 69       		.byte	105
+ 1954 064b 64       		.byte	100
+ 1955 064c 74       		.byte	116
+ 1956 064d 68       		.byte	104
+ 1957 064e 2C       		.byte	44
+ 1958 064f 20       		.byte	32
+ 1959 0650 69       		.byte	105
+ 1960 0651 6E       		.byte	110
+ 1961 0652 69       		.byte	105
+ 1962 0653 74       		.byte	116
+ 1963 0654 69       		.byte	105
+ 1964 0655 61       		.byte	97
+ 1965 0656 6C       		.byte	108
+ 1966 0657 2D       		.byte	45
+ 1967 0658 73       		.byte	115
+ 1968 0659 63       		.byte	99
+ 1969 065a 61       		.byte	97
+ 1970 065b 6C       		.byte	108
+ 1971 065c 65       		.byte	101
+ 1972 065d 3D       		.byte	61
+ 1973 065e 31       		.byte	49
+ 1974 065f 20       		.byte	32
+ 1975 0660 75       		.byte	117
+ 1976 0661 73       		.byte	115
+ 1977 0662 65       		.byte	101
+ 1978 0663 72       		.byte	114
+ 1979 0664 2D       		.byte	45
+ 1980 0665 73       		.byte	115
+ 1981 0666 63       		.byte	99
+ 1982 0667 61       		.byte	97
+ 1983 0668 6C       		.byte	108
+ 1984 0669 61       		.byte	97
+ 1985 066a 62       		.byte	98
+ 1986 066b 6C       		.byte	108
+ 1987 066c 65       		.byte	101
+ 1988 066d 3D       		.byte	61
+ 1989 066e 6E       		.byte	110
+ 1990 066f 6F       		.byte	111
+ 1991 0670 22       		.byte	34
+ 1992 0671 3E       		.byte	62
+ 1993 0672 0A       		.byte	10
+ 1994 0673 3C       		.byte	60
+ 1995 0674 2F       		.byte	47
+ 1996 0675 68       		.byte	104
+ 1997 0676 65       		.byte	101
+ 1998 0677 61       		.byte	97
+ 1999 0678 64       		.byte	100
+ 2000 0679 3E       		.byte	62
+ 2001 067a 0A       		.byte	10
+ 2002 067b 3C       		.byte	60
+ 2003 067c 62       		.byte	98
+ 2004 067d 6F       		.byte	111
+ 2005 067e 64       		.byte	100
+ 2006 067f 79       		.byte	121
+ 2007 0680 3E       		.byte	62
+ 2008 0681 0A       		.byte	10
+ 2009 0682 3C       		.byte	60
+ARM GAS  /tmp/cctyFkZL.s 			page 39
+
+
+ 2010 0683 64       		.byte	100
+ 2011 0684 69       		.byte	105
+ 2012 0685 76       		.byte	118
+ 2013 0686 20       		.byte	32
+ 2014 0687 63       		.byte	99
+ 2015 0688 6C       		.byte	108
+ 2016 0689 61       		.byte	97
+ 2017 068a 73       		.byte	115
+ 2018 068b 73       		.byte	115
+ 2019 068c 3D       		.byte	61
+ 2020 068d 22       		.byte	34
+ 2021 068e 63       		.byte	99
+ 2022 068f 6F       		.byte	111
+ 2023 0690 6E       		.byte	110
+ 2024 0691 74       		.byte	116
+ 2025 0692 61       		.byte	97
+ 2026 0693 69       		.byte	105
+ 2027 0694 6E       		.byte	110
+ 2028 0695 65       		.byte	101
+ 2029 0696 72       		.byte	114
+ 2030 0697 22       		.byte	34
+ 2031 0698 3E       		.byte	62
+ 2032 0699 0A       		.byte	10
+ 2033 069a 09       		.byte	9
+ 2034 069b 3C       		.byte	60
+ 2035 069c 64       		.byte	100
+ 2036 069d 69       		.byte	105
+ 2037 069e 76       		.byte	118
+ 2038 069f 20       		.byte	32
+ 2039 06a0 63       		.byte	99
+ 2040 06a1 6C       		.byte	108
+ 2041 06a2 61       		.byte	97
+ 2042 06a3 73       		.byte	115
+ 2043 06a4 73       		.byte	115
+ 2044 06a5 3D       		.byte	61
+ 2045 06a6 22       		.byte	34
+ 2046 06a7 70       		.byte	112
+ 2047 06a8 61       		.byte	97
+ 2048 06a9 6E       		.byte	110
+ 2049 06aa 65       		.byte	101
+ 2050 06ab 6C       		.byte	108
+ 2051 06ac 20       		.byte	32
+ 2052 06ad 70       		.byte	112
+ 2053 06ae 61       		.byte	97
+ 2054 06af 6E       		.byte	110
+ 2055 06b0 65       		.byte	101
+ 2056 06b1 6C       		.byte	108
+ 2057 06b2 2D       		.byte	45
+ 2058 06b3 64       		.byte	100
+ 2059 06b4 65       		.byte	101
+ 2060 06b5 66       		.byte	102
+ 2061 06b6 61       		.byte	97
+ 2062 06b7 75       		.byte	117
+ 2063 06b8 6C       		.byte	108
+ 2064 06b9 74       		.byte	116
+ 2065 06ba 22       		.byte	34
+ 2066 06bb 3E       		.byte	62
+ARM GAS  /tmp/cctyFkZL.s 			page 40
+
+
+ 2067 06bc 0A       		.byte	10
+ 2068 06bd 09       		.byte	9
+ 2069 06be 20       		.byte	32
+ 2070 06bf 20       		.byte	32
+ 2071 06c0 3C       		.byte	60
+ 2072 06c1 64       		.byte	100
+ 2073 06c2 69       		.byte	105
+ 2074 06c3 76       		.byte	118
+ 2075 06c4 20       		.byte	32
+ 2076 06c5 63       		.byte	99
+ 2077 06c6 6C       		.byte	108
+ 2078 06c7 61       		.byte	97
+ 2079 06c8 73       		.byte	115
+ 2080 06c9 73       		.byte	115
+ 2081 06ca 3D       		.byte	61
+ 2082 06cb 22       		.byte	34
+ 2083 06cc 70       		.byte	112
+ 2084 06cd 61       		.byte	97
+ 2085 06ce 6E       		.byte	110
+ 2086 06cf 65       		.byte	101
+ 2087 06d0 6C       		.byte	108
+ 2088 06d1 2D       		.byte	45
+ 2089 06d2 68       		.byte	104
+ 2090 06d3 65       		.byte	101
+ 2091 06d4 61       		.byte	97
+ 2092 06d5 64       		.byte	100
+ 2093 06d6 69       		.byte	105
+ 2094 06d7 6E       		.byte	110
+ 2095 06d8 67       		.byte	103
+ 2096 06d9 22       		.byte	34
+ 2097 06da 3E       		.byte	62
+ 2098 06db 4E       		.byte	78
+ 2099 06dc 75       		.byte	117
+ 2100 06dd 63       		.byte	99
+ 2101 06de 6C       		.byte	108
+ 2102 06df 65       		.byte	101
+ 2103 06e0 6F       		.byte	111
+ 2104 06e1 20       		.byte	32
+ 2105 06e2 4C       		.byte	76
+ 2106 06e3 45       		.byte	69
+ 2107 06e4 44       		.byte	68
+ 2108 06e5 73       		.byte	115
+ 2109 06e6 3C       		.byte	60
+ 2110 06e7 2F       		.byte	47
+ 2111 06e8 64       		.byte	100
+ 2112 06e9 69       		.byte	105
+ 2113 06ea 76       		.byte	118
+ 2114 06eb 3E       		.byte	62
+ 2115 06ec 0A       		.byte	10
+ 2116 06ed 09       		.byte	9
+ 2117 06ee 20       		.byte	32
+ 2118 06ef 20       		.byte	32
+ 2119 06f0 3C       		.byte	60
+ 2120 06f1 64       		.byte	100
+ 2121 06f2 69       		.byte	105
+ 2122 06f3 76       		.byte	118
+ 2123 06f4 20       		.byte	32
+ARM GAS  /tmp/cctyFkZL.s 			page 41
+
+
+ 2124 06f5 63       		.byte	99
+ 2125 06f6 6C       		.byte	108
+ 2126 06f7 61       		.byte	97
+ 2127 06f8 73       		.byte	115
+ 2128 06f9 73       		.byte	115
+ 2129 06fa 3D       		.byte	61
+ 2130 06fb 22       		.byte	34
+ 2131 06fc 70       		.byte	112
+ 2132 06fd 61       		.byte	97
+ 2133 06fe 6E       		.byte	110
+ 2134 06ff 65       		.byte	101
+ 2135 0700 6C       		.byte	108
+ 2136 0701 2D       		.byte	45
+ 2137 0702 62       		.byte	98
+ 2138 0703 6F       		.byte	111
+ 2139 0704 64       		.byte	100
+ 2140 0705 79       		.byte	121
+ 2141 0706 22       		.byte	34
+ 2142 0707 3E       		.byte	62
+ 2143 0708 0A       		.byte	10
+ 2144 0709 09       		.byte	9
+ 2145 070a 20       		.byte	32
+ 2146 070b 20       		.byte	32
+ 2147 070c 20       		.byte	32
+ 2148 070d 20       		.byte	32
+ 2149 070e 3C       		.byte	60
+ 2150 070f 64       		.byte	100
+ 2151 0710 69       		.byte	105
+ 2152 0711 76       		.byte	118
+ 2153 0712 20       		.byte	32
+ 2154 0713 63       		.byte	99
+ 2155 0714 6C       		.byte	108
+ 2156 0715 61       		.byte	97
+ 2157 0716 73       		.byte	115
+ 2158 0717 73       		.byte	115
+ 2159 0718 3D       		.byte	61
+ 2160 0719 22       		.byte	34
+ 2161 071a 72       		.byte	114
+ 2162 071b 6F       		.byte	111
+ 2163 071c 77       		.byte	119
+ 2164 071d 22       		.byte	34
+ 2165 071e 3E       		.byte	62
+ 2166 071f 0A       		.byte	10
+ 2167 0720 09       		.byte	9
+ 2168 0721 09       		.byte	9
+ 2169 0722 20       		.byte	32
+ 2170 0723 20       		.byte	32
+ 2171 0724 3C       		.byte	60
+ 2172 0725 64       		.byte	100
+ 2173 0726 69       		.byte	105
+ 2174 0727 76       		.byte	118
+ 2175 0728 20       		.byte	32
+ 2176 0729 63       		.byte	99
+ 2177 072a 6C       		.byte	108
+ 2178 072b 61       		.byte	97
+ 2179 072c 73       		.byte	115
+ 2180 072d 73       		.byte	115
+ARM GAS  /tmp/cctyFkZL.s 			page 42
+
+
+ 2181 072e 3D       		.byte	61
+ 2182 072f 22       		.byte	34
+ 2183 0730 63       		.byte	99
+ 2184 0731 6F       		.byte	111
+ 2185 0732 6C       		.byte	108
+ 2186 0733 2D       		.byte	45
+ 2187 0734 6D       		.byte	109
+ 2188 0735 64       		.byte	100
+ 2189 0736 2D       		.byte	45
+ 2190 0737 36       		.byte	54
+ 2191 0738 20       		.byte	32
+ 2192 0739 63       		.byte	99
+ 2193 073a 65       		.byte	101
+ 2194 073b 6C       		.byte	108
+ 2195 073c 6C       		.byte	108
+ 2196 073d 22       		.byte	34
+ 2197 073e 3E       		.byte	62
+ 2198 073f 0A       		.byte	10
+ 2199 0740 09       		.byte	9
+ 2200 0741 09       		.byte	9
+ 2201 0742 20       		.byte	32
+ 2202 0743 20       		.byte	32
+ 2203 0744 20       		.byte	32
+ 2204 0745 20       		.byte	32
+ 2205 0746 20       		.byte	32
+ 2206 0747 3C       		.byte	60
+ 2207 0748 62       		.byte	98
+ 2208 0749 75       		.byte	117
+ 2209 074a 74       		.byte	116
+ 2210 074b 74       		.byte	116
+ 2211 074c 6F       		.byte	111
+ 2212 074d 6E       		.byte	110
+ 2213 074e 20       		.byte	32
+ 2214 074f 74       		.byte	116
+ 2215 0750 79       		.byte	121
+ 2216 0751 70       		.byte	112
+ 2217 0752 65       		.byte	101
+ 2218 0753 3D       		.byte	61
+ 2219 0754 22       		.byte	34
+ 2220 0755 62       		.byte	98
+ 2221 0756 75       		.byte	117
+ 2222 0757 74       		.byte	116
+ 2223 0758 74       		.byte	116
+ 2224 0759 6F       		.byte	111
+ 2225 075a 6E       		.byte	110
+ 2226 075b 22       		.byte	34
+ 2227 075c 20       		.byte	32
+ 2228 075d 63       		.byte	99
+ 2229 075e 6C       		.byte	108
+ 2230 075f 61       		.byte	97
+ 2231 0760 73       		.byte	115
+ 2232 0761 73       		.byte	115
+ 2233 0762 3D       		.byte	61
+ 2234 0763 22       		.byte	34
+ 2235 0764 62       		.byte	98
+ 2236 0765 74       		.byte	116
+ 2237 0766 6E       		.byte	110
+ARM GAS  /tmp/cctyFkZL.s 			page 43
+
+
+ 2238 0767 20       		.byte	32
+ 2239 0768 62       		.byte	98
+ 2240 0769 74       		.byte	116
+ 2241 076a 6E       		.byte	110
+ 2242 076b 2D       		.byte	45
+ 2243 076c 64       		.byte	100
+ 2244 076d 65       		.byte	101
+ 2245 076e 66       		.byte	102
+ 2246 076f 61       		.byte	97
+ 2247 0770 75       		.byte	117
+ 2248 0771 6C       		.byte	108
+ 2249 0772 74       		.byte	116
+ 2250 0773 20       		.byte	32
+ 2251 0774 62       		.byte	98
+ 2252 0775 74       		.byte	116
+ 2253 0776 6E       		.byte	110
+ 2254 0777 2D       		.byte	45
+ 2255 0778 62       		.byte	98
+ 2256 0779 6C       		.byte	108
+ 2257 077a 6F       		.byte	111
+ 2258 077b 63       		.byte	99
+ 2259 077c 6B       		.byte	107
+ 2260 077d 20       		.byte	32
+ 2261 077e 6C       		.byte	108
+ 2262 077f 65       		.byte	101
+ 2263 0780 64       		.byte	100
+ 2264 0781 22       		.byte	34
+ 2265 0782 20       		.byte	32
+ 2266 0783 69       		.byte	105
+ 2267 0784 64       		.byte	100
+ 2268 0785 3D       		.byte	61
+ 2269 0786 22       		.byte	34
+ 2270 0787 6C       		.byte	108
+ 2271 0788 65       		.byte	101
+ 2272 0789 64       		.byte	100
+ 2273 078a 31       		.byte	49
+ 2274 078b 22       		.byte	34
+ 2275 078c 3E       		.byte	62
+ 2276 078d 4C       		.byte	76
+ 2277 078e 45       		.byte	69
+ 2278 078f 44       		.byte	68
+ 2279 0790 31       		.byte	49
+ 2280 0791 3C       		.byte	60
+ 2281 0792 2F       		.byte	47
+ 2282 0793 62       		.byte	98
+ 2283 0794 75       		.byte	117
+ 2284 0795 74       		.byte	116
+ 2285 0796 74       		.byte	116
+ 2286 0797 6F       		.byte	111
+ 2287 0798 6E       		.byte	110
+ 2288 0799 3E       		.byte	62
+ 2289 079a 0A       		.byte	10
+ 2290 079b 09       		.byte	9
+ 2291 079c 09       		.byte	9
+ 2292 079d 20       		.byte	32
+ 2293 079e 20       		.byte	32
+ 2294 079f 3C       		.byte	60
+ARM GAS  /tmp/cctyFkZL.s 			page 44
+
+
+ 2295 07a0 2F       		.byte	47
+ 2296 07a1 64       		.byte	100
+ 2297 07a2 69       		.byte	105
+ 2298 07a3 76       		.byte	118
+ 2299 07a4 3E       		.byte	62
+ 2300 07a5 0A       		.byte	10
+ 2301 07a6 09       		.byte	9
+ 2302 07a7 09       		.byte	9
+ 2303 07a8 20       		.byte	32
+ 2304 07a9 20       		.byte	32
+ 2305 07aa 3C       		.byte	60
+ 2306 07ab 64       		.byte	100
+ 2307 07ac 69       		.byte	105
+ 2308 07ad 76       		.byte	118
+ 2309 07ae 20       		.byte	32
+ 2310 07af 63       		.byte	99
+ 2311 07b0 6C       		.byte	108
+ 2312 07b1 61       		.byte	97
+ 2313 07b2 73       		.byte	115
+ 2314 07b3 73       		.byte	115
+ 2315 07b4 3D       		.byte	61
+ 2316 07b5 22       		.byte	34
+ 2317 07b6 63       		.byte	99
+ 2318 07b7 6F       		.byte	111
+ 2319 07b8 6C       		.byte	108
+ 2320 07b9 2D       		.byte	45
+ 2321 07ba 6D       		.byte	109
+ 2322 07bb 64       		.byte	100
+ 2323 07bc 2D       		.byte	45
+ 2324 07bd 36       		.byte	54
+ 2325 07be 20       		.byte	32
+ 2326 07bf 63       		.byte	99
+ 2327 07c0 65       		.byte	101
+ 2328 07c1 6C       		.byte	108
+ 2329 07c2 6C       		.byte	108
+ 2330 07c3 22       		.byte	34
+ 2331 07c4 3E       		.byte	62
+ 2332 07c5 0A       		.byte	10
+ 2333 07c6 09       		.byte	9
+ 2334 07c7 09       		.byte	9
+ 2335 07c8 20       		.byte	32
+ 2336 07c9 20       		.byte	32
+ 2337 07ca 09       		.byte	9
+ 2338 07cb 20       		.byte	32
+ 2339 07cc 3C       		.byte	60
+ 2340 07cd 62       		.byte	98
+ 2341 07ce 75       		.byte	117
+ 2342 07cf 74       		.byte	116
+ 2343 07d0 74       		.byte	116
+ 2344 07d1 6F       		.byte	111
+ 2345 07d2 6E       		.byte	110
+ 2346 07d3 20       		.byte	32
+ 2347 07d4 74       		.byte	116
+ 2348 07d5 79       		.byte	121
+ 2349 07d6 70       		.byte	112
+ 2350 07d7 65       		.byte	101
+ 2351 07d8 3D       		.byte	61
+ARM GAS  /tmp/cctyFkZL.s 			page 45
+
+
+ 2352 07d9 22       		.byte	34
+ 2353 07da 62       		.byte	98
+ 2354 07db 75       		.byte	117
+ 2355 07dc 74       		.byte	116
+ 2356 07dd 74       		.byte	116
+ 2357 07de 6F       		.byte	111
+ 2358 07df 6E       		.byte	110
+ 2359 07e0 22       		.byte	34
+ 2360 07e1 20       		.byte	32
+ 2361 07e2 63       		.byte	99
+ 2362 07e3 6C       		.byte	108
+ 2363 07e4 61       		.byte	97
+ 2364 07e5 73       		.byte	115
+ 2365 07e6 73       		.byte	115
+ 2366 07e7 3D       		.byte	61
+ 2367 07e8 22       		.byte	34
+ 2368 07e9 62       		.byte	98
+ 2369 07ea 74       		.byte	116
+ 2370 07eb 6E       		.byte	110
+ 2371 07ec 20       		.byte	32
+ 2372 07ed 62       		.byte	98
+ 2373 07ee 74       		.byte	116
+ 2374 07ef 6E       		.byte	110
+ 2375 07f0 2D       		.byte	45
+ 2376 07f1 64       		.byte	100
+ 2377 07f2 65       		.byte	101
+ 2378 07f3 66       		.byte	102
+ 2379 07f4 61       		.byte	97
+ 2380 07f5 75       		.byte	117
+ 2381 07f6 6C       		.byte	108
+ 2382 07f7 74       		.byte	116
+ 2383 07f8 20       		.byte	32
+ 2384 07f9 62       		.byte	98
+ 2385 07fa 74       		.byte	116
+ 2386 07fb 6E       		.byte	110
+ 2387 07fc 2D       		.byte	45
+ 2388 07fd 62       		.byte	98
+ 2389 07fe 6C       		.byte	108
+ 2390 07ff 6F       		.byte	111
+ 2391 0800 63       		.byte	99
+ 2392 0801 6B       		.byte	107
+ 2393 0802 20       		.byte	32
+ 2394 0803 6C       		.byte	108
+ 2395 0804 65       		.byte	101
+ 2396 0805 64       		.byte	100
+ 2397 0806 22       		.byte	34
+ 2398 0807 20       		.byte	32
+ 2399 0808 69       		.byte	105
+ 2400 0809 64       		.byte	100
+ 2401 080a 3D       		.byte	61
+ 2402 080b 22       		.byte	34
+ 2403 080c 6C       		.byte	108
+ 2404 080d 65       		.byte	101
+ 2405 080e 64       		.byte	100
+ 2406 080f 32       		.byte	50
+ 2407 0810 22       		.byte	34
+ 2408 0811 3E       		.byte	62
+ARM GAS  /tmp/cctyFkZL.s 			page 46
+
+
+ 2409 0812 4C       		.byte	76
+ 2410 0813 45       		.byte	69
+ 2411 0814 44       		.byte	68
+ 2412 0815 32       		.byte	50
+ 2413 0816 3C       		.byte	60
+ 2414 0817 2F       		.byte	47
+ 2415 0818 62       		.byte	98
+ 2416 0819 75       		.byte	117
+ 2417 081a 74       		.byte	116
+ 2418 081b 74       		.byte	116
+ 2419 081c 6F       		.byte	111
+ 2420 081d 6E       		.byte	110
+ 2421 081e 3E       		.byte	62
+ 2422 081f 0A       		.byte	10
+ 2423 0820 09       		.byte	9
+ 2424 0821 09       		.byte	9
+ 2425 0822 20       		.byte	32
+ 2426 0823 20       		.byte	32
+ 2427 0824 3C       		.byte	60
+ 2428 0825 2F       		.byte	47
+ 2429 0826 64       		.byte	100
+ 2430 0827 69       		.byte	105
+ 2431 0828 76       		.byte	118
+ 2432 0829 3E       		.byte	62
+ 2433 082a 09       		.byte	9
+ 2434 082b 20       		.byte	32
+ 2435 082c 20       		.byte	32
+ 2436 082d 09       		.byte	9
+ 2437 082e 20       		.byte	32
+ 2438 082f 0A       		.byte	10
+ 2439 0830 09       		.byte	9
+ 2440 0831 09       		.byte	9
+ 2441 0832 20       		.byte	32
+ 2442 0833 20       		.byte	32
+ 2443 0834 3C       		.byte	60
+ 2444 0835 64       		.byte	100
+ 2445 0836 69       		.byte	105
+ 2446 0837 76       		.byte	118
+ 2447 0838 20       		.byte	32
+ 2448 0839 63       		.byte	99
+ 2449 083a 6C       		.byte	108
+ 2450 083b 61       		.byte	97
+ 2451 083c 73       		.byte	115
+ 2452 083d 73       		.byte	115
+ 2453 083e 3D       		.byte	61
+ 2454 083f 22       		.byte	34
+ 2455 0840 63       		.byte	99
+ 2456 0841 6F       		.byte	111
+ 2457 0842 6C       		.byte	108
+ 2458 0843 2D       		.byte	45
+ 2459 0844 6D       		.byte	109
+ 2460 0845 64       		.byte	100
+ 2461 0846 2D       		.byte	45
+ 2462 0847 36       		.byte	54
+ 2463 0848 20       		.byte	32
+ 2464 0849 63       		.byte	99
+ 2465 084a 65       		.byte	101
+ARM GAS  /tmp/cctyFkZL.s 			page 47
+
+
+ 2466 084b 6C       		.byte	108
+ 2467 084c 6C       		.byte	108
+ 2468 084d 22       		.byte	34
+ 2469 084e 3E       		.byte	62
+ 2470 084f 0A       		.byte	10
+ 2471 0850 09       		.byte	9
+ 2472 0851 09       		.byte	9
+ 2473 0852 20       		.byte	32
+ 2474 0853 20       		.byte	32
+ 2475 0854 09       		.byte	9
+ 2476 0855 20       		.byte	32
+ 2477 0856 3C       		.byte	60
+ 2478 0857 62       		.byte	98
+ 2479 0858 75       		.byte	117
+ 2480 0859 74       		.byte	116
+ 2481 085a 74       		.byte	116
+ 2482 085b 6F       		.byte	111
+ 2483 085c 6E       		.byte	110
+ 2484 085d 20       		.byte	32
+ 2485 085e 74       		.byte	116
+ 2486 085f 79       		.byte	121
+ 2487 0860 70       		.byte	112
+ 2488 0861 65       		.byte	101
+ 2489 0862 3D       		.byte	61
+ 2490 0863 22       		.byte	34
+ 2491 0864 62       		.byte	98
+ 2492 0865 75       		.byte	117
+ 2493 0866 74       		.byte	116
+ 2494 0867 74       		.byte	116
+ 2495 0868 6F       		.byte	111
+ 2496 0869 6E       		.byte	110
+ 2497 086a 22       		.byte	34
+ 2498 086b 20       		.byte	32
+ 2499 086c 63       		.byte	99
+ 2500 086d 6C       		.byte	108
+ 2501 086e 61       		.byte	97
+ 2502 086f 73       		.byte	115
+ 2503 0870 73       		.byte	115
+ 2504 0871 3D       		.byte	61
+ 2505 0872 22       		.byte	34
+ 2506 0873 62       		.byte	98
+ 2507 0874 74       		.byte	116
+ 2508 0875 6E       		.byte	110
+ 2509 0876 20       		.byte	32
+ 2510 0877 62       		.byte	98
+ 2511 0878 74       		.byte	116
+ 2512 0879 6E       		.byte	110
+ 2513 087a 2D       		.byte	45
+ 2514 087b 64       		.byte	100
+ 2515 087c 65       		.byte	101
+ 2516 087d 66       		.byte	102
+ 2517 087e 61       		.byte	97
+ 2518 087f 75       		.byte	117
+ 2519 0880 6C       		.byte	108
+ 2520 0881 74       		.byte	116
+ 2521 0882 20       		.byte	32
+ 2522 0883 62       		.byte	98
+ARM GAS  /tmp/cctyFkZL.s 			page 48
+
+
+ 2523 0884 74       		.byte	116
+ 2524 0885 6E       		.byte	110
+ 2525 0886 2D       		.byte	45
+ 2526 0887 62       		.byte	98
+ 2527 0888 6C       		.byte	108
+ 2528 0889 6F       		.byte	111
+ 2529 088a 63       		.byte	99
+ 2530 088b 6B       		.byte	107
+ 2531 088c 20       		.byte	32
+ 2532 088d 6C       		.byte	108
+ 2533 088e 65       		.byte	101
+ 2534 088f 64       		.byte	100
+ 2535 0890 22       		.byte	34
+ 2536 0891 20       		.byte	32
+ 2537 0892 69       		.byte	105
+ 2538 0893 64       		.byte	100
+ 2539 0894 3D       		.byte	61
+ 2540 0895 22       		.byte	34
+ 2541 0896 6C       		.byte	108
+ 2542 0897 65       		.byte	101
+ 2543 0898 64       		.byte	100
+ 2544 0899 33       		.byte	51
+ 2545 089a 22       		.byte	34
+ 2546 089b 3E       		.byte	62
+ 2547 089c 4C       		.byte	76
+ 2548 089d 45       		.byte	69
+ 2549 089e 44       		.byte	68
+ 2550 089f 33       		.byte	51
+ 2551 08a0 3C       		.byte	60
+ 2552 08a1 2F       		.byte	47
+ 2553 08a2 62       		.byte	98
+ 2554 08a3 75       		.byte	117
+ 2555 08a4 74       		.byte	116
+ 2556 08a5 74       		.byte	116
+ 2557 08a6 6F       		.byte	111
+ 2558 08a7 6E       		.byte	110
+ 2559 08a8 3E       		.byte	62
+ 2560 08a9 0A       		.byte	10
+ 2561 08aa 09       		.byte	9
+ 2562 08ab 09       		.byte	9
+ 2563 08ac 20       		.byte	32
+ 2564 08ad 20       		.byte	32
+ 2565 08ae 3C       		.byte	60
+ 2566 08af 2F       		.byte	47
+ 2567 08b0 64       		.byte	100
+ 2568 08b1 69       		.byte	105
+ 2569 08b2 76       		.byte	118
+ 2570 08b3 3E       		.byte	62
+ 2571 08b4 0A       		.byte	10
+ 2572 08b5 09       		.byte	9
+ 2573 08b6 09       		.byte	9
+ 2574 08b7 3C       		.byte	60
+ 2575 08b8 2F       		.byte	47
+ 2576 08b9 64       		.byte	100
+ 2577 08ba 69       		.byte	105
+ 2578 08bb 76       		.byte	118
+ 2579 08bc 3E       		.byte	62
+ARM GAS  /tmp/cctyFkZL.s 			page 49
+
+
+ 2580 08bd 0A       		.byte	10
+ 2581 08be 09       		.byte	9
+ 2582 08bf 20       		.byte	32
+ 2583 08c0 20       		.byte	32
+ 2584 08c1 3C       		.byte	60
+ 2585 08c2 2F       		.byte	47
+ 2586 08c3 64       		.byte	100
+ 2587 08c4 69       		.byte	105
+ 2588 08c5 76       		.byte	118
+ 2589 08c6 3E       		.byte	62
+ 2590 08c7 0A       		.byte	10
+ 2591 08c8 09       		.byte	9
+ 2592 08c9 3C       		.byte	60
+ 2593 08ca 2F       		.byte	47
+ 2594 08cb 64       		.byte	100
+ 2595 08cc 69       		.byte	105
+ 2596 08cd 76       		.byte	118
+ 2597 08ce 3E       		.byte	62
+ 2598 08cf 0A       		.byte	10
+ 2599 08d0 09       		.byte	9
+ 2600 08d1 3C       		.byte	60
+ 2601 08d2 64       		.byte	100
+ 2602 08d3 69       		.byte	105
+ 2603 08d4 76       		.byte	118
+ 2604 08d5 20       		.byte	32
+ 2605 08d6 63       		.byte	99
+ 2606 08d7 6C       		.byte	108
+ 2607 08d8 61       		.byte	97
+ 2608 08d9 73       		.byte	115
+ 2609 08da 73       		.byte	115
+ 2610 08db 3D       		.byte	61
+ 2611 08dc 22       		.byte	34
+ 2612 08dd 70       		.byte	112
+ 2613 08de 61       		.byte	97
+ 2614 08df 6E       		.byte	110
+ 2615 08e0 65       		.byte	101
+ 2616 08e1 6C       		.byte	108
+ 2617 08e2 20       		.byte	32
+ 2618 08e3 70       		.byte	112
+ 2619 08e4 61       		.byte	97
+ 2620 08e5 6E       		.byte	110
+ 2621 08e6 65       		.byte	101
+ 2622 08e7 6C       		.byte	108
+ 2623 08e8 2D       		.byte	45
+ 2624 08e9 64       		.byte	100
+ 2625 08ea 65       		.byte	101
+ 2626 08eb 66       		.byte	102
+ 2627 08ec 61       		.byte	97
+ 2628 08ed 75       		.byte	117
+ 2629 08ee 6C       		.byte	108
+ 2630 08ef 74       		.byte	116
+ 2631 08f0 22       		.byte	34
+ 2632 08f1 3E       		.byte	62
+ 2633 08f2 0A       		.byte	10
+ 2634 08f3 09       		.byte	9
+ 2635 08f4 20       		.byte	32
+ 2636 08f5 20       		.byte	32
+ARM GAS  /tmp/cctyFkZL.s 			page 50
+
+
+ 2637 08f6 3C       		.byte	60
+ 2638 08f7 64       		.byte	100
+ 2639 08f8 69       		.byte	105
+ 2640 08f9 76       		.byte	118
+ 2641 08fa 20       		.byte	32
+ 2642 08fb 63       		.byte	99
+ 2643 08fc 6C       		.byte	108
+ 2644 08fd 61       		.byte	97
+ 2645 08fe 73       		.byte	115
+ 2646 08ff 73       		.byte	115
+ 2647 0900 3D       		.byte	61
+ 2648 0901 22       		.byte	34
+ 2649 0902 70       		.byte	112
+ 2650 0903 61       		.byte	97
+ 2651 0904 6E       		.byte	110
+ 2652 0905 65       		.byte	101
+ 2653 0906 6C       		.byte	108
+ 2654 0907 2D       		.byte	45
+ 2655 0908 68       		.byte	104
+ 2656 0909 65       		.byte	101
+ 2657 090a 61       		.byte	97
+ 2658 090b 64       		.byte	100
+ 2659 090c 69       		.byte	105
+ 2660 090d 6E       		.byte	110
+ 2661 090e 67       		.byte	103
+ 2662 090f 22       		.byte	34
+ 2663 0910 3E       		.byte	62
+ 2664 0911 4E       		.byte	78
+ 2665 0912 75       		.byte	117
+ 2666 0913 63       		.byte	99
+ 2667 0914 6C       		.byte	108
+ 2668 0915 65       		.byte	101
+ 2669 0916 6F       		.byte	111
+ 2670 0917 20       		.byte	32
+ 2671 0918 55       		.byte	85
+ 2672 0919 53       		.byte	83
+ 2673 091a 45       		.byte	69
+ 2674 091b 52       		.byte	82
+ 2675 091c 20       		.byte	32
+ 2676 091d 42       		.byte	66
+ 2677 091e 55       		.byte	85
+ 2678 091f 54       		.byte	84
+ 2679 0920 54       		.byte	84
+ 2680 0921 4F       		.byte	79
+ 2681 0922 4E       		.byte	78
+ 2682 0923 3C       		.byte	60
+ 2683 0924 2F       		.byte	47
+ 2684 0925 64       		.byte	100
+ 2685 0926 69       		.byte	105
+ 2686 0927 76       		.byte	118
+ 2687 0928 3E       		.byte	62
+ 2688 0929 0A       		.byte	10
+ 2689 092a 09       		.byte	9
+ 2690 092b 20       		.byte	32
+ 2691 092c 20       		.byte	32
+ 2692 092d 3C       		.byte	60
+ 2693 092e 64       		.byte	100
+ARM GAS  /tmp/cctyFkZL.s 			page 51
+
+
+ 2694 092f 69       		.byte	105
+ 2695 0930 76       		.byte	118
+ 2696 0931 20       		.byte	32
+ 2697 0932 63       		.byte	99
+ 2698 0933 6C       		.byte	108
+ 2699 0934 61       		.byte	97
+ 2700 0935 73       		.byte	115
+ 2701 0936 73       		.byte	115
+ 2702 0937 3D       		.byte	61
+ 2703 0938 22       		.byte	34
+ 2704 0939 70       		.byte	112
+ 2705 093a 61       		.byte	97
+ 2706 093b 6E       		.byte	110
+ 2707 093c 65       		.byte	101
+ 2708 093d 6C       		.byte	108
+ 2709 093e 2D       		.byte	45
+ 2710 093f 62       		.byte	98
+ 2711 0940 6F       		.byte	111
+ 2712 0941 64       		.byte	100
+ 2713 0942 79       		.byte	121
+ 2714 0943 22       		.byte	34
+ 2715 0944 3E       		.byte	62
+ 2716 0945 0A       		.byte	10
+ 2717 0946 09       		.byte	9
+ 2718 0947 20       		.byte	32
+ 2719 0948 20       		.byte	32
+ 2720 0949 20       		.byte	32
+ 2721 094a 20       		.byte	32
+ 2722 094b 20       		.byte	32
+ 2723 094c 3C       		.byte	60
+ 2724 094d 64       		.byte	100
+ 2725 094e 69       		.byte	105
+ 2726 094f 76       		.byte	118
+ 2727 0950 20       		.byte	32
+ 2728 0951 69       		.byte	105
+ 2729 0952 64       		.byte	100
+ 2730 0953 3D       		.byte	61
+ 2731 0954 22       		.byte	34
+ 2732 0955 75       		.byte	117
+ 2733 0956 73       		.byte	115
+ 2734 0957 72       		.byte	114
+ 2735 0958 2D       		.byte	45
+ 2736 0959 62       		.byte	98
+ 2737 095a 74       		.byte	116
+ 2738 095b 6E       		.byte	110
+ 2739 095c 22       		.byte	34
+ 2740 095d 20       		.byte	32
+ 2741 095e 63       		.byte	99
+ 2742 095f 6C       		.byte	108
+ 2743 0960 61       		.byte	97
+ 2744 0961 73       		.byte	115
+ 2745 0962 73       		.byte	115
+ 2746 0963 3D       		.byte	61
+ 2747 0964 22       		.byte	34
+ 2748 0965 61       		.byte	97
+ 2749 0966 6C       		.byte	108
+ 2750 0967 65       		.byte	101
+ARM GAS  /tmp/cctyFkZL.s 			page 52
+
+
+ 2751 0968 72       		.byte	114
+ 2752 0969 74       		.byte	116
+ 2753 096a 20       		.byte	32
+ 2754 096b 61       		.byte	97
+ 2755 096c 6C       		.byte	108
+ 2756 096d 65       		.byte	101
+ 2757 096e 72       		.byte	114
+ 2758 096f 74       		.byte	116
+ 2759 0970 2D       		.byte	45
+ 2760 0971 69       		.byte	105
+ 2761 0972 6E       		.byte	110
+ 2762 0973 66       		.byte	102
+ 2763 0974 6F       		.byte	111
+ 2764 0975 22       		.byte	34
+ 2765 0976 20       		.byte	32
+ 2766 0977 72       		.byte	114
+ 2767 0978 6F       		.byte	111
+ 2768 0979 6C       		.byte	108
+ 2769 097a 65       		.byte	101
+ 2770 097b 3D       		.byte	61
+ 2771 097c 22       		.byte	34
+ 2772 097d 61       		.byte	97
+ 2773 097e 6C       		.byte	108
+ 2774 097f 65       		.byte	101
+ 2775 0980 72       		.byte	114
+ 2776 0981 74       		.byte	116
+ 2777 0982 22       		.byte	34
+ 2778 0983 3E       		.byte	62
+ 2779 0984 3C       		.byte	60
+ 2780 0985 62       		.byte	98
+ 2781 0986 3E       		.byte	62
+ 2782 0987 4F       		.byte	79
+ 2783 0988 46       		.byte	70
+ 2784 0989 46       		.byte	70
+ 2785 098a 3C       		.byte	60
+ 2786 098b 2F       		.byte	47
+ 2787 098c 62       		.byte	98
+ 2788 098d 3E       		.byte	62
+ 2789 098e 3C       		.byte	60
+ 2790 098f 2F       		.byte	47
+ 2791 0990 64       		.byte	100
+ 2792 0991 69       		.byte	105
+ 2793 0992 76       		.byte	118
+ 2794 0993 3E       		.byte	62
+ 2795 0994 0A       		.byte	10
+ 2796 0995 09       		.byte	9
+ 2797 0996 20       		.byte	32
+ 2798 0997 20       		.byte	32
+ 2799 0998 3C       		.byte	60
+ 2800 0999 2F       		.byte	47
+ 2801 099a 64       		.byte	100
+ 2802 099b 69       		.byte	105
+ 2803 099c 76       		.byte	118
+ 2804 099d 3E       		.byte	62
+ 2805 099e 0A       		.byte	10
+ 2806 099f 09       		.byte	9
+ 2807 09a0 3C       		.byte	60
+ARM GAS  /tmp/cctyFkZL.s 			page 53
+
+
+ 2808 09a1 2F       		.byte	47
+ 2809 09a2 64       		.byte	100
+ 2810 09a3 69       		.byte	105
+ 2811 09a4 76       		.byte	118
+ 2812 09a5 3E       		.byte	62
+ 2813 09a6 09       		.byte	9
+ 2814 09a7 0A       		.byte	10
+ 2815 09a8 09       		.byte	9
+ 2816 09a9 3C       		.byte	60
+ 2817 09aa 64       		.byte	100
+ 2818 09ab 69       		.byte	105
+ 2819 09ac 76       		.byte	118
+ 2820 09ad 20       		.byte	32
+ 2821 09ae 63       		.byte	99
+ 2822 09af 6C       		.byte	108
+ 2823 09b0 61       		.byte	97
+ 2824 09b1 73       		.byte	115
+ 2825 09b2 73       		.byte	115
+ 2826 09b3 3D       		.byte	61
+ 2827 09b4 22       		.byte	34
+ 2828 09b5 70       		.byte	112
+ 2829 09b6 61       		.byte	97
+ 2830 09b7 6E       		.byte	110
+ 2831 09b8 65       		.byte	101
+ 2832 09b9 6C       		.byte	108
+ 2833 09ba 20       		.byte	32
+ 2834 09bb 70       		.byte	112
+ 2835 09bc 61       		.byte	97
+ 2836 09bd 6E       		.byte	110
+ 2837 09be 65       		.byte	101
+ 2838 09bf 6C       		.byte	108
+ 2839 09c0 2D       		.byte	45
+ 2840 09c1 64       		.byte	100
+ 2841 09c2 65       		.byte	101
+ 2842 09c3 66       		.byte	102
+ 2843 09c4 61       		.byte	97
+ 2844 09c5 75       		.byte	117
+ 2845 09c6 6C       		.byte	108
+ 2846 09c7 74       		.byte	116
+ 2847 09c8 22       		.byte	34
+ 2848 09c9 3E       		.byte	62
+ 2849 09ca 0A       		.byte	10
+ 2850 09cb 09       		.byte	9
+ 2851 09cc 20       		.byte	32
+ 2852 09cd 20       		.byte	32
+ 2853 09ce 3C       		.byte	60
+ 2854 09cf 64       		.byte	100
+ 2855 09d0 69       		.byte	105
+ 2856 09d1 76       		.byte	118
+ 2857 09d2 20       		.byte	32
+ 2858 09d3 63       		.byte	99
+ 2859 09d4 6C       		.byte	108
+ 2860 09d5 61       		.byte	97
+ 2861 09d6 73       		.byte	115
+ 2862 09d7 73       		.byte	115
+ 2863 09d8 3D       		.byte	61
+ 2864 09d9 22       		.byte	34
+ARM GAS  /tmp/cctyFkZL.s 			page 54
+
+
+ 2865 09da 70       		.byte	112
+ 2866 09db 61       		.byte	97
+ 2867 09dc 6E       		.byte	110
+ 2868 09dd 65       		.byte	101
+ 2869 09de 6C       		.byte	108
+ 2870 09df 2D       		.byte	45
+ 2871 09e0 68       		.byte	104
+ 2872 09e1 65       		.byte	101
+ 2873 09e2 61       		.byte	97
+ 2874 09e3 64       		.byte	100
+ 2875 09e4 69       		.byte	105
+ 2876 09e5 6E       		.byte	110
+ 2877 09e6 67       		.byte	103
+ 2878 09e7 22       		.byte	34
+ 2879 09e8 3E       		.byte	62
+ 2880 09e9 4D       		.byte	77
+ 2881 09ea 43       		.byte	67
+ 2882 09eb 55       		.byte	85
+ 2883 09ec 20       		.byte	32
+ 2884 09ed 54       		.byte	84
+ 2885 09ee 65       		.byte	101
+ 2886 09ef 6D       		.byte	109
+ 2887 09f0 70       		.byte	112
+ 2888 09f1 65       		.byte	101
+ 2889 09f2 72       		.byte	114
+ 2890 09f3 61       		.byte	97
+ 2891 09f4 74       		.byte	116
+ 2892 09f5 75       		.byte	117
+ 2893 09f6 72       		.byte	114
+ 2894 09f7 65       		.byte	101
+ 2895 09f8 3C       		.byte	60
+ 2896 09f9 2F       		.byte	47
+ 2897 09fa 64       		.byte	100
+ 2898 09fb 69       		.byte	105
+ 2899 09fc 76       		.byte	118
+ 2900 09fd 3E       		.byte	62
+ 2901 09fe 0A       		.byte	10
+ 2902 09ff 09       		.byte	9
+ 2903 0a00 20       		.byte	32
+ 2904 0a01 20       		.byte	32
+ 2905 0a02 3C       		.byte	60
+ 2906 0a03 64       		.byte	100
+ 2907 0a04 69       		.byte	105
+ 2908 0a05 76       		.byte	118
+ 2909 0a06 20       		.byte	32
+ 2910 0a07 63       		.byte	99
+ 2911 0a08 6C       		.byte	108
+ 2912 0a09 61       		.byte	97
+ 2913 0a0a 73       		.byte	115
+ 2914 0a0b 73       		.byte	115
+ 2915 0a0c 3D       		.byte	61
+ 2916 0a0d 22       		.byte	34
+ 2917 0a0e 70       		.byte	112
+ 2918 0a0f 61       		.byte	97
+ 2919 0a10 6E       		.byte	110
+ 2920 0a11 65       		.byte	101
+ 2921 0a12 6C       		.byte	108
+ARM GAS  /tmp/cctyFkZL.s 			page 55
+
+
+ 2922 0a13 2D       		.byte	45
+ 2923 0a14 62       		.byte	98
+ 2924 0a15 6F       		.byte	111
+ 2925 0a16 64       		.byte	100
+ 2926 0a17 79       		.byte	121
+ 2927 0a18 22       		.byte	34
+ 2928 0a19 3E       		.byte	62
+ 2929 0a1a 0A       		.byte	10
+ 2930 0a1b 09       		.byte	9
+ 2931 0a1c 20       		.byte	32
+ 2932 0a1d 20       		.byte	32
+ 2933 0a1e 20       		.byte	32
+ 2934 0a1f 20       		.byte	32
+ 2935 0a20 20       		.byte	32
+ 2936 0a21 3C       		.byte	60
+ 2937 0a22 64       		.byte	100
+ 2938 0a23 69       		.byte	105
+ 2939 0a24 76       		.byte	118
+ 2940 0a25 20       		.byte	32
+ 2941 0a26 69       		.byte	105
+ 2942 0a27 64       		.byte	100
+ 2943 0a28 3D       		.byte	61
+ 2944 0a29 22       		.byte	34
+ 2945 0a2a 6D       		.byte	109
+ 2946 0a2b 63       		.byte	99
+ 2947 0a2c 75       		.byte	117
+ 2948 0a2d 2D       		.byte	45
+ 2949 0a2e 74       		.byte	116
+ 2950 0a2f 65       		.byte	101
+ 2951 0a30 6D       		.byte	109
+ 2952 0a31 70       		.byte	112
+ 2953 0a32 22       		.byte	34
+ 2954 0a33 20       		.byte	32
+ 2955 0a34 63       		.byte	99
+ 2956 0a35 6C       		.byte	108
+ 2957 0a36 61       		.byte	97
+ 2958 0a37 73       		.byte	115
+ 2959 0a38 73       		.byte	115
+ 2960 0a39 3D       		.byte	61
+ 2961 0a3a 22       		.byte	34
+ 2962 0a3b 61       		.byte	97
+ 2963 0a3c 6C       		.byte	108
+ 2964 0a3d 65       		.byte	101
+ 2965 0a3e 72       		.byte	114
+ 2966 0a3f 74       		.byte	116
+ 2967 0a40 20       		.byte	32
+ 2968 0a41 61       		.byte	97
+ 2969 0a42 6C       		.byte	108
+ 2970 0a43 65       		.byte	101
+ 2971 0a44 72       		.byte	114
+ 2972 0a45 74       		.byte	116
+ 2973 0a46 2D       		.byte	45
+ 2974 0a47 77       		.byte	119
+ 2975 0a48 61       		.byte	97
+ 2976 0a49 72       		.byte	114
+ 2977 0a4a 6E       		.byte	110
+ 2978 0a4b 69       		.byte	105
+ARM GAS  /tmp/cctyFkZL.s 			page 56
+
+
+ 2979 0a4c 6E       		.byte	110
+ 2980 0a4d 67       		.byte	103
+ 2981 0a4e 22       		.byte	34
+ 2982 0a4f 20       		.byte	32
+ 2983 0a50 72       		.byte	114
+ 2984 0a51 6F       		.byte	111
+ 2985 0a52 6C       		.byte	108
+ 2986 0a53 65       		.byte	101
+ 2987 0a54 3D       		.byte	61
+ 2988 0a55 22       		.byte	34
+ 2989 0a56 61       		.byte	97
+ 2990 0a57 6C       		.byte	108
+ 2991 0a58 65       		.byte	101
+ 2992 0a59 72       		.byte	114
+ 2993 0a5a 74       		.byte	116
+ 2994 0a5b 22       		.byte	34
+ 2995 0a5c 3E       		.byte	62
+ 2996 0a5d 3C       		.byte	60
+ 2997 0a5e 62       		.byte	98
+ 2998 0a5f 3E       		.byte	62
+ 2999 0a60 54       		.byte	84
+ 3000 0a61 45       		.byte	69
+ 3001 0a62 4D       		.byte	77
+ 3002 0a63 50       		.byte	80
+ 3003 0a64 3C       		.byte	60
+ 3004 0a65 2F       		.byte	47
+ 3005 0a66 62       		.byte	98
+ 3006 0a67 3E       		.byte	62
+ 3007 0a68 3C       		.byte	60
+ 3008 0a69 2F       		.byte	47
+ 3009 0a6a 64       		.byte	100
+ 3010 0a6b 69       		.byte	105
+ 3011 0a6c 76       		.byte	118
+ 3012 0a6d 3E       		.byte	62
+ 3013 0a6e 0A       		.byte	10
+ 3014 0a6f 09       		.byte	9
+ 3015 0a70 20       		.byte	32
+ 3016 0a71 20       		.byte	32
+ 3017 0a72 3C       		.byte	60
+ 3018 0a73 2F       		.byte	47
+ 3019 0a74 64       		.byte	100
+ 3020 0a75 69       		.byte	105
+ 3021 0a76 76       		.byte	118
+ 3022 0a77 3E       		.byte	62
+ 3023 0a78 0A       		.byte	10
+ 3024 0a79 09       		.byte	9
+ 3025 0a7a 3C       		.byte	60
+ 3026 0a7b 2F       		.byte	47
+ 3027 0a7c 64       		.byte	100
+ 3028 0a7d 69       		.byte	105
+ 3029 0a7e 76       		.byte	118
+ 3030 0a7f 3E       		.byte	62
+ 3031 0a80 09       		.byte	9
+ 3032 0a81 0A       		.byte	10
+ 3033 0a82 3C       		.byte	60
+ 3034 0a83 2F       		.byte	47
+ 3035 0a84 64       		.byte	100
+ARM GAS  /tmp/cctyFkZL.s 			page 57
+
+
+ 3036 0a85 69       		.byte	105
+ 3037 0a86 76       		.byte	118
+ 3038 0a87 3E       		.byte	62
+ 3039 0a88 0A       		.byte	10
+ 3040 0a89 3C       		.byte	60
+ 3041 0a8a 2F       		.byte	47
+ 3042 0a8b 62       		.byte	98
+ 3043 0a8c 6F       		.byte	111
+ 3044 0a8d 64       		.byte	100
+ 3045 0a8e 79       		.byte	121
+ 3046 0a8f 3E       		.byte	62
+ 3047 0a90 0A       		.byte	10
+ 3048 0a91 3C       		.byte	60
+ 3049 0a92 2F       		.byte	47
+ 3050 0a93 68       		.byte	104
+ 3051 0a94 74       		.byte	116
+ 3052 0a95 6D       		.byte	109
+ 3053 0a96 6C       		.byte	108
+ 3054 0a97 3E       		.byte	62
+ 3055              		.section	.data.index_html_len,"aw",%progbits
+ 3056              		.align	2
+ 3057              		.set	.LANCHOR0,. + 0
+ 3060              	index_html_len:
+ 3061 0000 980A0000 		.word	2712
+ 3062              		.section	.rodata.http_server_netconn_init.str1.4,"aMS",%progbits,1
+ 3063              		.align	2
+ 3064              	.LC8:
+ 3065 0000 48545450 		.ascii	"HTTP\000"
+ 3065      00
+ 3066              		.section	.rodata.http_server_serve.str1.4,"aMS",%progbits,1
+ 3067              		.align	2
+ 3068              	.LC0:
+ 3069 0000 47455420 		.ascii	"GET /\000"
+ 3069      2F00
+ 3070 0006 0000     		.space	2
+ 3071              	.LC1:
+ 3072 0008 47455420 		.ascii	"GET /index.html\000"
+ 3072      2F696E64 
+ 3072      65782E68 
+ 3072      746D6C00 
+ 3073              	.LC2:
+ 3074 0018 47455420 		.ascii	"GET /led1\000"
+ 3074      2F6C6564 
+ 3074      3100
+ 3075 0022 0000     		.space	2
+ 3076              	.LC3:
+ 3077 0024 47455420 		.ascii	"GET /led2\000"
+ 3077      2F6C6564 
+ 3077      3200
+ 3078 002e 0000     		.space	2
+ 3079              	.LC4:
+ 3080 0030 47455420 		.ascii	"GET /led3\000"
+ 3080      2F6C6564 
+ 3080      3300
+ 3081 003a 0000     		.space	2
+ 3082              	.LC5:
+ 3083 003c 47455420 		.ascii	"GET /btn1\000"
+ARM GAS  /tmp/cctyFkZL.s 			page 58
+
+
+ 3083      2F62746E 
+ 3083      3100
+ 3084 0046 0000     		.space	2
+ 3085              	.LC6:
+ 3086 0048 4F4E00   		.ascii	"ON\000"
+ 3087 004b 00       		.space	1
+ 3088              	.LC7:
+ 3089 004c 4F464600 		.ascii	"OFF\000"
+ 3090              		.text
+ 3091              	.Letext0:
+ 3092              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+ 3093              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+ 3094              		.file 4 "Drivers/CMSIS/Include/core_cm7.h"
+ 3095              		.file 5 "Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h"
+ 3096              		.file 6 "Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f746xx.h"
+ 3097              		.file 7 "/usr/lib/gcc/arm-none-eabi/7.1.0/include/stddef.h"
+ 3098              		.file 8 "/usr/arm-none-eabi/include/sys/lock.h"
+ 3099              		.file 9 "/usr/arm-none-eabi/include/sys/_types.h"
+ 3100              		.file 10 "/usr/arm-none-eabi/include/sys/reent.h"
+ 3101              		.file 11 "/usr/arm-none-eabi/include/stdlib.h"
+ 3102              		.file 12 "/usr/arm-none-eabi/include/time.h"
+ 3103              		.file 13 "Middlewares/Third_Party/LwIP/src/include/lwip/arch.h"
+ 3104              		.file 14 "Middlewares/Third_Party/LwIP/src/include/lwip/err.h"
+ 3105              		.file 15 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_gpio.h"
+ 3106              		.file 16 "Middlewares/Third_Party/LwIP/src/include/lwip/pbuf.h"
+ 3107              		.file 17 "Middlewares/Third_Party/LwIP/src/include/lwip/ip4_addr.h"
+ 3108              		.file 18 "Middlewares/Third_Party/LwIP/src/include/lwip/ip_addr.h"
+ 3109              		.file 19 "Middlewares/Third_Party/LwIP/src/include/lwip/netbuf.h"
+ 3110              		.file 20 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1/portmacro.h"
+ 3111              		.file 21 "Middlewares/Third_Party/FreeRTOS/Source/include/queue.h"
+ 3112              		.file 22 "Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h"
+ 3113              		.file 23 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 3114              		.file 24 "Middlewares/Third_Party/LwIP/system/arch/sys_arch.h"
+ 3115              		.file 25 "Middlewares/Third_Party/LwIP/src/include/lwip/api.h"
+ 3116              		.file 26 "Src/../webpages/index.h"
+ 3117              		.file 27 "Middlewares/Third_Party/LwIP/src/include/lwip/sys.h"
+ 3118              		.file 28 "/usr/arm-none-eabi/include/string.h"
+ARM GAS  /tmp/cctyFkZL.s 			page 59
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 httpserver-netconn.c
+     /tmp/cctyFkZL.s:18     .text.http_server_serve:0000000000000000 $t
+     /tmp/cctyFkZL.s:25     .text.http_server_serve:0000000000000000 http_server_serve
+     /tmp/cctyFkZL.s:198    .text.http_server_serve:0000000000000100 $d
+     /tmp/cctyFkZL.s:212    .text.http_server_netconn_thread:0000000000000000 $t
+     /tmp/cctyFkZL.s:218    .text.http_server_netconn_thread:0000000000000000 http_server_netconn_thread
+     /tmp/cctyFkZL.s:285    .text.http_server_netconn_init:0000000000000000 $t
+     /tmp/cctyFkZL.s:292    .text.http_server_netconn_init:0000000000000000 http_server_netconn_init
+     /tmp/cctyFkZL.s:323    .text.http_server_netconn_init:000000000000001c $d
+     /tmp/cctyFkZL.s:335    .bss.nPageHits:0000000000000000 nPageHits
+     /tmp/cctyFkZL.s:3060   .data.index_html_len:0000000000000000 index_html_len
+     /tmp/cctyFkZL.s:342    .data.index_html:0000000000000000 index_html
+     /tmp/cctyFkZL.s:332    .bss.nPageHits:0000000000000000 $d
+     /tmp/cctyFkZL.s:338    .data.index_html:0000000000000000 $d
+     /tmp/cctyFkZL.s:3056   .data.index_html_len:0000000000000000 $d
+     /tmp/cctyFkZL.s:3063   .rodata.http_server_netconn_init.str1.4:0000000000000000 $d
+     /tmp/cctyFkZL.s:3067   .rodata.http_server_serve.str1.4:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+netconn_recv
+netconn_close
+netbuf_delete
+netbuf_data
+strncmp
+HAL_GPIO_ReadPin
+netconn_write_partly
+HAL_GPIO_TogglePin
+netconn_new_with_proto_and_callback
+netconn_bind
+netconn_listen_with_backlog
+netconn_accept
+netconn_delete
+sys_thread_new

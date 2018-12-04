@@ -59,6 +59,8 @@
 #include "ansi.h"
 #include "term_io.h"
 #include "memory_access.h"
+#include  <errno.h>
+#include  <sys/unistd.h>
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -78,6 +80,14 @@ extern ApplicationTypeDef Appli_state;
 extern USBH_HandleTypeDef hUsbHostFS;
 
 extern const Diskio_drvTypeDef USBH_Driver;
+
+
+char USBHPath[4];   /* USBH logical drive path */
+FATFS USBHFatFS;    /* File system object for USBH logical drive */
+
+//see usbh_diskio.c
+extern const Diskio_drvTypeDef  USBH_Driver;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -86,6 +96,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_I2C2_Init(void);
 void StartDefaultTask(void const * argument);
+void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -94,6 +105,53 @@ void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN 0 */
 
+char inkey(void)
+{
+    uint32_t flags = huart3.Instance->ISR;
+
+
+    if((flags & UART_FLAG_RXNE) || (flags & UART_FLAG_ORE))
+    {
+        __HAL_UART_CLEAR_OREFLAG(&huart3);
+        return (huart3.Instance->RDR);
+    }
+    else
+        return 0;
+}
+
+unsigned int file_create_with_contents(char * fname, char * inData, uint32_t len) {
+    FIL file;
+    UINT ret = 0;
+    FRESULT res = 0;
+
+    f_open(&file, fname, FA_CREATE_ALWAYS | FA_WRITE);
+
+    f_truncate(&file);
+
+    f_write(&file, inData, len, &ret);
+
+    f_close(&file);
+
+    return ret;
+}
+
+void list_files_from_dir(char * path) {
+    DIR dir;
+    FILINFO file;
+    FRESULT res = 0;
+
+    f_opendir(&dir, path);
+
+    for(;;) {
+        res = f_readdir(&dir, &file);
+        if (res != FR_OK || file.fname[0] == 0) break;
+        if (!(file.fattrib & AM_DIR)) {
+            printf("%s/%s\n", path, file.fname);
+        }
+    }
+
+    f_closedir(&dir);
+}
 /* USER CODE END 0 */
 
 /**
@@ -128,10 +186,74 @@ int main(void)
   MX_USART3_UART_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
-  
-    xprintf("ZACZYNAM DZIAŁAĆ\n");
-  
-  /* USER CODE END 2 */
+
+  xprintf(ANSI_BG_BLUE "The Mass Storage Project" ANSI_BG_DEFAULT "\n");
+  xprintf("Regular printf says hello!\n");
+  HAL_Delay(500);
+  HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
+  FATFS *fs;
+  fs = malloc(sizeof (FATFS));
+  xprintf("ZACZYNAM DZIAŁAĆ\n");
+  FATFS_LinkDriver(&USBH_Driver, USBHPath);
+  HAL_Delay(4000);
+  FRESULT res = f_mount(fs,USBHPath ,1);
+
+  xprintf("RES : %d\n",res);
+  xprintf("f_mount path = %s\n",USBHPath);
+
+  char databuf[] = "ala ma kota";
+  while (1)
+  {
+      char key = inkey();
+      switch(key)
+      {
+          case 'a':
+              {
+                xprintf("Odebrano polecenie a\n");
+                break;
+              }
+            case 'b':
+            {
+                xprintf("Sciezka USB: %s\n",USBHPath);
+                break;
+            }
+            case 'e':
+            {
+                list_files_from_dir(USBHPath);
+                break;
+            }
+            case 'd':
+            {
+                if(file_create_with_contents("a2.txt", databuf, 7)) {
+                    xprintf("Writing successful\n");
+                } else {
+                    xprintf("Writing failed\n");
+                }
+                break;
+            }
+          case 'f':
+            {
+              HAL_GPIO_TogglePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin);
+            }
+            case 0:
+                break;
+            default:
+                xprintf("Nie rozpoznane polecenie: %c = 0x%02X\n",key,key);
+        }
+
+        usbh_stat = USBH_Process(&hUsbHostFS);
+
+        switch(usbh_stat)
+        {
+            case USBH_OK:
+                break;
+            case USBH_FAIL:
+                xprintf("usbh_stat FAIL\n");
+            default:
+                xprintf("usbh_stat error %d\n",usbh_stat);
+        }
+    }
+    /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -391,10 +513,7 @@ void StartDefaultTask(void const * argument)
   FATFS_LinkDriver(&USBH_Driver, "");
   /* Infinite loop */
   for(;;)
-  { 
-    USB_Process(Appli_state);
-    xprintf("asd\n");
-    osDelay(1000);
+  {
   }
   /* USER CODE END 5 */ 
 }

@@ -36,6 +36,7 @@ BUILD_DIR = build
 # C sources
 C_SOURCES =  \
 Src/memory_access.c \
+Src/httpserver-netconn.c \
 Src/main.c \
 Src/term_io.c\
 Src/dbgu.c\

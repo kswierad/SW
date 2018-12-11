@@ -10,9 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13cf7946-08a8-4223-92ba-af802ea2d159" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Inc/memory_access.h" beforeDir="false" afterPath="$PROJECT_DIR$/Inc/memory_access.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/lwip.c" beforeDir="false" afterPath="$PROJECT_DIR$/Src/lwip.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/Src/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/memory_access.c" beforeDir="false" afterPath="$PROJECT_DIR$/Src/memory_access.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/ServerFTP.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/ServerFTP.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/ServerFTP.elf" beforeDir="false" afterPath="$PROJECT_DIR$/build/ServerFTP.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/ServerFTP.hex" beforeDir="false" afterPath="$PROJECT_DIR$/build/ServerFTP.hex" afterDir="false" />
@@ -49,6 +50,8 @@
       <change beforePath="$PROJECT_DIR$/build/freertos.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/freertos.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/fsm.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/fsm.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/heap_4.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/heap_4.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/httpserver-netconn.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/httpserver-netconn.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/httpserver-netconn.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/httpserver-netconn.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/icmp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/icmp.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/icmp6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/icmp6.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/igmp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/igmp.lst" afterDir="false" />
@@ -68,14 +71,13 @@
       <change beforePath="$PROJECT_DIR$/build/list.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/list.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/lowpan6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/lowpan6.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/lwip.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/lwip.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/lwip.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/lwip.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/magic.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/magic.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main.d" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/mem.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/mem.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/memory_access.d" beforeDir="false" afterPath="$PROJECT_DIR$/build/memory_access.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/memory_access.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/memory_access.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/memory_access.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/memory_access.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/memp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/memp.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/mld6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/mld6.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/mppe.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/mppe.lst" afterDir="false" />
@@ -160,8 +162,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Src/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="507" column="13" lean-forward="true" selection-start-line="507" selection-start-column="13" selection-end-line="507" selection-end-column="13" />
+            <state relative-caret-position="252">
+              <caret line="433" column="35" selection-start-line="433" selection-start-column="35" selection-end-line="433" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -186,8 +188,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Src/main.c" />
         <option value="$PROJECT_DIR$/Src/memory_access.c" />
+        <option value="$PROJECT_DIR$/Src/main.c" />
       </list>
     </option>
   </component>
@@ -252,16 +254,15 @@
       <option name="presentableId" value="Default" />
       <updated>1543935223336</updated>
       <workItem from="1543935229370" duration="129000" />
-      <workItem from="1544542493380" duration="5882000" />
+      <workItem from="1544542493380" duration="8405000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6011000" />
+    <option name="totallyTimeSpent" value="8534000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25320512" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -308,8 +309,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Src/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="507" column="13" lean-forward="true" selection-start-line="507" selection-start-column="13" selection-end-line="507" selection-end-column="13" />
+        <state relative-caret-position="252">
+          <caret line="433" column="35" selection-start-line="433" selection-start-column="35" selection-end-line="433" selection-end-column="35" />
         </state>
       </provider>
     </entry>

@@ -59,6 +59,7 @@
 #include "ansi.h"
 #include "term_io.h"
 #include "memory_access.h"
+#include "httpserver-netconn.h"
 #include  <errno.h>
 #include  <sys/unistd.h>
 /* USER CODE END Includes */
@@ -430,6 +431,10 @@ void StartDefaultTask(void const * argument)
 
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
+  //proba servera niestety nieudana
+  http_server_netconn_init();
+  for(;;)
+      osThreadTerminate(NULL);
 
     xprintf("TEST BEGIN\n");
     HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_SET);

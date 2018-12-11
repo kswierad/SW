@@ -1,5 +1,5 @@
 build/memory_access.o: Src/memory_access.c Inc/memory_access.h \
- Inc/memory_access.h Inc/fatfs.h Middlewares/Third_Party/FatFs/src/ff.h \
+ Inc/fatfs.h Middlewares/Third_Party/FatFs/src/ff.h \
  Middlewares/Third_Party/FatFs/src/integer.h Inc/ffconf.h \
  Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  Inc/stm32f7xx_hal_conf.h Inc/main.h \
@@ -60,10 +60,7 @@ build/memory_access.o: Src/memory_access.c Inc/memory_access.h \
  Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h \
  Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
  Middlewares/Third_Party/FatFs/src/diskio.h \
- Middlewares/Third_Party/FatFs/src/ff.h Inc/usbh_diskio.h Inc/usb_host.h \
- Inc/fatfs.h Inc/usb_host.h
-
-Inc/memory_access.h:
+ Middlewares/Third_Party/FatFs/src/ff.h Inc/usbh_diskio.h Inc/usb_host.h
 
 Inc/memory_access.h:
 
@@ -202,9 +199,5 @@ Middlewares/Third_Party/FatFs/src/diskio.h:
 Middlewares/Third_Party/FatFs/src/ff.h:
 
 Inc/usbh_diskio.h:
-
-Inc/usb_host.h:
-
-Inc/fatfs.h:
 
 Inc/usb_host.h:

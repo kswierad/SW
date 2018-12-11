@@ -97,7 +97,7 @@ build/main.o: Src/main.c Inc/main.h \
  Middlewares/Third_Party/LwIP/system/arch/sys_arch.h Inc/ethernetif.h \
  Middlewares/Third_Party/LwIP/src/include/lwip/tcpip.h Inc/usb_host.h \
  Inc/dbgu.h Inc/ansi.h Inc/ansi.h Inc/term_io.h Inc/dbgu.h \
- Inc/memory_access.h Inc/memory_access.h Inc/fatfs.h Inc/usb_host.h \
+ Inc/memory_access.h Inc/fatfs.h Inc/usb_host.h \
  Middlewares/Third_Party/LwIP/src/include/lwip/errno.h
 
 Inc/main.h:
@@ -325,8 +325,6 @@ Inc/ansi.h:
 Inc/term_io.h:
 
 Inc/dbgu.h:
-
-Inc/memory_access.h:
 
 Inc/memory_access.h:
 

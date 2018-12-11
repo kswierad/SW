@@ -135,23 +135,6 @@ unsigned int file_create_with_contents(char * fname, char * inData, uint32_t len
     return ret;
 }
 
-void list_files_from_dir(char * path) {
-    DIR dir;
-    FILINFO file;
-    FRESULT res = 0;
-
-    f_opendir(&dir, path);
-
-    for(;;) {
-        res = f_readdir(&dir, &file);
-        if (res != FR_OK || file.fname[0] == 0) break;
-        if (!(file.fattrib & AM_DIR)) {
-            printf("%s/%s\n", path, file.fname);
-        }
-    }
-
-    f_closedir(&dir);
-}
 /* USER CODE END 0 */
 
 /**
@@ -185,74 +168,10 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   MX_I2C2_Init();
+  MX_USB_HOST_Init();
   /* USER CODE BEGIN 2 */
 
-  xprintf(ANSI_BG_BLUE "The Mass Storage Project" ANSI_BG_DEFAULT "\n");
-  xprintf("Regular printf says hello!\n");
-  HAL_Delay(500);
-  HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
-  FATFS *fs;
-  fs = malloc(sizeof (FATFS));
-  xprintf("ZACZYNAM DZIAŁAĆ\n");
-  FATFS_LinkDriver(&USBH_Driver, USBHPath);
-  HAL_Delay(4000);
-  FRESULT res = f_mount(fs,USBHPath ,1);
-
-  xprintf("RES : %d\n",res);
-  xprintf("f_mount path = %s\n",USBHPath);
-
-  char databuf[] = "ala ma kota";
-  while (1)
-  {
-      char key = inkey();
-      switch(key)
-      {
-          case 'a':
-              {
-                xprintf("Odebrano polecenie a\n");
-                break;
-              }
-            case 'b':
-            {
-                xprintf("Sciezka USB: %s\n",USBHPath);
-                break;
-            }
-            case 'e':
-            {
-                list_files_from_dir(USBHPath);
-                break;
-            }
-            case 'd':
-            {
-                if(file_create_with_contents("a2.txt", databuf, 7)) {
-                    xprintf("Writing successful\n");
-                } else {
-                    xprintf("Writing failed\n");
-                }
-                break;
-            }
-          case 'f':
-            {
-              HAL_GPIO_TogglePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin);
-            }
-            case 0:
-                break;
-            default:
-                xprintf("Nie rozpoznane polecenie: %c = 0x%02X\n",key,key);
-        }
-
-        usbh_stat = USBH_Process(&hUsbHostFS);
-
-        switch(usbh_stat)
-        {
-            case USBH_OK:
-                break;
-            case USBH_FAIL:
-                xprintf("usbh_stat FAIL\n");
-            default:
-                xprintf("usbh_stat error %d\n",usbh_stat);
-        }
-    }
+  
     /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -510,11 +429,93 @@ void StartDefaultTask(void const * argument)
   MX_LWIP_Init();
 
   /* USER CODE BEGIN 5 */
-  FATFS_LinkDriver(&USBH_Driver, "");
   /* Infinite loop */
-  for(;;)
+
+    xprintf("TEST BEGIN\n");
+    HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_SET);
+    while(Appli_state !=APPLICATION_READY){
+    }
+    xprintf("%s\n", USBHPath);
+    FATFS *fs;
+
+    fs = malloc(sizeof(FATFS));
+    if(f_mount(fs, USBHPath, 1) != FR_OK) {
+        xprintf("usb mount error\n");
+        free(fs);
+        return;
+    }
+
+    mount_usb();
+    xprintf("%s\n", get_current_directory());
+    xprintf("%s\n", list_directory());
+
+    FIL *f = open_file("a2.txt");
+
+    uint16_t buf_size = 16;
+    char *buf = malloc(sizeof(char)*buf_size);
+    uint16_t rb = read_file(f, buf, buf_size);
+    xprintf("Read %u\n%s\n", rb, buf);
+    free(buf);
+
+
+    printf("TEST END\r\n");
+
+  char databuf[] = "ala ma kota";
+  while (1)
   {
-  }
+      char key = inkey();
+      switch(key)
+      {
+          case 'a':
+              {
+                xprintf("Odebrano polecenie a\n");
+                break;
+              }
+            case 'b':
+            {
+                xprintf("Sciezka USB: %s\n",USBHPath);
+                break;
+            }
+            case 'e':
+            {
+                change_directory("0:/test");
+
+                break;
+            }
+            case 'w':
+            {
+                if(file_create_with_contents("a2.txt", databuf, 7)) {
+                    xprintf("Writing successful\n");
+                } else {
+                    xprintf("Writing failed\n");
+                }
+                break;
+            }
+          case 'd':
+          {
+              delete_file("a2.txt");
+              break;
+          }
+          case 's':
+          {
+              xprintf("Current directory: %s\n", get_current_directory());
+              xprintf("List of this directory:\n");
+              xprintf("%s\n", list_directory());
+              break;
+          }
+
+          case 'f':
+            {
+              HAL_GPIO_TogglePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin);
+              break;
+            }
+            case 0:
+                break;
+            default:
+                xprintf("Nie rozpoznane polecenie: %c = 0x%02X\n",key,key);
+        }
+
+    }
   /* USER CODE END 5 */ 
 }
 

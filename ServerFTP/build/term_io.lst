@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccIEZheZ.s 			page 1
+ARM GAS  /tmp/ccWWR1BY.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
   16:Src/term_io.c **** 	while ((c = **str) == ' ') (*str)++;
   41              		.loc 1 16 0
   42 0002 01E0     		b	.L2
-ARM GAS  /tmp/ccIEZheZ.s 			page 2
+ARM GAS  /tmp/ccWWR1BY.s 			page 2
 
 
   43              	.LVL2:
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
   42:Src/term_io.c **** 			return 0;
   43:Src/term_io.c **** 		radix = 10;
   71              		.loc 1 43 0
-ARM GAS  /tmp/ccIEZheZ.s 			page 3
+ARM GAS  /tmp/ccWWR1BY.s 			page 3
 
 
   72 0024 0A25     		movs	r5, #10
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  115 0052 0825     		movs	r5, #8
  116 0054 E7E7     		b	.L9
  117              	.L24:
-ARM GAS  /tmp/ccIEZheZ.s 			page 4
+ARM GAS  /tmp/ccWWR1BY.s 			page 4
 
 
   24:Src/term_io.c **** 		}
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  159 0076 AA42     		cmp	r2, r5
  160 0078 1ED2     		bcs	.L20
   54:Src/term_io.c **** 		val = val * radix + c;
-ARM GAS  /tmp/ccIEZheZ.s 			page 5
+ARM GAS  /tmp/ccWWR1BY.s 			page 5
 
 
  161              		.loc 1 54 0
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  205              		.loc 1 57 0 is_stmt 0 discriminator 1
  206 00aa 6442     		negs	r4, r4
  207              	.LVL37:
-ARM GAS  /tmp/ccIEZheZ.s 			page 6
+ARM GAS  /tmp/ccWWR1BY.s 			page 6
 
 
  208              	.L15:
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  253              		.cfi_startproc
  254              		@ args = 0, pretend = 0, frame = 0
  255              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccIEZheZ.s 			page 7
+ARM GAS  /tmp/ccWWR1BY.s 			page 7
 
 
  256              	.LVL44:
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  301              		.loc 1 75 0
  302 000c 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
  303 000e 0028     		cmp	r0, #0
-ARM GAS  /tmp/ccIEZheZ.s 			page 8
+ARM GAS  /tmp/ccWWR1BY.s 			page 8
 
 
  304 0010 F9D1     		bne	.L33
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
   92:Src/term_io.c **** 			val = -val;
   93:Src/term_io.c **** 			sgn = '-';
   94:Src/term_io.c **** 		}
-ARM GAS  /tmp/ccIEZheZ.s 			page 9
+ARM GAS  /tmp/ccWWR1BY.s 			page 9
 
 
   95:Src/term_io.c **** 	}
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  381 002e 3027     		movs	r7, #48
  382 0030 EFE7     		b	.L37
  383              	.LVL59:
-ARM GAS  /tmp/ccIEZheZ.s 			page 10
+ARM GAS  /tmp/ccWWR1BY.s 			page 10
 
 
  384              	.L39:
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  426 0066 06AB     		add	r3, sp, #24
  427              	.LVL69:
  428 0068 1C44     		add	r4, r4, r3
-ARM GAS  /tmp/ccIEZheZ.s 			page 11
+ARM GAS  /tmp/ccWWR1BY.s 			page 11
 
 
  429 006a 04F8141C 		strb	r1, [r4, #-20]
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  477              		.global	xprintf
  478              		.syntax unified
  479              		.thumb
-ARM GAS  /tmp/ccIEZheZ.s 			page 12
+ARM GAS  /tmp/ccWWR1BY.s 			page 12
 
 
  480              		.thumb_func
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  522              	.LVL84:
  523 0018 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
  524              	.LVL85:
-ARM GAS  /tmp/ccIEZheZ.s 			page 13
+ARM GAS  /tmp/ccWWR1BY.s 			page 13
 
 
  525 001a 0028     		cmp	r0, #0
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  569              	.L60:
  134:Src/term_io.c **** 			w += w * 10 + (d - '0');
  570              		.loc 1 134 0
-ARM GAS  /tmp/ccIEZheZ.s 			page 14
+ARM GAS  /tmp/ccWWR1BY.s 			page 14
 
 
  571 0048 A3F13001 		sub	r1, r3, #48
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  606              	.LVL101:
  607              	.L68:
  154:Src/term_io.c **** 		if (d == 'X' || d == 'x') r = 16; // 'x' added by mthomas in increase compatibility
-ARM GAS  /tmp/ccIEZheZ.s 			page 15
+ARM GAS  /tmp/ccWWR1BY.s 			page 15
 
 
  608              		.loc 1 154 0
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  652 009e 019B     		ldr	r3, [sp, #4]
  653              	.LVL111:
  654 00a0 1A1D     		adds	r2, r3, #4
-ARM GAS  /tmp/ccIEZheZ.s 			page 16
+ARM GAS  /tmp/ccWWR1BY.s 			page 16
 
 
  655              	.LVL112:
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  702 00d0 FFF7FEFF 		bl	xitoa
  703              	.LVL127:
  704 00d4 9FE7     		b	.L56
-ARM GAS  /tmp/ccIEZheZ.s 			page 17
+ARM GAS  /tmp/ccWWR1BY.s 			page 17
 
 
  705              	.LVL128:
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  172:Src/term_io.c **** 
  173:Src/term_io.c **** void put_dump (const uint8_t *buff, uint32_t ofs, int cnt)
  174:Src/term_io.c **** {
-ARM GAS  /tmp/ccIEZheZ.s 			page 18
+ARM GAS  /tmp/ccWWR1BY.s 			page 18
 
 
  751              		.loc 1 174 0
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  795 0028 03E0     		b	.L91
  796              	.LVL141:
  797              	.L92:
-ARM GAS  /tmp/ccIEZheZ.s 			page 19
+ARM GAS  /tmp/ccWWR1BY.s 			page 19
 
 
  183:Src/term_io.c **** 		if ((buff[n] < 0x20)||(buff[n] >= 0x7F))
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  842              		.thumb
  843              		.thumb_func
  844              		.fpu fpv5-sp-d16
-ARM GAS  /tmp/ccIEZheZ.s 			page 20
+ARM GAS  /tmp/ccWWR1BY.s 			page 20
 
 
  846              	get_line:
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  887              	.L102:
  203:Src/term_io.c **** 			idx--; xputc(c);
  204:Src/term_io.c **** 			xputc(' '); xputc(c); // added by mthomas for Eclipse Terminal plug-in
-ARM GAS  /tmp/ccIEZheZ.s 			page 21
+ARM GAS  /tmp/ccWWR1BY.s 			page 21
 
 
  205:Src/term_io.c **** 		}
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  932              	.LFE142:
  934              		.section	.text.get_line_r,"ax",%progbits
  935              		.align	1
-ARM GAS  /tmp/ccIEZheZ.s 			page 22
+ARM GAS  /tmp/ccWWR1BY.s 			page 22
 
 
  936              		.global	get_line_r
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  235:Src/term_io.c **** 					buff[myidx++] = c; xputc(c);
  236:Src/term_io.c **** 			}
  237:Src/term_io.c **** 		}
-ARM GAS  /tmp/ccIEZheZ.s 			page 23
+ARM GAS  /tmp/ccWWR1BY.s 			page 23
 
 
  238:Src/term_io.c **** 		*idx = myidx;
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  1010 0042 0023     		movs	r3, #0
  1011 0044 08F80630 		strb	r3, [r8, r6]
  227:Src/term_io.c **** 			retval = 1;
-ARM GAS  /tmp/ccIEZheZ.s 			page 24
+ARM GAS  /tmp/ccWWR1BY.s 			page 24
 
 
  1012              		.loc 1 227 0
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  1060              		.section	.rodata.put_dump.str1.4,"aMS",%progbits,1
  1061              		.align	2
  1062              	.LC0:
-ARM GAS  /tmp/ccIEZheZ.s 			page 25
+ARM GAS  /tmp/ccWWR1BY.s 			page 25
 
 
  1063 0000 2530386C 		.ascii	"%08lX \000"
@@ -1460,29 +1460,29 @@ ARM GAS  /tmp/ccIEZheZ.s 			page 1
  1077              		.file 10 "/usr/arm-none-eabi/include/sys/reent.h"
  1078              		.file 11 "<built-in>"
  1079              		.file 12 "Inc/dbgu.h"
-ARM GAS  /tmp/ccIEZheZ.s 			page 26
+ARM GAS  /tmp/ccWWR1BY.s 			page 26
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 term_io.c
-     /tmp/ccIEZheZ.s:18     .text.xatoi:0000000000000000 $t
-     /tmp/ccIEZheZ.s:25     .text.xatoi:0000000000000000 xatoi
-     /tmp/ccIEZheZ.s:243    .text.xputc:0000000000000000 $t
-     /tmp/ccIEZheZ.s:250    .text.xputc:0000000000000000 xputc
-     /tmp/ccIEZheZ.s:271    .text.xputs:0000000000000000 $t
-     /tmp/ccIEZheZ.s:278    .text.xputs:0000000000000000 xputs
-     /tmp/ccIEZheZ.s:311    .text.xitoa:0000000000000000 $t
-     /tmp/ccIEZheZ.s:318    .text.xitoa:0000000000000000 xitoa
-     /tmp/ccIEZheZ.s:476    .text.xprintf:0000000000000000 $t
-     /tmp/ccIEZheZ.s:483    .text.xprintf:0000000000000000 xprintf
-     /tmp/ccIEZheZ.s:742    .text.put_dump:0000000000000000 $t
-     /tmp/ccIEZheZ.s:749    .text.put_dump:0000000000000000 put_dump
-     /tmp/ccIEZheZ.s:833    .text.put_dump:0000000000000054 $d
-     /tmp/ccIEZheZ.s:839    .text.get_line:0000000000000000 $t
-     /tmp/ccIEZheZ.s:846    .text.get_line:0000000000000000 get_line
-     /tmp/ccIEZheZ.s:935    .text.get_line_r:0000000000000000 $t
-     /tmp/ccIEZheZ.s:942    .text.get_line_r:0000000000000000 get_line_r
-     /tmp/ccIEZheZ.s:1061   .rodata.put_dump.str1.4:0000000000000000 $d
+     /tmp/ccWWR1BY.s:18     .text.xatoi:0000000000000000 $t
+     /tmp/ccWWR1BY.s:25     .text.xatoi:0000000000000000 xatoi
+     /tmp/ccWWR1BY.s:243    .text.xputc:0000000000000000 $t
+     /tmp/ccWWR1BY.s:250    .text.xputc:0000000000000000 xputc
+     /tmp/ccWWR1BY.s:271    .text.xputs:0000000000000000 $t
+     /tmp/ccWWR1BY.s:278    .text.xputs:0000000000000000 xputs
+     /tmp/ccWWR1BY.s:311    .text.xitoa:0000000000000000 $t
+     /tmp/ccWWR1BY.s:318    .text.xitoa:0000000000000000 xitoa
+     /tmp/ccWWR1BY.s:476    .text.xprintf:0000000000000000 $t
+     /tmp/ccWWR1BY.s:483    .text.xprintf:0000000000000000 xprintf
+     /tmp/ccWWR1BY.s:742    .text.put_dump:0000000000000000 $t
+     /tmp/ccWWR1BY.s:749    .text.put_dump:0000000000000000 put_dump
+     /tmp/ccWWR1BY.s:833    .text.put_dump:0000000000000054 $d
+     /tmp/ccWWR1BY.s:839    .text.get_line:0000000000000000 $t
+     /tmp/ccWWR1BY.s:846    .text.get_line:0000000000000000 get_line
+     /tmp/ccWWR1BY.s:935    .text.get_line_r:0000000000000000 $t
+     /tmp/ccWWR1BY.s:942    .text.get_line_r:0000000000000000 get_line_r
+     /tmp/ccWWR1BY.s:1061   .rodata.put_dump.str1.4:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 debug_chr

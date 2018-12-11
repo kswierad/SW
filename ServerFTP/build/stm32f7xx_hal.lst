@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccaWdMF3.s 			page 1
+ARM GAS  /tmp/ccYaSGaD.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
   29:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   *      this list of conditions and the following disclaimer.
   30:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
   31:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   *      this list of conditions and the following disclaimer in the documentation
-ARM GAS  /tmp/ccaWdMF3.s 			page 2
+ARM GAS  /tmp/ccYaSGaD.s 			page 2
 
 
   32:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   *      and/or other materials provided with the distribution.
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
   86:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** /* Private variables ---------------------------------------------------------*/
   87:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** /** @addtogroup HAL_Private_Variables
   88:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   * @{
-ARM GAS  /tmp/ccaWdMF3.s 			page 3
+ARM GAS  /tmp/ccYaSGaD.s 			page 3
 
 
   89:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   */
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  143:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   *           which is clocked by the HSI (at this stage, the clock is not yet
  144:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   *           configured and thus the system is running from the internal HSI at 16 MHz).
  145:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   *           Set NVIC Group Priority to 4.
-ARM GAS  /tmp/ccaWdMF3.s 			page 4
+ARM GAS  /tmp/ccYaSGaD.s 			page 4
 
 
  146:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   *           Calls the HAL_MspInit() callback function defined in user file 
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  200:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   __HAL_RCC_AHB3_RELEASE_RESET();
  201:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** 
  202:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   /* De-Init the low level hardware */
-ARM GAS  /tmp/ccaWdMF3.s 			page 5
+ARM GAS  /tmp/ccYaSGaD.s 			page 5
 
 
  203:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   HAL_MspDeInit();
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
   58              		.section	.text.HAL_DeInit,"ax",%progbits
   59              		.align	1
   60              		.global	HAL_DeInit
-ARM GAS  /tmp/ccaWdMF3.s 			page 6
+ARM GAS  /tmp/ccYaSGaD.s 			page 6
 
 
   61              		.syntax unified
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  103              		.loc 1 207 0
  104 0022 2046     		mov	r0, r4
  105 0024 10BD     		pop	{r4, pc}
-ARM GAS  /tmp/ccaWdMF3.s 			page 7
+ARM GAS  /tmp/ccYaSGaD.s 			page 7
 
 
  106              	.L6:
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  141 0012 1068     		ldr	r0, [r2]
  142 0014 B0FBF3F0 		udiv	r0, r0, r3
  143 0018 FFF7FEFF 		bl	HAL_SYSTICK_Config
-ARM GAS  /tmp/ccaWdMF3.s 			page 8
+ARM GAS  /tmp/ccYaSGaD.s 			page 8
 
 
  144              	.LVL3:
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  177 0048 00000000 		.word	.LANCHOR1
  178              		.cfi_endproc
  179              	.LFE140:
-ARM GAS  /tmp/ccaWdMF3.s 			page 9
+ARM GAS  /tmp/ccYaSGaD.s 			page 9
 
 
  181              		.section	.text.HAL_Init,"ax",%progbits
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  275:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****  *  @brief    HAL Control functions
  276:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****  *
  277:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** @verbatim
-ARM GAS  /tmp/ccaWdMF3.s 			page 10
+ARM GAS  /tmp/ccYaSGaD.s 			page 10
 
 
  278:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****  ===============================================================================
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  250              		.align	1
  251              		.weak	HAL_GetTick
  252              		.syntax unified
-ARM GAS  /tmp/ccaWdMF3.s 			page 11
+ARM GAS  /tmp/ccYaSGaD.s 			page 11
 
 
  253              		.thumb
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  329:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** }
  291              		.loc 1 329 0
  292 0000 014B     		ldr	r3, .L24
-ARM GAS  /tmp/ccaWdMF3.s 			page 12
+ARM GAS  /tmp/ccYaSGaD.s 			page 12
 
 
  293 0002 1868     		ldr	r0, [r3]
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  333 0010 1868     		ldr	r0, [r3]
  334              	.LVL11:
  335 0012 FFF7FEFF 		bl	HAL_InitTick
-ARM GAS  /tmp/ccaWdMF3.s 			page 13
+ARM GAS  /tmp/ccYaSGaD.s 			page 13
 
 
  336              	.LVL12:
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  378              	.LFE145:
  380              		.section	.text.HAL_Delay,"ax",%progbits
  381              		.align	1
-ARM GAS  /tmp/ccaWdMF3.s 			page 14
+ARM GAS  /tmp/ccYaSGaD.s 			page 14
 
 
  382              		.weak	HAL_Delay
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  416              	.L37:
  380:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   }
  381:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** 
-ARM GAS  /tmp/ccaWdMF3.s 			page 15
+ARM GAS  /tmp/ccYaSGaD.s 			page 15
 
 
  382:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   while ((HAL_GetTick() - tickstart) < wait)
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  453              		.loc 1 401 0
  454 000a 7047     		bx	lr
  455              	.L43:
-ARM GAS  /tmp/ccaWdMF3.s 			page 16
+ARM GAS  /tmp/ccYaSGaD.s 			page 16
 
 
  456              		.align	2
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  497              		.fpu fpv5-sp-d16
  499              	HAL_GetHalVersion:
  500              	.LFB149:
-ARM GAS  /tmp/ccaWdMF3.s 			page 17
+ARM GAS  /tmp/ccYaSGaD.s 			page 17
 
 
  418:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** 
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  539              	.L51:
  540 0008 002004E0 		.word	-536600576
  541              		.cfi_endproc
-ARM GAS  /tmp/ccaWdMF3.s 			page 18
+ARM GAS  /tmp/ccYaSGaD.s 			page 18
 
 
  542              	.LFE150:
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  584              		@ args = 0, pretend = 0, frame = 0
  585              		@ frame_needed = 0, uses_anonymous_args = 0
  586              		@ link register save eliminated.
-ARM GAS  /tmp/ccaWdMF3.s 			page 19
+ARM GAS  /tmp/ccYaSGaD.s 			page 19
 
 
  452:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****    return(READ_REG(*((uint32_t *)UID_BASE)));
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  463:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** 
  464:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** /**
  465:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   * @brief  Returns third word of the unique device identifier (UID based on 96 bits)
-ARM GAS  /tmp/ccaWdMF3.s 			page 20
+ARM GAS  /tmp/ccYaSGaD.s 			page 20
 
 
  466:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   * @retval Device identifier
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  675 000c 002004E0 		.word	-536600576
  676              		.cfi_endproc
  677              	.LFE155:
-ARM GAS  /tmp/ccaWdMF3.s 			page 21
+ARM GAS  /tmp/ccYaSGaD.s 			page 21
 
 
  679              		.section	.text.HAL_DBGMCU_DisableDBGSleepMode,"ax",%progbits
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  720              		@ args = 0, pretend = 0, frame = 0
  721              		@ frame_needed = 0, uses_anonymous_args = 0
  722              		@ link register save eliminated.
-ARM GAS  /tmp/ccaWdMF3.s 			page 22
+ARM GAS  /tmp/ccYaSGaD.s 			page 22
 
 
  497:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c ****   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP);
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  769              		.syntax unified
  770              		.thumb
  771              		.thumb_func
-ARM GAS  /tmp/ccaWdMF3.s 			page 23
+ARM GAS  /tmp/ccYaSGaD.s 			page 23
 
 
  772              		.fpu fpv5-sp-d16
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  812 0002 5368     		ldr	r3, [r2, #4]
  813 0004 23F00403 		bic	r3, r3, #4
  814 0008 5360     		str	r3, [r2, #4]
-ARM GAS  /tmp/ccaWdMF3.s 			page 24
+ARM GAS  /tmp/ccYaSGaD.s 			page 24
 
 
  525:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** }
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  861              	HAL_DisableCompensationCell:
  862              	.LFB162:
  537:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** 
-ARM GAS  /tmp/ccaWdMF3.s 			page 25
+ARM GAS  /tmp/ccYaSGaD.s 			page 25
 
 
  538:Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c **** /**
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  897              		.loc 1 559 0
  898 0000 024A     		ldr	r2, .L90
  899 0002 1368     		ldr	r3, [r2]
-ARM GAS  /tmp/ccaWdMF3.s 			page 26
+ARM GAS  /tmp/ccYaSGaD.s 			page 26
 
 
  900 0004 43F48063 		orr	r3, r3, #1024
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  942              		.comm	uwTick,4,4
  943              		.section	.data.uwTickFreq,"aw",%progbits
  944              		.set	.LANCHOR0,. + 0
-ARM GAS  /tmp/ccaWdMF3.s 			page 27
+ARM GAS  /tmp/ccYaSGaD.s 			page 27
 
 
  947              	uwTickFreq:
@@ -1582,102 +1582,102 @@ ARM GAS  /tmp/ccaWdMF3.s 			page 1
  967              		.file 11 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h"
  968              		.file 12 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h"
  969              		.file 13 "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h"
-ARM GAS  /tmp/ccaWdMF3.s 			page 28
+ARM GAS  /tmp/ccYaSGaD.s 			page 28
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f7xx_hal.c
-     /tmp/ccaWdMF3.s:18     .text.HAL_MspInit:0000000000000000 $t
-     /tmp/ccaWdMF3.s:25     .text.HAL_MspInit:0000000000000000 HAL_MspInit
-     /tmp/ccaWdMF3.s:39     .text.HAL_MspDeInit:0000000000000000 $t
-     /tmp/ccaWdMF3.s:46     .text.HAL_MspDeInit:0000000000000000 HAL_MspDeInit
-     /tmp/ccaWdMF3.s:59     .text.HAL_DeInit:0000000000000000 $t
-     /tmp/ccaWdMF3.s:66     .text.HAL_DeInit:0000000000000000 HAL_DeInit
-     /tmp/ccaWdMF3.s:109    .text.HAL_DeInit:0000000000000028 $d
-     /tmp/ccaWdMF3.s:114    .text.HAL_InitTick:0000000000000000 $t
-     /tmp/ccaWdMF3.s:121    .text.HAL_InitTick:0000000000000000 HAL_InitTick
-     /tmp/ccaWdMF3.s:175    .text.HAL_InitTick:0000000000000040 $d
-     /tmp/ccaWdMF3.s:182    .text.HAL_Init:0000000000000000 $t
-     /tmp/ccaWdMF3.s:189    .text.HAL_Init:0000000000000000 HAL_Init
-     /tmp/ccaWdMF3.s:218    .text.HAL_IncTick:0000000000000000 $t
-     /tmp/ccaWdMF3.s:225    .text.HAL_IncTick:0000000000000000 HAL_IncTick
-     /tmp/ccaWdMF3.s:244    .text.HAL_IncTick:0000000000000010 $d
+     /tmp/ccYaSGaD.s:18     .text.HAL_MspInit:0000000000000000 $t
+     /tmp/ccYaSGaD.s:25     .text.HAL_MspInit:0000000000000000 HAL_MspInit
+     /tmp/ccYaSGaD.s:39     .text.HAL_MspDeInit:0000000000000000 $t
+     /tmp/ccYaSGaD.s:46     .text.HAL_MspDeInit:0000000000000000 HAL_MspDeInit
+     /tmp/ccYaSGaD.s:59     .text.HAL_DeInit:0000000000000000 $t
+     /tmp/ccYaSGaD.s:66     .text.HAL_DeInit:0000000000000000 HAL_DeInit
+     /tmp/ccYaSGaD.s:109    .text.HAL_DeInit:0000000000000028 $d
+     /tmp/ccYaSGaD.s:114    .text.HAL_InitTick:0000000000000000 $t
+     /tmp/ccYaSGaD.s:121    .text.HAL_InitTick:0000000000000000 HAL_InitTick
+     /tmp/ccYaSGaD.s:175    .text.HAL_InitTick:0000000000000040 $d
+     /tmp/ccYaSGaD.s:182    .text.HAL_Init:0000000000000000 $t
+     /tmp/ccYaSGaD.s:189    .text.HAL_Init:0000000000000000 HAL_Init
+     /tmp/ccYaSGaD.s:218    .text.HAL_IncTick:0000000000000000 $t
+     /tmp/ccYaSGaD.s:225    .text.HAL_IncTick:0000000000000000 HAL_IncTick
+     /tmp/ccYaSGaD.s:244    .text.HAL_IncTick:0000000000000010 $d
                             *COM*:0000000000000004 uwTick
-     /tmp/ccaWdMF3.s:250    .text.HAL_GetTick:0000000000000000 $t
-     /tmp/ccaWdMF3.s:257    .text.HAL_GetTick:0000000000000000 HAL_GetTick
-     /tmp/ccaWdMF3.s:272    .text.HAL_GetTick:0000000000000008 $d
-     /tmp/ccaWdMF3.s:277    .text.HAL_GetTickPrio:0000000000000000 $t
-     /tmp/ccaWdMF3.s:284    .text.HAL_GetTickPrio:0000000000000000 HAL_GetTickPrio
-     /tmp/ccaWdMF3.s:298    .text.HAL_GetTickPrio:0000000000000008 $d
-     /tmp/ccaWdMF3.s:303    .text.HAL_SetTickFreq:0000000000000000 $t
-     /tmp/ccaWdMF3.s:310    .text.HAL_SetTickFreq:0000000000000000 HAL_SetTickFreq
-     /tmp/ccaWdMF3.s:349    .text.HAL_SetTickFreq:000000000000001c $d
-     /tmp/ccaWdMF3.s:355    .text.HAL_GetTickFreq:0000000000000000 $t
-     /tmp/ccaWdMF3.s:362    .text.HAL_GetTickFreq:0000000000000000 HAL_GetTickFreq
-     /tmp/ccaWdMF3.s:376    .text.HAL_GetTickFreq:0000000000000008 $d
-     /tmp/ccaWdMF3.s:381    .text.HAL_Delay:0000000000000000 $t
-     /tmp/ccaWdMF3.s:388    .text.HAL_Delay:0000000000000000 HAL_Delay
-     /tmp/ccaWdMF3.s:429    .text.HAL_Delay:0000000000000024 $d
-     /tmp/ccaWdMF3.s:434    .text.HAL_SuspendTick:0000000000000000 $t
-     /tmp/ccaWdMF3.s:441    .text.HAL_SuspendTick:0000000000000000 HAL_SuspendTick
-     /tmp/ccaWdMF3.s:458    .text.HAL_SuspendTick:000000000000000c $d
-     /tmp/ccaWdMF3.s:463    .text.HAL_ResumeTick:0000000000000000 $t
-     /tmp/ccaWdMF3.s:470    .text.HAL_ResumeTick:0000000000000000 HAL_ResumeTick
-     /tmp/ccaWdMF3.s:487    .text.HAL_ResumeTick:000000000000000c $d
-     /tmp/ccaWdMF3.s:492    .text.HAL_GetHalVersion:0000000000000000 $t
-     /tmp/ccaWdMF3.s:499    .text.HAL_GetHalVersion:0000000000000000 HAL_GetHalVersion
-     /tmp/ccaWdMF3.s:512    .text.HAL_GetHalVersion:0000000000000004 $d
-     /tmp/ccaWdMF3.s:517    .text.HAL_GetREVID:0000000000000000 $t
-     /tmp/ccaWdMF3.s:524    .text.HAL_GetREVID:0000000000000000 HAL_GetREVID
-     /tmp/ccaWdMF3.s:540    .text.HAL_GetREVID:0000000000000008 $d
-     /tmp/ccaWdMF3.s:545    .text.HAL_GetDEVID:0000000000000000 $t
-     /tmp/ccaWdMF3.s:552    .text.HAL_GetDEVID:0000000000000000 HAL_GetDEVID
-     /tmp/ccaWdMF3.s:568    .text.HAL_GetDEVID:000000000000000c $d
-     /tmp/ccaWdMF3.s:573    .text.HAL_GetUIDw0:0000000000000000 $t
-     /tmp/ccaWdMF3.s:580    .text.HAL_GetUIDw0:0000000000000000 HAL_GetUIDw0
-     /tmp/ccaWdMF3.s:594    .text.HAL_GetUIDw0:0000000000000008 $d
-     /tmp/ccaWdMF3.s:599    .text.HAL_GetUIDw1:0000000000000000 $t
-     /tmp/ccaWdMF3.s:606    .text.HAL_GetUIDw1:0000000000000000 HAL_GetUIDw1
-     /tmp/ccaWdMF3.s:620    .text.HAL_GetUIDw1:0000000000000008 $d
-     /tmp/ccaWdMF3.s:625    .text.HAL_GetUIDw2:0000000000000000 $t
-     /tmp/ccaWdMF3.s:632    .text.HAL_GetUIDw2:0000000000000000 HAL_GetUIDw2
-     /tmp/ccaWdMF3.s:646    .text.HAL_GetUIDw2:0000000000000008 $d
-ARM GAS  /tmp/ccaWdMF3.s 			page 29
+     /tmp/ccYaSGaD.s:250    .text.HAL_GetTick:0000000000000000 $t
+     /tmp/ccYaSGaD.s:257    .text.HAL_GetTick:0000000000000000 HAL_GetTick
+     /tmp/ccYaSGaD.s:272    .text.HAL_GetTick:0000000000000008 $d
+     /tmp/ccYaSGaD.s:277    .text.HAL_GetTickPrio:0000000000000000 $t
+     /tmp/ccYaSGaD.s:284    .text.HAL_GetTickPrio:0000000000000000 HAL_GetTickPrio
+     /tmp/ccYaSGaD.s:298    .text.HAL_GetTickPrio:0000000000000008 $d
+     /tmp/ccYaSGaD.s:303    .text.HAL_SetTickFreq:0000000000000000 $t
+     /tmp/ccYaSGaD.s:310    .text.HAL_SetTickFreq:0000000000000000 HAL_SetTickFreq
+     /tmp/ccYaSGaD.s:349    .text.HAL_SetTickFreq:000000000000001c $d
+     /tmp/ccYaSGaD.s:355    .text.HAL_GetTickFreq:0000000000000000 $t
+     /tmp/ccYaSGaD.s:362    .text.HAL_GetTickFreq:0000000000000000 HAL_GetTickFreq
+     /tmp/ccYaSGaD.s:376    .text.HAL_GetTickFreq:0000000000000008 $d
+     /tmp/ccYaSGaD.s:381    .text.HAL_Delay:0000000000000000 $t
+     /tmp/ccYaSGaD.s:388    .text.HAL_Delay:0000000000000000 HAL_Delay
+     /tmp/ccYaSGaD.s:429    .text.HAL_Delay:0000000000000024 $d
+     /tmp/ccYaSGaD.s:434    .text.HAL_SuspendTick:0000000000000000 $t
+     /tmp/ccYaSGaD.s:441    .text.HAL_SuspendTick:0000000000000000 HAL_SuspendTick
+     /tmp/ccYaSGaD.s:458    .text.HAL_SuspendTick:000000000000000c $d
+     /tmp/ccYaSGaD.s:463    .text.HAL_ResumeTick:0000000000000000 $t
+     /tmp/ccYaSGaD.s:470    .text.HAL_ResumeTick:0000000000000000 HAL_ResumeTick
+     /tmp/ccYaSGaD.s:487    .text.HAL_ResumeTick:000000000000000c $d
+     /tmp/ccYaSGaD.s:492    .text.HAL_GetHalVersion:0000000000000000 $t
+     /tmp/ccYaSGaD.s:499    .text.HAL_GetHalVersion:0000000000000000 HAL_GetHalVersion
+     /tmp/ccYaSGaD.s:512    .text.HAL_GetHalVersion:0000000000000004 $d
+     /tmp/ccYaSGaD.s:517    .text.HAL_GetREVID:0000000000000000 $t
+     /tmp/ccYaSGaD.s:524    .text.HAL_GetREVID:0000000000000000 HAL_GetREVID
+     /tmp/ccYaSGaD.s:540    .text.HAL_GetREVID:0000000000000008 $d
+     /tmp/ccYaSGaD.s:545    .text.HAL_GetDEVID:0000000000000000 $t
+     /tmp/ccYaSGaD.s:552    .text.HAL_GetDEVID:0000000000000000 HAL_GetDEVID
+     /tmp/ccYaSGaD.s:568    .text.HAL_GetDEVID:000000000000000c $d
+     /tmp/ccYaSGaD.s:573    .text.HAL_GetUIDw0:0000000000000000 $t
+     /tmp/ccYaSGaD.s:580    .text.HAL_GetUIDw0:0000000000000000 HAL_GetUIDw0
+     /tmp/ccYaSGaD.s:594    .text.HAL_GetUIDw0:0000000000000008 $d
+     /tmp/ccYaSGaD.s:599    .text.HAL_GetUIDw1:0000000000000000 $t
+     /tmp/ccYaSGaD.s:606    .text.HAL_GetUIDw1:0000000000000000 HAL_GetUIDw1
+     /tmp/ccYaSGaD.s:620    .text.HAL_GetUIDw1:0000000000000008 $d
+     /tmp/ccYaSGaD.s:625    .text.HAL_GetUIDw2:0000000000000000 $t
+     /tmp/ccYaSGaD.s:632    .text.HAL_GetUIDw2:0000000000000000 HAL_GetUIDw2
+     /tmp/ccYaSGaD.s:646    .text.HAL_GetUIDw2:0000000000000008 $d
+ARM GAS  /tmp/ccYaSGaD.s 			page 29
 
 
-     /tmp/ccaWdMF3.s:651    .text.HAL_DBGMCU_EnableDBGSleepMode:0000000000000000 $t
-     /tmp/ccaWdMF3.s:658    .text.HAL_DBGMCU_EnableDBGSleepMode:0000000000000000 HAL_DBGMCU_EnableDBGSleepMode
-     /tmp/ccaWdMF3.s:675    .text.HAL_DBGMCU_EnableDBGSleepMode:000000000000000c $d
-     /tmp/ccaWdMF3.s:680    .text.HAL_DBGMCU_DisableDBGSleepMode:0000000000000000 $t
-     /tmp/ccaWdMF3.s:687    .text.HAL_DBGMCU_DisableDBGSleepMode:0000000000000000 HAL_DBGMCU_DisableDBGSleepMode
-     /tmp/ccaWdMF3.s:704    .text.HAL_DBGMCU_DisableDBGSleepMode:000000000000000c $d
-     /tmp/ccaWdMF3.s:709    .text.HAL_DBGMCU_EnableDBGStopMode:0000000000000000 $t
-     /tmp/ccaWdMF3.s:716    .text.HAL_DBGMCU_EnableDBGStopMode:0000000000000000 HAL_DBGMCU_EnableDBGStopMode
-     /tmp/ccaWdMF3.s:733    .text.HAL_DBGMCU_EnableDBGStopMode:000000000000000c $d
-     /tmp/ccaWdMF3.s:738    .text.HAL_DBGMCU_DisableDBGStopMode:0000000000000000 $t
-     /tmp/ccaWdMF3.s:745    .text.HAL_DBGMCU_DisableDBGStopMode:0000000000000000 HAL_DBGMCU_DisableDBGStopMode
-     /tmp/ccaWdMF3.s:762    .text.HAL_DBGMCU_DisableDBGStopMode:000000000000000c $d
-     /tmp/ccaWdMF3.s:767    .text.HAL_DBGMCU_EnableDBGStandbyMode:0000000000000000 $t
-     /tmp/ccaWdMF3.s:774    .text.HAL_DBGMCU_EnableDBGStandbyMode:0000000000000000 HAL_DBGMCU_EnableDBGStandbyMode
-     /tmp/ccaWdMF3.s:791    .text.HAL_DBGMCU_EnableDBGStandbyMode:000000000000000c $d
-     /tmp/ccaWdMF3.s:796    .text.HAL_DBGMCU_DisableDBGStandbyMode:0000000000000000 $t
-     /tmp/ccaWdMF3.s:803    .text.HAL_DBGMCU_DisableDBGStandbyMode:0000000000000000 HAL_DBGMCU_DisableDBGStandbyMode
-     /tmp/ccaWdMF3.s:820    .text.HAL_DBGMCU_DisableDBGStandbyMode:000000000000000c $d
-     /tmp/ccaWdMF3.s:825    .text.HAL_EnableCompensationCell:0000000000000000 $t
-     /tmp/ccaWdMF3.s:832    .text.HAL_EnableCompensationCell:0000000000000000 HAL_EnableCompensationCell
-     /tmp/ccaWdMF3.s:849    .text.HAL_EnableCompensationCell:000000000000000c $d
-     /tmp/ccaWdMF3.s:854    .text.HAL_DisableCompensationCell:0000000000000000 $t
-     /tmp/ccaWdMF3.s:861    .text.HAL_DisableCompensationCell:0000000000000000 HAL_DisableCompensationCell
-     /tmp/ccaWdMF3.s:878    .text.HAL_DisableCompensationCell:000000000000000c $d
-     /tmp/ccaWdMF3.s:883    .text.HAL_EnableFMCMemorySwapping:0000000000000000 $t
-     /tmp/ccaWdMF3.s:890    .text.HAL_EnableFMCMemorySwapping:0000000000000000 HAL_EnableFMCMemorySwapping
-     /tmp/ccaWdMF3.s:907    .text.HAL_EnableFMCMemorySwapping:000000000000000c $d
-     /tmp/ccaWdMF3.s:912    .text.HAL_DisableFMCMemorySwapping:0000000000000000 $t
-     /tmp/ccaWdMF3.s:919    .text.HAL_DisableFMCMemorySwapping:0000000000000000 HAL_DisableFMCMemorySwapping
-     /tmp/ccaWdMF3.s:936    .text.HAL_DisableFMCMemorySwapping:000000000000000c $d
-     /tmp/ccaWdMF3.s:947    .data.uwTickFreq:0000000000000000 uwTickFreq
-     /tmp/ccaWdMF3.s:954    .data.uwTickPrio:0000000000000000 uwTickPrio
-     /tmp/ccaWdMF3.s:950    .data.uwTickPrio:0000000000000000 $d
+     /tmp/ccYaSGaD.s:651    .text.HAL_DBGMCU_EnableDBGSleepMode:0000000000000000 $t
+     /tmp/ccYaSGaD.s:658    .text.HAL_DBGMCU_EnableDBGSleepMode:0000000000000000 HAL_DBGMCU_EnableDBGSleepMode
+     /tmp/ccYaSGaD.s:675    .text.HAL_DBGMCU_EnableDBGSleepMode:000000000000000c $d
+     /tmp/ccYaSGaD.s:680    .text.HAL_DBGMCU_DisableDBGSleepMode:0000000000000000 $t
+     /tmp/ccYaSGaD.s:687    .text.HAL_DBGMCU_DisableDBGSleepMode:0000000000000000 HAL_DBGMCU_DisableDBGSleepMode
+     /tmp/ccYaSGaD.s:704    .text.HAL_DBGMCU_DisableDBGSleepMode:000000000000000c $d
+     /tmp/ccYaSGaD.s:709    .text.HAL_DBGMCU_EnableDBGStopMode:0000000000000000 $t
+     /tmp/ccYaSGaD.s:716    .text.HAL_DBGMCU_EnableDBGStopMode:0000000000000000 HAL_DBGMCU_EnableDBGStopMode
+     /tmp/ccYaSGaD.s:733    .text.HAL_DBGMCU_EnableDBGStopMode:000000000000000c $d
+     /tmp/ccYaSGaD.s:738    .text.HAL_DBGMCU_DisableDBGStopMode:0000000000000000 $t
+     /tmp/ccYaSGaD.s:745    .text.HAL_DBGMCU_DisableDBGStopMode:0000000000000000 HAL_DBGMCU_DisableDBGStopMode
+     /tmp/ccYaSGaD.s:762    .text.HAL_DBGMCU_DisableDBGStopMode:000000000000000c $d
+     /tmp/ccYaSGaD.s:767    .text.HAL_DBGMCU_EnableDBGStandbyMode:0000000000000000 $t
+     /tmp/ccYaSGaD.s:774    .text.HAL_DBGMCU_EnableDBGStandbyMode:0000000000000000 HAL_DBGMCU_EnableDBGStandbyMode
+     /tmp/ccYaSGaD.s:791    .text.HAL_DBGMCU_EnableDBGStandbyMode:000000000000000c $d
+     /tmp/ccYaSGaD.s:796    .text.HAL_DBGMCU_DisableDBGStandbyMode:0000000000000000 $t
+     /tmp/ccYaSGaD.s:803    .text.HAL_DBGMCU_DisableDBGStandbyMode:0000000000000000 HAL_DBGMCU_DisableDBGStandbyMode
+     /tmp/ccYaSGaD.s:820    .text.HAL_DBGMCU_DisableDBGStandbyMode:000000000000000c $d
+     /tmp/ccYaSGaD.s:825    .text.HAL_EnableCompensationCell:0000000000000000 $t
+     /tmp/ccYaSGaD.s:832    .text.HAL_EnableCompensationCell:0000000000000000 HAL_EnableCompensationCell
+     /tmp/ccYaSGaD.s:849    .text.HAL_EnableCompensationCell:000000000000000c $d
+     /tmp/ccYaSGaD.s:854    .text.HAL_DisableCompensationCell:0000000000000000 $t
+     /tmp/ccYaSGaD.s:861    .text.HAL_DisableCompensationCell:0000000000000000 HAL_DisableCompensationCell
+     /tmp/ccYaSGaD.s:878    .text.HAL_DisableCompensationCell:000000000000000c $d
+     /tmp/ccYaSGaD.s:883    .text.HAL_EnableFMCMemorySwapping:0000000000000000 $t
+     /tmp/ccYaSGaD.s:890    .text.HAL_EnableFMCMemorySwapping:0000000000000000 HAL_EnableFMCMemorySwapping
+     /tmp/ccYaSGaD.s:907    .text.HAL_EnableFMCMemorySwapping:000000000000000c $d
+     /tmp/ccYaSGaD.s:912    .text.HAL_DisableFMCMemorySwapping:0000000000000000 $t
+     /tmp/ccYaSGaD.s:919    .text.HAL_DisableFMCMemorySwapping:0000000000000000 HAL_DisableFMCMemorySwapping
+     /tmp/ccYaSGaD.s:936    .text.HAL_DisableFMCMemorySwapping:000000000000000c $d
+     /tmp/ccYaSGaD.s:947    .data.uwTickFreq:0000000000000000 uwTickFreq
+     /tmp/ccYaSGaD.s:954    .data.uwTickPrio:0000000000000000 uwTickPrio
+     /tmp/ccYaSGaD.s:950    .data.uwTickPrio:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 HAL_SYSTICK_Config

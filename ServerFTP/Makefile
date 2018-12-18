@@ -36,7 +36,6 @@ BUILD_DIR = build
 # C sources
 C_SOURCES =  \
 Src/memory_access.c \
-Src/httpserver-netconn.c \
 Src/main.c \
 Src/term_io.c\
 Src/dbgu.c\
@@ -48,6 +47,9 @@ Src/ethernetif.c \
 Src/syscalls.c \
 Src/usb_host.c \
 Src/usbh_conf.c \
+Src/ftp_server.c \
+Src/client_thread.c \
+Src/request.c \
 Src/stm32f7xx_it.c \
 Src/stm32f7xx_hal_msp.c \
 Src/stm32f7xx_hal_timebase_TIM.c \

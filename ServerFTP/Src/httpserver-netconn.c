@@ -36,7 +36,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define WEBSERVER_THREAD_PRIO    ( tskIDLE_PRIORITY + 4 )
+#define WEBSERVER_THREAD_PRIO( tskIDLE_PRIORITY + 4 )
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -110,7 +110,7 @@ static void http_server_netconn_thread()
   if (conn!= NULL)
   {
     /* Bind to port 80 (HTTP) with default IP address */
-    err = netconn_bind(conn, NULL, 80);
+    err = netconn_bind(conn, NULL, 20);
     
     if (err == ERR_OK)
     {

@@ -10,146 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13cf7946-08a8-4223-92ba-af802ea2d159" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Inc/memory_access.h" beforeDir="false" afterPath="$PROJECT_DIR$/Inc/memory_access.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/httpserver-netconn.c" beforeDir="false" afterPath="$PROJECT_DIR$/Src/httpserver-netconn.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Src/lwip.c" beforeDir="false" afterPath="$PROJECT_DIR$/Src/lwip.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/Src/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ServerFTP.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/ServerFTP.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ServerFTP.elf" beforeDir="false" afterPath="$PROJECT_DIR$/build/ServerFTP.elf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ServerFTP.hex" beforeDir="false" afterPath="$PROJECT_DIR$/build/ServerFTP.hex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ServerFTP.map" beforeDir="false" afterPath="$PROJECT_DIR$/build/ServerFTP.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/api_lib.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/api_lib.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/api_msg.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/api_msg.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/auth.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/auth.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/autoip.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/autoip.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ccp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ccp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/chap-md5.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/chap-md5.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/chap-new.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/chap-new.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/chap_ms.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/chap_ms.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/cmsis_os.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/cmsis_os.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/croutine.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/croutine.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/dbgu.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/dbgu.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/def.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/def.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/demand.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/demand.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/dhcp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/dhcp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/dhcp6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/dhcp6.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/diskio.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/diskio.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/dns.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/dns.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/eap.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/eap.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ecp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ecp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/err.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/err.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/etharp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/etharp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ethernet.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ethernet.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ethernetif.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ethernetif.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ethip6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ethip6.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/eui64.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/eui64.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/event_groups.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/event_groups.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/fatfs.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/fatfs.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ff.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ff.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ff_gen_drv.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ff_gen_drv.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/freertos.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/freertos.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/fsm.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/fsm.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/heap_4.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/heap_4.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/httpserver-netconn.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/httpserver-netconn.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/httpserver-netconn.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/httpserver-netconn.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icmp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/icmp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icmp6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/icmp6.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/igmp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/igmp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/inet6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/inet6.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/inet_chksum.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/inet_chksum.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/init.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/init.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ip.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ip.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ip4.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ip4.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ip4_addr.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ip4_addr.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ip4_frag.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ip4_frag.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ip6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ip6.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ip6_addr.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ip6_addr.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ip6_frag.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ip6_frag.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ipcp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ipcp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ipv6cp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ipv6cp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lcp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/lcp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/list.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/list.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lowpan6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/lowpan6.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lwip.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/lwip.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lwip.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/lwip.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/magic.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/magic.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main.d" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/mem.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/mem.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/memory_access.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/memory_access.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/memp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/memp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/mld6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/mld6.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/mppe.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/mppe.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/mqtt.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/mqtt.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/multilink.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/multilink.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/nd6.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/nd6.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/netbuf.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/netbuf.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/netdb.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/netdb.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/netif.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/netif.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/netifapi.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/netifapi.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/pbuf.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/pbuf.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/port.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/port.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ppp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/ppp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/pppapi.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/pppapi.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/pppcrypt.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/pppcrypt.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/pppoe.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/pppoe.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/pppol2tp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/pppol2tp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/pppos.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/pppos.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/queue.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/queue.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/raw.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/raw.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/slipif.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/slipif.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sockets.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/sockets.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stats.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stats.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_cortex.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_cortex.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_dma.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_dma.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_dma_ex.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_dma_ex.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_eth.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_eth.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_flash.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_flash.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_flash_ex.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_flash_ex.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_gpio.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_gpio.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_hcd.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_hcd.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_i2c.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_i2c.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_i2c_ex.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_i2c_ex.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_msp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_msp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_pwr.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_pwr.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_pwr_ex.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_pwr_ex.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_rcc.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_rcc.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_rcc_ex.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_rcc_ex.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_tim.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_tim.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_tim_ex.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_tim_ex.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_timebase_TIM.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_timebase_TIM.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_hal_uart.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_hal_uart.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_it.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_it.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/stm32f7xx_ll_usb.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/stm32f7xx_ll_usb.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sys.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/sys.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sys_arch.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/sys_arch.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/syscall.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/syscall.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/syscalls.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/syscalls.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/system_stm32f7xx.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/system_stm32f7xx.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tasks.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/tasks.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tcp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/tcp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tcp_in.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/tcp_in.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tcp_out.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/tcp_out.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tcpip.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/tcpip.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/term_io.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/term_io.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/timeouts.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/timeouts.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/timers.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/timers.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/udp.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/udp.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/upap.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/upap.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usb_host.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usb_host.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_conf.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_conf.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_core.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_core.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_ctlreq.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_ctlreq.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_diskio.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_diskio.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_ioreq.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_ioreq.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_msc.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_msc.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_msc_bot.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_msc_bot.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_msc_scsi.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_msc_scsi.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/usbh_pipes.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/usbh_pipes.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/utils.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/utils.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/vj.lst" beforeDir="false" afterPath="$PROJECT_DIR$/build/vj.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/memory_access.c" beforeDir="false" afterPath="$PROJECT_DIR$/Src/memory_access.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -159,11 +25,65 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Src/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="433" column="35" selection-start-line="433" selection-start-column="35" selection-end-line="433" selection-end-column="35" />
+            <state relative-caret-position="126">
+              <caret line="435" column="25" selection-start-line="435" selection-start-column="25" selection-end-line="435" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Src/ftp_server.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="291">
+              <caret line="56" column="43" selection-start-line="56" selection-start-column="43" selection-end-line="56" selection-end-column="43" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Inc/ftp_server.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="16" column="27" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Src/client_thread.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3888">
+              <caret line="222" column="12" selection-start-line="222" selection-start-column="12" selection-end-line="222" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Src/request.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3">
+              <caret line="45" column="15" selection-start-line="45" selection-start-column="15" selection-end-line="45" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Src/memory_access.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4572">
+              <caret line="254" selection-start-line="254" selection-end-line="254" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Inc/memory_access.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="489">
+              <caret line="52" selection-start-line="52" selection-end-line="52" />
             </state>
           </provider>
         </entry>
@@ -177,6 +97,17 @@
       <find>current_dir</find>
       <find>open_file</find>
       <find>read_file</find>
+      <find>115200</find>
+      <find>\r</find>
+      <find>conn</find>
+      <find>api.h</find>
+      <find>timeout</find>
+      <find>printf</find>
+      <find>netconn_accept</find>
+      <find>serve_client</find>
+      <find>Remote system</find>
+      <find>extern</find>
+      <find>mkd</find>
     </findStrings>
     <replaceStrings>
       <replace>xprintf</replace>
@@ -188,8 +119,14 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/Src/httpserver-netconn.c" />
+        <option value="$PROJECT_DIR$/Src/lwip.c" />
         <option value="$PROJECT_DIR$/Src/memory_access.c" />
+        <option value="$PROJECT_DIR$/Inc/memory_access.h" />
+        <option value="$PROJECT_DIR$/Src/ftp_server.c" />
         <option value="$PROJECT_DIR$/Src/main.c" />
+        <option value="$PROJECT_DIR$/Inc/ftp_server.h" />
+        <option value="$PROJECT_DIR$/Src/client_thread.c" />
       </list>
     </option>
   </component>
@@ -213,6 +150,11 @@
             <path>
               <item name="ServerFTP" type="b2602c69:ProjectViewProjectNode" />
               <item name="ServerFTP" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ServerFTP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ServerFTP" type="462c0819:PsiDirectoryNode" />
+              <item name="Inc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ServerFTP" type="b2602c69:ProjectViewProjectNode" />
@@ -255,16 +197,17 @@
       <updated>1543935223336</updated>
       <workItem from="1543935229370" duration="129000" />
       <workItem from="1544542493380" duration="8405000" />
+      <workItem from="1545133759016" duration="9658000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8534000" />
+    <option name="totallyTimeSpent" value="18192000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25320512" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25641027" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -276,7 +219,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.32894737" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -300,17 +243,79 @@
         <state relative-caret-position="-1134" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Src/httpserver-netconn.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="112" column="37" selection-start-line="112" selection-start-column="37" selection-end-line="112" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Inc/memory_access.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="489">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/fatfs.c">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/ethernetif.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="272" column="28" lean-forward="true" selection-start-line="272" selection-start-column="28" selection-end-line="272" selection-end-column="29" />
+          <folding>
+            <element signature="e#9584#11208#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/lwip.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="69" column="20" lean-forward="true" selection-start-line="69" selection-start-column="20" selection-end-line="69" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/ftp_server.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="56" column="43" selection-start-line="56" selection-start-column="43" selection-end-line="56" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Src/memory_access.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="88" column="21" lean-forward="true" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="21" />
+        <state relative-caret-position="4572">
+          <caret line="254" selection-start-line="254" selection-end-line="254" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Src/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="433" column="35" selection-start-line="433" selection-start-column="35" selection-end-line="433" selection-end-column="35" />
+        <state relative-caret-position="126">
+          <caret line="435" column="25" selection-start-line="435" selection-start-column="25" selection-end-line="435" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Inc/ftp_server.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="16" column="27" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/request.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3">
+          <caret line="45" column="15" selection-start-line="45" selection-start-column="15" selection-end-line="45" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/client_thread.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3888">
+          <caret line="222" column="12" selection-start-line="222" selection-start-column="12" selection-end-line="222" selection-end-column="67" />
         </state>
       </provider>
     </entry>

@@ -6,19 +6,19 @@
 
 int8_t mount_usb() {
     if(f_mount(&fs, "", 1) != FR_OK) {
-        printf("usb mount error\r\n");
+        xprintf("usb mount error\r\n");
         return 0;
     }
-    printf("mounted USB\r\n");
+    xprintf("mounted USB\r\n");
     return 1;
 }
 
 int8_t unmount_usb() {
     if(f_mount(0, "", 0) != FR_OK) {
-        printf("usb unmount error\r\n");
+        xprintf("usb unmount error\r\n");
         return 0;
     }
-    printf("unmounted USB\r\n");
+    xprintf("unmounted USB\r\n");
     return 1;
 }
 
@@ -85,13 +85,13 @@ int8_t directory_exist(const char *full_path) {
     char final_path[MAX_PATH_LEN];
     strcpy(final_path, full_path);
     if(!get_final_path(final_path)) {
-        printf("cannot get directory path: %s\r\n", full_path);
+        xprintf("cannot get directory path: %s\r\n", full_path);
         return 0;
     }
 
     DIR dir;
     if(f_opendir(&dir, final_path) != FR_OK) {
-        printf("cannot change to directory: %s\r\n", full_path);
+        xprintf("cannot change to directory: %s\r\n", full_path);
         return 0;
     }
     f_closedir(&dir);
@@ -108,13 +108,13 @@ uint8_t change_directory(char *current_path, const char *path) {
     if(!directory_exist(new_path)) {
         FRESULT res = f_mkdir(new_path);
         if(res != FR_OK) {
-            printf("connot make directory: %s\r\n", new_path);
+            xprintf("connot make directory: %s\r\n", new_path);
             return 0;
         }
     }
 
     strcpy(current_path, new_path);
-    printf("directory changed: %s\r\n", current_path);
+    xprintf("directory changed: %s\r\n", current_path);
     return 1;
 }
 
@@ -127,7 +127,7 @@ uint8_t list_directory(const char *current_path, char *buffer, uint16_t buffer_s
 
     DIR dir;
     if(f_opendir(&dir, dir_path) != FR_OK) {
-        printf("cannot open directory: %s\r\n", dir_path);
+        xprintf("cannot open directory: %s\r\n", dir_path);
         return 0;
     }
 
@@ -149,7 +149,7 @@ uint8_t list_directory(const char *current_path, char *buffer, uint16_t buffer_s
     }
     f_closedir(&dir);
 
-    printf("directory list, success\n");
+    xprintf("directory list, success\n");
     return 1;
 }
 
@@ -161,7 +161,7 @@ uint8_t open_file(const char *current_path, const char *filename, FIL *file) {
         return 0;
 
     if(f_open(file, filepath, FA_OPEN_EXISTING | FA_READ) != FR_OK ) {
-        printf("cannot open file %s\r\n", filepath);
+        xprintf("cannot open file %s\r\n", filepath);
         return 0;
     }
     return 1;
@@ -175,7 +175,7 @@ uint8_t create_file(const char *current_path, const char *filename, FIL *file) {
         return 0;
 
     if(f_open(file, filepath, FA_CREATE_NEW | FA_WRITE) != FR_OK ) {
-        printf("cannot create file %s\r\n", filepath);
+        xprintf("cannot create file %s\r\n", filepath);
         return 0;
     }
     return 1;
@@ -193,11 +193,11 @@ int8_t delete_file(const char *current_path, const char *filename) {
         return 0;
 
     if(f_unlink(filepath) != FR_OK) {
-        printf("cannot delete file: %s\r\n", filepath);
+        xprintf("cannot delete file: %s\r\n", filepath);
         return 0;
     }
 
-    printf("deleted file: %s\r\n", filepath);
+    xprintf("deleted file: %s\r\n", filepath);
     return 1;
 }
 
@@ -210,7 +210,7 @@ int8_t create_dir(const char *current_path, const char *dir_name) {
 
     FRESULT res = f_mkdir(dir_path);
     if(res != FR_OK) {
-        printf("connot make directory: %s\r\n", dir_path);
+        xprintf("connot make directory: %s\r\n", dir_path);
         return 0;
     }
     return 1;
@@ -219,7 +219,7 @@ int8_t create_dir(const char *current_path, const char *dir_name) {
 unsigned int write_to_file(FIL *file, char *buf, uint16_t size) {
     unsigned int bw;
     if(f_write(file, buf, size, &bw) != FR_OK) {
-        printf("write to file error\r\n");
+        xprintf("write to file error\r\n");
         return -1;
     }
     return bw;
@@ -228,7 +228,7 @@ unsigned int write_to_file(FIL *file, char *buf, uint16_t size) {
 unsigned int read_file(FIL *file, char *buf, uint16_t size) {
     unsigned int br;
     if(f_read(file, buf, size, &br) != FR_OK) {
-        printf("read file error\r\n");
+        xprintf("read file error\r\n");
         return -1;
     }
     return br;
@@ -237,15 +237,15 @@ unsigned int read_file(FIL *file, char *buf, uint16_t size) {
 void USB_Process(ApplicationTypeDef Appli_state) {
     switch(Appli_state) {
         case APPLICATION_START:
-            printf("Device connected.\r\n");
+            xprintf("Device connected.\r\n");
             break;
         case APPLICATION_READY:
             mount_usb();
-            printf("Device ready.\r\n");
+            xprintf("Device ready.\r\n");
             break;
         case APPLICATION_DISCONNECT:
             unmount_usb();
-            printf("Device disconnected.\r\n");
+            xprintf("Device disconnected.\r\n");
             break;
         default:
             break;

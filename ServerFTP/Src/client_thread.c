@@ -10,7 +10,7 @@
 
 int8_t send_data(void *data, size_t data_size, struct netconn *conn) {
     if(netconn_write(conn, data, data_size, NETCONN_COPY) != ERR_OK) {
-    	printf("netconn_write error\r\n");
+    	xprintf("netconn_write error\r\n");
     	return 0;
     }
     return 1;
@@ -19,9 +19,9 @@ int8_t send_data(void *data, size_t data_size, struct netconn *conn) {
 
 int8_t send_msg(char *status, char *msg, struct netconn *conn) {	
     char respond[MAX_RESPOND_LEN]; 
-    sprintf(respond, "%s %s\r\n", status, msg);
-    printf("RESPOND: %s", respond);
 
+    sprintf(respond, "%s %s\n", status, msg); 
+    xprintf("RESPOND: %s", respond);
     send_data(respond, sizeof(char)*strlen(respond), conn);
     return 1;    
 }
@@ -33,9 +33,9 @@ uint8_t recv_request(struct netconn *conn, Request *request) {
     struct netbuf *buf; 
     if(netconn_recv(conn, &buf) != ERR_OK) {
         if(conn->last_err == ERR_TIMEOUT) {
-            printf("netconn_recv timeout error\r\n");
+            xprintf("netconn_recv timeout error\r\n");
         } else {
-            printf("netconn_recv error\r\n");
+            xprintf("netconn_recv error\r\n");
         }
         return 0;
     }  
@@ -44,15 +44,15 @@ uint8_t recv_request(struct netconn *conn, Request *request) {
     u16_t len;
 
     if(netbuf_data(buf, (void *)&msg, &len) != ERR_OK) {
-        printf("netbuf_data error\r\n");
+        xprintf("netbuf_data error\r\n");
         return 0;
     }	
 
     /*if(netbuf_next(buf) != -1)
-        printf("There is more buffer parts\r\n");*/
+        xprintf("There is more buffer parts\r\n");*/
 
-    printf("REQUEST: %s\n", msg);
-
+    //xprintf("REQUEST: %s\n", msg);
+    //xprintf(msg);
     update_request(request, msg);
 
     netbuf_delete(buf);
@@ -83,17 +83,18 @@ void pasv_response(ClientData *client_data) {
 }
 
 void list_response(ClientData *client_data) {
-    send_msg("150", "Directory listing", client_data->conn);
 
+    send_msg("150", "Listing", client_data->conn);
     struct netconn *client_data_conn;
 	if(netconn_accept(data_conn, &client_data_conn) != ERR_OK) {
-        printf("netconn_accept error\r\n");
+        xprintf("netconn_accept error\r\n");
         return;
     } 
 
     char list_data[MAX_LIST_DATA_LEN];
+    xprintf(client_data->current_dir);
     list_directory(client_data->current_dir, list_data, MAX_LIST_DATA_LEN);
-    printf("LIST DATA: %s\r\n", list_data);
+    xprintf("LIST DATA: %s\r\n", list_data);
 
     send_data(list_data, sizeof(char)*strlen(list_data), client_data_conn);
     send_msg("226", "List OK", client_data->conn);
@@ -104,7 +105,7 @@ void list_response(ClientData *client_data) {
 
 void cwd_response(char *args, ClientData *client_data) {
     if(!change_directory(client_data->current_dir, args)) {
-        printf("cwd error\r\n");
+        xprintf("cwd error\r\n");
         send_msg("550", "File unavailable.", client_data->conn);
         return;
     }
@@ -114,7 +115,7 @@ void cwd_response(char *args, ClientData *client_data) {
 int8_t send_file(char *current_path, char *filename, struct netconn *conn) {
     FIL file;
     if(!open_file(current_path, filename, &file)) {
-        printf("open_file error\r\n");
+        xprintf("open_file error\r\n");
         return 0;
     }
 
@@ -122,7 +123,7 @@ int8_t send_file(char *current_path, char *filename, struct netconn *conn) {
     unsigned int br;
     while(1) {
 		if(f_read(&file, buf, sizeof(char)*BUFFER_LEN, &br) != FR_OK) {
-			printf("f_read error\r\n");
+			xprintf("f_read error\r\n");
 			close_file(&file);	
             return 0;		
 		}		
@@ -140,7 +141,7 @@ int8_t send_file(char *current_path, char *filename, struct netconn *conn) {
 int8_t recv_file(char *current_path, char *filename, struct netconn *conn) {
     FIL file;
     if(!create_file(current_path, filename, &file)) {
-        printf("create_file error\r\n");
+        xprintf("create_file error\r\n");
         return 0;
     }  
 
@@ -154,7 +155,7 @@ int8_t recv_file(char *current_path, char *filename, struct netconn *conn) {
         do {
             netbuf_data(buf, &data, &data_size);
             if(f_write(&file, data, data_size, &bw) != FR_OK) {
-            	printf("f_write error\r\n");
+            	xprintf("f_write error\r\n");
             }
         } while (netbuf_next(buf) >= 0);
         netbuf_delete(buf);
@@ -168,7 +169,7 @@ void retr_response(char *args, ClientData *client_data) {
 
     struct netconn *client_data_conn;
 	if(netconn_accept(data_conn, &client_data_conn) != ERR_OK) {
-        printf("netconn_accept error\r\n");
+        xprintf("netconn_accept error\r\n");
         return;
     } 
 
@@ -185,7 +186,7 @@ void stor_response(char *args, ClientData *client_data) {
 
     struct netconn *client_data_conn;
 	if(netconn_accept(data_conn, &client_data_conn) != ERR_OK) {
-        printf("netconn_accept error\r\n");
+        xprintf("netconn_accept error\r\n");
         return;
     } 
 
@@ -199,7 +200,7 @@ void stor_response(char *args, ClientData *client_data) {
 
 void mkd_response(char *args, ClientData *client_data) {
     if(!create_dir(client_data->current_dir, args)) {
-        printf("create_dir error\r\n");
+        xprintf("create_dir error\r\n");
         return;
     }
     send_msg("257", "Directory created", client_data->conn);
@@ -251,16 +252,16 @@ void serve_client(void *client_conn) {
 
     Request req;
     while(1) {
-        printf("wait for request\r\n");
+        xprintf("wait for request\r\n");
         if(!recv_request(client_data.conn, &req)) {
-            printf("Request error\r\n");     
+            xprintf("Request error\r\n");     
             netconn_close(client_data.conn);
             netconn_delete(client_data.conn);    
-            printf("closing client connection\r\n");     
+            xprintf("closing client connection\r\n");     
             return;      
         }
 
-        printf("Start serving reqest, COMMAND: %s, ARGS: %s\r\n", req.command, req.args);
+        xprintf("Start serving reqest, COMMAND: %s, ARGS: %s\r\n", req.command, req.args);
         serve_request(&req, &client_data);
     }    
 }
@@ -270,7 +271,7 @@ void serve_client_task(void *arg) {
         ClientData client_data;
         
         if(!xQueueReceive(clients_queue, &client_data.conn, portMAX_DELAY)) {
-            printf("xQueueReceive error, serve_client_task\r\n");
+            xprintf("xQueueReceive error, serve_client_task\r\n");
         }
         strcpy(client_data.current_dir, "/");
 
@@ -279,13 +280,13 @@ void serve_client_task(void *arg) {
         Request req;
         while(1) {
             if(!recv_request(client_data.conn, &req)) {
-                printf("Request error\r\n");
+                xprintf("Request error\r\n");
                 netconn_close(client_data.conn);
                 netconn_delete(client_data.conn); 
-                printf("closing client connection\r\n");    
+                xprintf("closing client connection\r\n");    
                 return;      
             }
-            printf("Start serving reqest, COMMAND: %s, ARGS: %s\r\n", req.command, req.args);
+            xprintf("Start serving reqest, COMMAND: %s, ARGS: %s\r\n", req.command, req.args);
             serve_request(&req, &client_data);            
             vTaskDelay(100);
         }    

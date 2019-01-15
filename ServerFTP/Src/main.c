@@ -450,7 +450,7 @@ void StartDefaultTask(void const * argument)
     }
     ftp_start();
     //ftp_start_paraller();
-
+  while(1);
   for(;;)
       osThreadTerminate(NULL);
 //
@@ -572,6 +572,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void _Error_Handler(char *file, int line)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
+  xprintf("nie dziala \n");
   /* User can add his own implementation to report the HAL error return state */
   while(1)
   {

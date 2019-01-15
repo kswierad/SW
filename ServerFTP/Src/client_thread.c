@@ -29,7 +29,7 @@ int8_t send_msg(char *status, char *msg, struct netconn *conn) {
 
 uint8_t recv_request(struct netconn *conn, Request *request) {
 
-//    ((conn)->recv_timeout = (10000));
+    ((conn)->recv_timeout = (10000));
     struct netbuf *buf; 
     if(netconn_recv(conn, &buf) != ERR_OK) {
         if(conn->last_err == ERR_TIMEOUT) {
@@ -87,7 +87,8 @@ void list_response(ClientData *client_data) {
     send_msg("150", "Listing", client_data->conn);
     struct netconn *client_data_conn;
 	if(netconn_accept(data_conn, &client_data_conn) != ERR_OK) {
-        xprintf("netconn_accept error\r\n");
+        xprintf("netconn_accept error\n");
+        xprintf("list\n");
         return;
     } 
 
@@ -150,7 +151,7 @@ int8_t recv_file(char *current_path, char *filename, struct netconn *conn) {
     uint16_t data_size;
     unsigned int bw;
 
-//    conn->recv_timeout = 10000;
+    conn->recv_timeout = 10000;
     while(netconn_recv(conn, &buf) == ERR_OK) {
         do {
             netbuf_data(buf, &data, &data_size);
@@ -169,7 +170,8 @@ void retr_response(char *args, ClientData *client_data) {
 
     struct netconn *client_data_conn;
 	if(netconn_accept(data_conn, &client_data_conn) != ERR_OK) {
-        xprintf("netconn_accept error\r\n");
+        xprintf("netconn_accept error\n");
+        xprintf("retr\n");
         return;
     } 
 
@@ -186,7 +188,8 @@ void stor_response(char *args, ClientData *client_data) {
 
     struct netconn *client_data_conn;
 	if(netconn_accept(data_conn, &client_data_conn) != ERR_OK) {
-        xprintf("netconn_accept error\r\n");
+        xprintf("netconn_accept error\n");
+        xprintf("stor\n");
         return;
     } 
 
@@ -283,8 +286,12 @@ void serve_client_task(void *arg) {
                 xprintf("Request error\r\n");
                 netconn_close(client_data.conn);
                 netconn_delete(client_data.conn); 
-                xprintf("closing client connection\r\n");    
-                return;      
+                xprintf("closing client connection\r\n");   
+                //BaseType_t xReturned = xTaskCreate(serve_client_task, "task_name", 512, NULL, 16, NULL);
+
+                //if( xReturned != pdPASS )
+                   // xprintf("xTaskCreate error, client: %d\n", -1); 
+                break;      
             }
             xprintf("Start serving reqest, COMMAND: %s, ARGS: %s\r\n", req.command, req.args);
             serve_request(&req, &client_data);            

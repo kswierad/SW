@@ -71,9 +71,9 @@ void ftp_start() {
 //
 void accept_client_paraller() {
    struct netconn *client_conn;
-    xprintf("qwe");
+    xprintf("Waiting\n");
    if(netconn_accept(command_conn, &client_conn) != ERR_OK) {
-       xprintf("netconn_accept error\n");
+       //xprintf("netconn_accept error\n");
        return;
    }
    xprintf("qwe");
@@ -90,9 +90,9 @@ void accept_client_paraller() {
 
 void server_ftp_task(void *arg) {
    while(1) {
-       xprintf("asd");
+       //xprintf("asd");
        accept_client_paraller();
-       vTaskDelay(100);
+       vTaskDelay(1000);
    }
 }
 
@@ -117,6 +117,8 @@ void ftp_start_paraller() {
 
    command_conn = open_conn(COMMAND_PORT);
    data_conn = open_conn(DATA_PORT);
+   //netconn_set_recvtimeout(command_conn, 100);
+   //data_conn->recv_timeout = 1000;
 
    clients_queue = xQueueCreate(CLIENTS_QUEUE_SIZE, sizeof(struct netconn *));
    if(clients_queue == NULL)
@@ -125,7 +127,7 @@ void ftp_start_paraller() {
    //Create server task accepting clients
    BaseType_t xReturned;
    TaskHandle_t server_task;
-   xReturned = xTaskCreate(server_ftp_task, "ST1", TASK_STACK_SIZE, NULL, 16, &server_task);
+   xReturned = xTaskCreate(server_ftp_task, "ST1", TASK_STACK_SIZE, NULL, 10, &server_task);
    if( xReturned != pdPASS )
            xprintf("xTaskCreate error, server_task\n");
 
@@ -140,6 +142,6 @@ void ftp_start_paraller() {
            xprintf("xTaskCreate error, client: %d\n", i);
    }
 
-   vTaskStartScheduler();
-   xprintf("vTaskStartScheduler error\n");
+   
+   //xprintf("vTaskStartScheduler error\n");
 }
